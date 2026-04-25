@@ -1,0 +1,145 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\JadwalPengisian;
+use App\Models\Kuesioner;
+use App\Models\Materi;
+use App\Models\Video;
+use App\Models\Gambar;
+use App\Models\RekomendasiOlahraga;
+use Illuminate\Http\Request;
+
+class AdminController extends Controller
+{
+    // ===== JADWAL PENGISIAN =====
+    public function getJadwal()
+    {
+        return response()->json(['success' => true, 'data' => JadwalPengisian::all()]);
+    }
+
+    public function updateJadwal(Request $request)
+    {
+        $request->validate([
+            'jenis_pengisian' => 'required|in:td,gad7',
+            'tipe' => 'required|in:hours,day,week,month,year',
+            'jumlah' => 'required|integer|min:1',
+        ]);
+
+        $jadwal = JadwalPengisian::updateOrCreate(
+            ['jenis_pengisian' => $request->jenis_pengisian],
+            ['tipe' => $request->tipe, 'jumlah' => $request->jumlah]
+        );
+
+        return response()->json(['success' => true, 'message' => 'Jadwal berhasil diupdate', 'data' => $jadwal]);
+    }
+
+    // ===== KUESIONER GAD7 =====
+    public function storeKuesioner(Request $request)
+    {
+        $request->validate(['soal' => 'required|string']);
+        $k = Kuesioner::create(['soal' => $request->soal]);
+        return response()->json(['success' => true, 'data' => $k], 201);
+    }
+
+    public function updateKuesioner(Request $request, $id)
+    {
+        $k = Kuesioner::findOrFail($id);
+        $request->validate(['soal' => 'required|string']);
+        $k->update(['soal' => $request->soal]);
+        return response()->json(['success' => true, 'data' => $k]);
+    }
+
+    public function destroyKuesioner($id)
+    {
+        Kuesioner::findOrFail($id)->delete();
+        return response()->json(['success' => true, 'message' => 'Soal berhasil dihapus']);
+    }
+
+    // ===== MATERI =====
+    public function storeMateri(Request $request)
+    {
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'file' => 'required|file|max:10240',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+        ]);
+        $path = $request->file('file')->store('materi', 'public');
+        $m = Materi::create(['judul' => $request->judul, 'file_path' => $path, 'kategori_gad' => $request->kategori_gad, 'kategori_td' => $request->kategori_td]);
+        return response()->json(['success' => true, 'data' => $m], 201);
+    }
+
+    public function indexMateri() { return response()->json(['success' => true, 'data' => Materi::all()]); }
+
+    public function destroyMateri($id) { Materi::findOrFail($id)->delete(); return response()->json(['success' => true, 'message' => 'Materi dihapus']); }
+
+    // ===== VIDEO =====
+    public function storeVideo(Request $request)
+    {
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'link_embed' => 'required|string',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+        ]);
+        $v = Video::create($request->only('judul', 'link_embed', 'kategori_gad', 'kategori_td'));
+        return response()->json(['success' => true, 'data' => $v], 201);
+    }
+
+    public function indexVideo() { return response()->json(['success' => true, 'data' => Video::all()]); }
+
+    public function destroyVideo($id) { Video::findOrFail($id)->delete(); return response()->json(['success' => true, 'message' => 'Video dihapus']); }
+
+    // ===== GAMBAR =====
+    public function storeGambar(Request $request)
+    {
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'file' => 'required|image|max:5120',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+        ]);
+        $path = $request->file('file')->store('gambar', 'public');
+        $g = Gambar::create(['judul' => $request->judul, 'file_path' => $path, 'kategori_gad' => $request->kategori_gad, 'kategori_td' => $request->kategori_td]);
+        return response()->json(['success' => true, 'data' => $g], 201);
+    }
+
+    public function indexGambar() { return response()->json(['success' => true, 'data' => Gambar::all()]); }
+
+    public function destroyGambar($id) { Gambar::findOrFail($id)->delete(); return response()->json(['success' => true, 'message' => 'Gambar dihapus']); }
+
+    // ===== REKOMENDASI OLAHRAGA =====
+    public function storeOlahraga(Request $request)
+    {
+        $request->validate([
+            'nama_olahraga' => 'required|string|max:255',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+        ]);
+        $o = RekomendasiOlahraga::create($request->only('nama_olahraga', 'kategori_gad', 'kategori_td'));
+        return response()->json(['success' => true, 'data' => $o], 201);
+    }
+
+    public function indexOlahraga() { return response()->json(['success' => true, 'data' => RekomendasiOlahraga::all()]); }
+
+    public function destroyOlahraga($id) { RekomendasiOlahraga::findOrFail($id)->delete(); return response()->json(['success' => true, 'message' => 'Olahraga dihapus']); }
+
+    // ===== REKOMENDASI =====
+    public function getRekomendasi(Request $request)
+    {
+        $kategoriGad = $request->get('kategori_gad', 'normal');
+        $kategoriTd = $request->get('kategori_td', 'normal');
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'videos' => Video::where('kategori_gad', $kategoriGad)->orWhere('kategori_td', $kategoriTd)->get(),
+                'materis' => Materi::where('kategori_gad', $kategoriGad)->orWhere('kategori_td', $kategoriTd)->get(),
+                'gambars' => Gambar::where('kategori_gad', $kategoriGad)->orWhere('kategori_td', $kategoriTd)->get(),
+                'olahragas' => RekomendasiOlahraga::where('kategori_gad', $kategoriGad)->orWhere('kategori_td', $kategoriTd)->get(),
+            ]
+        ]);
+    }
+}

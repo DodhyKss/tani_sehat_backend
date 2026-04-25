@@ -1,0 +1,42 @@
+FLOW :
+1. Admin Menginput Kader dan Warga di tabel User
+2. Admin Menentukan Kader dari Warga yang telah di input di tabel Warga
+3. Warga Menginput Tekanan darah setiap hari akan muncul popup pada saat pertama kali login (dan ini bisa diatur oleh admin rentangnya)
+4. Warga Mengisi kuesioner GAD7 setiap 2 minggu sekali (dan ini bisa diatur rentang juga di admin)
+5. Setiap setelah mengisi akan menampilkan hasil TD ataupun GAD7 dan merekomendasikan Video, Materi, Gambar, Olahraga sesuai dengan hasil pengisiannya untuk dibaca, dilihat atau dilakukan
+6. Warga dan Kader dapat chatting
+7. Warga yang mempunya masalah yang kompleks dapat berkonsultasi dengan Kader
+
+
+INFO LEBIH LANJUT
+1. ROEL (ADMIN, WARGA, KADER)
+2. Status Tekanan Darah
+   ┌────────────────┬─────────┬──────────┬────────┬───────────────┐
+   │ Kategori       │ Systole │ Diastole │ Warna  │ Penjelasan    │
+   ├────────────────┼─────────┼──────────┼────────┼───────────────┤
+   │ Normal         │ <120    │ <80      │ Hijau  │ Kondisi sehat │
+   │ Pra-hipertensi │ 120–139 │ 80–89    │ Kuning │ Perlu waspada │
+   │ Hipertensi     │ ≥140    │ ≥90      │ Merah  │ Risiko tinggi │
+   └────────────────┴─────────┴──────────┴────────┴───────────────┘
+
+3. Status Kecemasan GAD7
+   ┌──────────┬────────────────────┬──────────────────────────────────────────────────┐
+   │ Skor     │ Tingkat Kecemasan  │ Implikasi Klinis                                 │
+   ├──────────┼────────────────────┼──────────────────────────────────────────────────┤
+   │ 0–4      │ Minim              │ Tidak ada gangguan signifikan, observasi rutin    │
+   │ 5–9      │ Ringan             │ Pertimbangkan intervensi awal                     │
+   │ 10–14    │ Sedang             │ Anjurkan konseling atau terapi                    │
+   │ 15–21    │ Berat              │ Butuh evaluasi profesional segera                 │
+   └──────────┴────────────────────┴──────────────────────────────────────────────────┘
+   ┌─────┬──────┬────────────────┬──────┐
+   │ min │ max  │ Kategori       │ warna│
+   ├─────┼──────┼────────────────┼──────┤
+   │ 0   │ 4    │ Normal         │ hijau│
+   │ 5   │ 9    │ Ringan         │ kuning│
+   │ 10  │ 21   │ Sedang-Tinggi  │ merah│
+   └─────┴──────┴────────────────┴──────┘
+
+4. ADMIN dan kader dapat memantau data kesehatan warga
+berupa 1. Grafik Tekanan Darah berapa yang tergolong Normal, P-H, H yang terbagi perminggu
+5. Grafik GAD7 berapa yang tergolong Normal, R, ST yang terbagi perminggu
+grafik gunakan yang bar dan bundar(pie) 

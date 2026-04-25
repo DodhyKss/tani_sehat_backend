@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Materi extends Model
+class RekomendasiOlahraga extends Model
 {
-    protected $table = 'materi';
+    protected $table = 'rekomendasi_olahragas';
 
     protected $fillable = [
-        'judul',
-        'file_path',
+        'nama_olahraga',
         'kategori_gad',
         'kategori_td',
     ];

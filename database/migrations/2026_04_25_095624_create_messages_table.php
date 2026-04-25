@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('status_kesehatan', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('kader_id')->constrained('users', 'id');
             $table->foreignId('warga_id')->constrained('users', 'id');
-            $table->integer('tekanan_darah')->nullable();
-            $table->integer('skor_gad')->nullable();
-            $table->enum('kategori_gad', ['normal', 'ringan', 'sedang', 'tinggi']);
-            $table->enum('kategori_td', ['hipertensi', 'pre_hipertensi', 'normal']);
-            $table->date('tgl_update')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('status_kesehatan');
+        Schema::dropIfExists('messages');
     }
 };

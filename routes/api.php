@@ -1,0 +1,90 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\TekananDarahController;
+use App\Http\Controllers\Api\GADController;
+use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\StatusKesehatanController;
+use App\Http\Controllers\Api\DashboardController;
+
+// Public Routes
+Route::post('/login', [AuthController::class, 'login']);
+
+// Protected Routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
+
+    // --- Admin Routes ---
+    Route::middleware('role:admin')->group(function () {
+        // User Management
+        Route::apiResource('users', UserController::class);
+        Route::post('users/assign-kader', [UserController::class, 'assignKader']);
+        Route::delete('users/remove-kader/{wargaId}', [UserController::class, 'removeKader']);
+        Route::get('users/warga-kader', [UserController::class, 'wargaKaderList']);
+        Route::get('users/kaders', [UserController::class, 'kadersList']);
+        Route::get('users/kader/{kaderId}/warga', [UserController::class, 'wargaByKader']);
+
+        // Jadwal
+        Route::get('admin/jadwal', [AdminController::class, 'getJadwal']);
+        Route::post('admin/jadwal', [AdminController::class, 'updateJadwal']);
+
+        // Kuesioner GAD7
+        Route::post('admin/kuesioner', [AdminController::class, 'storeKuesioner']);
+        Route::put('admin/kuesioner/{id}', [AdminController::class, 'updateKuesioner']);
+        Route::delete('admin/kuesioner/{id}', [AdminController::class, 'destroyKuesioner']);
+
+        // Materi
+        Route::post('admin/materi', [AdminController::class, 'storeMateri']);
+        Route::delete('admin/materi/{id}', [AdminController::class, 'destroyMateri']);
+
+        // Video
+        Route::post('admin/video', [AdminController::class, 'storeVideo']);
+        Route::delete('admin/video/{id}', [AdminController::class, 'destroyVideo']);
+
+        // Gambar
+        Route::post('admin/gambar', [AdminController::class, 'storeGambar']);
+        Route::delete('admin/gambar/{id}', [AdminController::class, 'destroyGambar']);
+
+        // Rekomendasi Olahraga
+        Route::post('admin/olahraga', [AdminController::class, 'storeOlahraga']);
+        Route::delete('admin/olahraga/{id}', [AdminController::class, 'destroyOlahraga']);
+    });
+
+    // Public content resources (viewable by all authenticated users)
+    Route::get('materi', [AdminController::class, 'indexMateri']);
+    Route::get('video', [AdminController::class, 'indexVideo']);
+    Route::get('gambar', [AdminController::class, 'indexGambar']);
+    Route::get('olahraga', [AdminController::class, 'indexOlahraga']);
+    Route::get('rekomendasi', [AdminController::class, 'getRekomendasi']);
+
+    // --- Dashboard & Grafik ---
+    Route::get('dashboard/summary', [DashboardController::class, 'summary']);
+    Route::get('dashboard/tekanan-darah', [DashboardController::class, 'grafikTekananDarah']);
+    Route::get('dashboard/gad', [DashboardController::class, 'grafikGAD']);
+
+    // --- Status Kesehatan ---
+    Route::get('status-kesehatan', [StatusKesehatanController::class, 'index']);
+    Route::get('status-kesehatan/cek-jadwal', [StatusKesehatanController::class, 'cekJadwal']);
+    Route::post('status-kesehatan/td', [StatusKesehatanController::class, 'updateTd']);
+    Route::post('status-kesehatan/gad', [StatusKesehatanController::class, 'updateGad']);
+
+    // --- Tekanan Darah ---
+    Route::get('tekanan-darah/cek-jadwal', [TekananDarahController::class, 'cekJadwal']);
+    Route::apiResource('tekanan-darah', TekananDarahController::class)->only(['index', 'store', 'show']);
+
+    // --- GAD7 ---
+    Route::get('gad/kuesioner', [GADController::class, 'kuesioner']);
+    Route::get('gad/cek-jadwal', [GADController::class, 'cekJadwal']);
+    Route::apiResource('gad', GADController::class)->only(['index', 'store', 'show']);
+
+    // --- Messages / Chat ---
+    Route::get('messages', [MessageController::class, 'index']);
+    Route::post('messages/start', [MessageController::class, 'startConversation']);
+    Route::get('messages/{id}', [MessageController::class, 'show']);
+    Route::post('messages/{id}/send', [MessageController::class, 'sendMessage']);
+});
