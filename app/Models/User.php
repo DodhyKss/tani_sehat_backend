@@ -82,4 +82,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class, 'warga_id');
     }
+
+    public function lastTd()
+    {
+        return $this->hasOne(TekananDarah::class, 'warga_id')->latestOfMany('tgl_cek');
+    }
+
+    public function lastGad()
+    {
+        return $this->hasOne(GAD::class, 'warga_id')->latestOfMany('tgl_gad');
+    }
 }

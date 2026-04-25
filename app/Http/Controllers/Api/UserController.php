@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Warga;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -200,19 +201,18 @@ class UserController extends Controller
      */
     public function wargaKaderList()
     {
-        $wargas = User::where('role', 'warga')
-            ->with(['wargaRelasi.kader'])
-            ->get()
-            ->map(function ($user) {
-                return [
-                    'id' => $user->id,
-                    'nama_lengkap' => $user->nama_lengkap,
-                    'nik' => $user->nik,
-                    'no_hp' => $user->no_hp,
-                    'kader_id' => $user->wargaRelasi?->kader_id,
-                    'kader_nama' => $user->wargaRelasi?->kader?->nama_lengkap,
-                ];
-            });
+        $wargas = User::where('users.role', 'warga')
+            ->leftJoin('warga', 'users.id', '=', 'warga.warga_id')
+            ->leftJoin('users as kader', 'warga.kader_id', '=', 'kader.id')
+            ->select([
+                'users.id',
+                'users.nama_lengkap',
+                'users.nik',
+                'users.no_hp',
+                'warga.kader_id',
+                'kader.nama_lengkap as kader_nama'
+            ])
+            ->get();
 
         return response()->json([
             'success' => true,
@@ -234,10 +234,7 @@ class UserController extends Controller
         ]);
     }
     
-    /**
-     * DELETE /api/users/remove-kader/{wargaId}
-     * Admin: Hapus warga dari kader
-     */
+
     public function removeKader($wargaId)
     {
         $relation = Warga::where('warga_id', $wargaId)->first();
@@ -249,7 +246,8 @@ class UserController extends Controller
             ], 404);
         }
         
-        $relation->delete();
+        $relation->kader_id = null;
+        $relation->save();
 
         return response()->json([
             'success' => true,

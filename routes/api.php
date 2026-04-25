@@ -19,15 +19,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
-    // --- Admin Routes ---
+// --- Admin Routes ---
     Route::middleware('role:admin')->group(function () {
         // User Management
-        Route::apiResource('users', UserController::class);
-        Route::post('users/assign-kader', [UserController::class, 'assignKader']);
-        Route::delete('users/remove-kader/{wargaId}', [UserController::class, 'removeKader']);
+        Route::get('kaders', [UserController::class, 'kadersList']);
         Route::get('users/warga-kader', [UserController::class, 'wargaKaderList']);
-        Route::get('users/kaders', [UserController::class, 'kadersList']);
+        Route::delete('users/remove-kader/{wargaId}', [UserController::class, 'removeKader']);
+        Route::post('users/assign-kader', [UserController::class, 'assignKader']);
         Route::get('users/kader/{kaderId}/warga', [UserController::class, 'wargaByKader']);
+        Route::apiResource('users', UserController::class);
 
         // Jadwal
         Route::get('admin/jadwal', [AdminController::class, 'getJadwal']);
@@ -66,6 +66,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('dashboard/summary', [DashboardController::class, 'summary']);
     Route::get('dashboard/tekanan-darah', [DashboardController::class, 'grafikTekananDarah']);
     Route::get('dashboard/gad', [DashboardController::class, 'grafikGAD']);
+    Route::get('kader/dashboard', [DashboardController::class, 'kaderDashboard']);
+    Route::get('dashboard/progres-warga', [DashboardController::class, 'progresWarga']);
 
     // --- Status Kesehatan ---
     Route::get('status-kesehatan', [StatusKesehatanController::class, 'index']);

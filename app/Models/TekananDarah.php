@@ -21,7 +21,7 @@ class TekananDarah extends Model
 
     protected $appends = ['kategori', 'warna'];
 
-    public function user()
+    public function warga()
     {
         return $this->belongsTo(User::class, 'warga_id');
     }

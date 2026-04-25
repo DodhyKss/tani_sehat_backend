@@ -6,15 +6,26 @@
     <p class="text-gray-500 text-sm">Monitoring tekanan darah dan GAD7 warga</p>
 </div>
 
-<div class="flex flex-col md:flex-row gap-4 mb-6">
+<div class="flex flex-col lg:flex-row gap-4 mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
     <div class="flex-1">
-        <select id="filterWarga" class="w-full md:w-64 px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-sm focus:ring-2 focus:ring-primary-500">
+        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Warga</label>
+        <select id="filterWarga" class="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-primary-500">
             <option value="">Semua Warga</option>
         </select>
     </div>
-    <div class="flex gap-2">
-        <button onclick="filterData('week')" class="px-4 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium hover:bg-gray-50 transition filter-btn active">Minggu</button>
-        <button onclick="filterData('month')" class="px-4 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium hover:bg-gray-50 transition filter-btn">Bulan</button>
+    <div class="flex flex-col md:flex-row gap-3">
+        <div>
+            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Dari Tanggal</label>
+            <input type="date" id="startDate" class="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-primary-500">
+        </div>
+        <div>
+            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Sampai Tanggal</label>
+            <input type="date" id="endDate" class="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-primary-500">
+        </div>
+    </div>
+    <div class="flex items-end gap-2">
+        <button onclick="loadData()" class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition shadow-sm">Cari</button>
+        <button onclick="resetFilter()" class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium transition">Reset</button>
     </div>
 </div>
 
@@ -112,26 +123,35 @@ function filterData(filter) {
 
 async function loadData() {
     const wargaId = document.getElementById('filterWarga').value;
+    const start = document.getElementById('startDate').value;
+    const end = document.getElementById('endDate').value;
+    
     try {
         const [tdRes, gadRes] = await Promise.all([
-            apiCall(`/tekanan-darah?warga_id=${wargaId}&filter=${currentFilter}`),
-            apiCall(`/gad?warga_id=${wargaId}&filter=${currentFilter}`)
+            apiCall(`/tekanan-darah?warga_id=${wargaId}&start_date=${start}&end_date=${end}`),
+            apiCall(`/gad?warga_id=${wargaId}&start_date=${start}&end_date=${end}`)
         ]);
         
-        if (tdRes && tdRes.success) renderTdTable(tdRes.data);
-        if (gadRes && gadRes.success) renderGadTable(gadRes.data);
+        if (tdRes && tdRes.success) {
+            renderTdTable(tdRes.data.data || []);
+            renderPagination(tdRes.data, 'tdPagination', 'loadTdData');
+        }
+        if (gadRes && gadRes.success) {
+            renderGadTable(gadRes.data.data || []);
+            renderPagination(gadRes.data, 'gadPagination', 'loadGadData');
+        }
     } catch (e) { console.error(e); }
 }
 
 function renderTdTable(data) {
     const tbody = document.getElementById('tdTable');
-    if (!data.data || data.data.length === 0) {
+    if (!data || data.length === 0) {
         tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">Tidak ada data</td></tr>';
         return;
     }
     
     let normal = 0, waspada = 0, risiko = 0;
-    tbody.innerHTML = data.data.map(td => {
+    tbody.innerHTML = data.map(td => {
         const status = getStatusTd(td.systolic, td.diastolic);
         if (status.label === 'Normal') normal++;
         else if (status.label === 'Pra-Hipertensi') waspada++;
@@ -153,12 +173,12 @@ function renderTdTable(data) {
 
 function renderGadTable(data) {
     const tbody = document.getElementById('gadTable');
-    if (!data.data || data.data.length === 0) {
+    if (!data || data.length === 0) {
         tbody.innerHTML = '<tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">Tidak ada data</td></tr>';
         return;
     }
     
-    tbody.innerHTML = data.data.map(gad => {
+    tbody.innerHTML = data.map(gad => {
         const status = getStatusGad(gad.skor);
         return `<tr class="hover:bg-gray-50">
             <td class="px-4 py-3 font-medium">${gad.warga?.nama_lengkap || '-'}</td>
@@ -187,6 +207,51 @@ async function loadWargaList() {
 document.addEventListener('DOMContentLoaded', () => {
     loadWargaList();
     loadData();
+    
+    document.getElementById('filterWarga').addEventListener('change', loadData);
 });
+function renderPagination(data, containerId, loadFn) {
+    const container = document.getElementById(containerId);
+    if (!data.last_page || data.last_page <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+    
+    let html = '';
+    for (let i = 1; i <= data.last_page; i++) {
+        const isActive = i === data.current_page;
+        html += `<button onclick="${loadFn}(${i})" class="px-3 py-1 rounded-md ${isActive ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'} transition text-xs font-medium">${i}</button>`;
+    }
+    container.innerHTML = html;
+}
+
+async function loadTdData(page = 1) {
+    const wargaId = document.getElementById('filterWarga').value;
+    const start = document.getElementById('startDate').value;
+    const end = document.getElementById('endDate').value;
+    const res = await apiCall(`/tekanan-darah?page=${page}&warga_id=${wargaId}&start_date=${start}&end_date=${end}`);
+    if (res && res.success) {
+        renderTdTable(res.data.data || []);
+        renderPagination(res.data, 'tdPagination', 'loadTdData');
+    }
+}
+
+async function loadGadData(page = 1) {
+    const wargaId = document.getElementById('filterWarga').value;
+    const start = document.getElementById('startDate').value;
+    const end = document.getElementById('endDate').value;
+    const res = await apiCall(`/gad?page=${page}&warga_id=${wargaId}&start_date=${start}&end_date=${end}`);
+    if (res && res.success) {
+        renderGadTable(res.data.data || []);
+        renderPagination(res.data, 'gadPagination', 'loadGadData');
+    }
+}
+
+function resetFilter() {
+    document.getElementById('filterWarga').value = '';
+    document.getElementById('startDate').value = '';
+    document.getElementById('endDate').value = '';
+    loadData();
+}
 </script>
 @endsection

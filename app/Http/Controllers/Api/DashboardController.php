@@ -141,4 +141,124 @@ class DashboardController extends Controller
 
         return response()->json(['success' => true, 'data' => $data]);
     }
+
+    /**
+     * GET /api/dashboard/kader
+     * Dashboard khusus kader: ringkasan warga saya, peringatan hipertensi, warga terbaru
+     */
+    public function kaderDashboard(Request $request)
+    {
+        $user = $request->user();
+        if ($user->role !== 'kader' && $user->role !== 'admin') {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+        }
+
+        $kaderId = $request->get('kader_id', $user->id);
+        $wargaIds = Warga::where('kader_id', $kaderId)->pluck('warga_id');
+
+        $data = [
+            'warga_count' => $wargaIds->count(),
+            'td_today' => TekananDarah::whereIn('warga_id', $wargaIds)->whereDate('tgl_cek', Carbon::today())->count(),
+            'gad_today' => GAD::whereIn('warga_id', $wargaIds)->whereDate('tgl_gad', Carbon::today())->count(),
+            'new_chat' => 0, // Placeholder
+            'peringatan' => [],
+            'warga_terbaru' => []
+        ];
+
+        // Ambil peringatan (Hipertensi atau GAD Tinggi dalam 7 hari terakhir)
+        $tdAlerts = TekananDarah::with('warga')
+            ->whereIn('warga_id', $wargaIds)
+            ->where('tgl_cek', '>=', Carbon::now()->subDays(7))
+            ->get();
+        
+        foreach ($tdAlerts as $td) {
+            if ($td->kategori === 'hipertensi') {
+                $data['peringatan'][] = [
+                    'warga' => $td->warga->nama_lengkap,
+                    'tipe' => 'hipertensi',
+                    'pesan' => "Tekanan darah tinggi: {$td->systolic}/{$td->diastolic}",
+                    'tanggal' => Carbon::parse($td->tgl_cek)->diffForHumans()
+                ];
+            }
+        }
+
+        $gadAlerts = GAD::with('warga')
+            ->whereIn('warga_id', $wargaIds)
+            ->where('tgl_gad', '>=', Carbon::now()->subDays(7))
+            ->get();
+
+        foreach ($gadAlerts as $gad) {
+            if ($gad->kategori === 'sedang_tinggi') {
+                $data['peringatan'][] = [
+                    'warga' => $gad->warga->nama_lengkap,
+                    'tipe' => 'gad_tinggi',
+                    'pesan' => "Skor GAD7 tinggi: {$gad->skor}",
+                    'tanggal' => Carbon::parse($gad->tgl_gad)->diffForHumans()
+                ];
+            }
+        }
+
+        // Ambil warga terbaru dengan status terakhir
+        $wargaTerbaru = User::whereIn('id', $wargaIds)
+            ->with(['lastTd', 'lastGad'])
+            ->limit(5)
+            ->get();
+
+        foreach ($wargaTerbaru as $w) {
+            $data['warga_terbaru'][] = [
+                'nama_lengkap' => $w->nama_lengkap,
+                'no_hp' => $w->no_hp,
+                'last_td' => $w->lastTd,
+                'last_gad' => $w->lastGad
+            ];
+        }
+
+        return response()->json(['success' => true, 'data' => $data]);
+    }
+
+        /**
+     * GET /api/dashboard/progres-warga
+     * Perbandingan data awal vs data terakhir setiap warga
+     */
+    public function progresWarga(Request $request)
+    {
+        $user = $request->user();
+        $query = User::where('role', 'warga');
+
+        if ($user->role === 'kader') {
+            $wargaIds = Warga::where('kader_id', $user->id)->pluck('warga_id');
+            $query->whereIn('id', $wargaIds);
+        }
+
+        $wargas = $query->with([
+            'tekananDarah' => fn($q) => $q->orderBy('tgl_cek', 'asc'),
+            'gad' => fn($q) => $q->orderBy('tgl_gad', 'asc')
+        ])->get();
+
+        $result = $wargas->map(function($w) {
+            $firstTd = $w->tekananDarah->first();
+            $lastTd = $w->tekananDarah->last();
+            
+            $firstGad = $w->gad->first();
+            $lastGad = $w->gad->last();
+
+            return [
+                'nama' => $w->nama_lengkap,
+                'td' => [
+                    'awal' => $firstTd ? "{$firstTd->systolic}/{$firstTd->diastolic}" : '-',
+                    'akhir' => $lastTd ? "{$lastTd->systolic}/{$lastTd->diastolic}" : '-',
+                    'status_awal' => $firstTd ? $firstTd->kategori : '-',
+                    'status_akhir' => $lastTd ? $lastTd->kategori : '-',
+                ],
+                'gad' => [
+                    'awal' => $firstGad ? $firstGad->skor : '-',
+                    'akhir' => $lastGad ? $lastGad->skor : '-',
+                    'status_awal' => $firstGad ? $firstGad->kategori : '-',
+                    'status_akhir' => $lastGad ? $lastGad->kategori : '-',
+                ]
+            ];
+        });
+
+        return response()->json(['success' => true, 'data' => $result]);
+    }
 }

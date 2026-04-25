@@ -134,14 +134,14 @@ async function loadUsers(page = 1) {
     } catch (e) { console.error(e); showAlert('Gagal memuat data user', 'error'); }
 }
 
-function renderUsers(data) {
+function renderUsers(users) {
     const tbody = document.getElementById('usersTableBody');
-    if (!data.data || data.data.length === 0) {
+    if (!users || users.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">Tidak ada user</td></tr>';
         return;
     }
     
-    tbody.innerHTML = data.data.map(u => {
+    tbody.innerHTML = users.map(u => {
         const badgeClass = u.role === 'admin' ? 'bg-indigo-100 text-indigo-700' : u.role === 'kader' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700';
         return `<tr class="hover:bg-gray-50 transition">
             <td class="px-4 md:px-6 py-4 font-mono text-gray-600 text-xs md:text-sm">${u.nik}</td>

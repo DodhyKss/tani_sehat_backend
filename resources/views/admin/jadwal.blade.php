@@ -88,8 +88,8 @@ async function loadJadwal() {
         const res = await apiCall('/admin/jadwal');
         const tbody = document.getElementById('jadwalTable');
         
-        if (res && res.data && res.data.success && res.data.data && res.data.data.length > 0) {
-            res.data.data.forEach(j => {
+        if (res && res.success && res.data && res.data.length > 0) {
+            res.data.forEach(j => {
                 if (j.jenis_pengisian === 'td') {
                     document.getElementById('tdJumlah').value = j.jumlah;
                     document.getElementById('tdTipe').value = j.tipe;
@@ -99,7 +99,7 @@ async function loadJadwal() {
                 }
             });
             
-            tbody.innerHTML = res.data.data.map(j => {
+            tbody.innerHTML = res.data.map(j => {
                 const tipeLabel = { hours: 'jam', day: 'hari', week: 'minggu' };
                 return `<tr class="hover:bg-gray-50">
                     <td class="px-4 py-3 font-medium">${j.jenis_pengisian === 'td' ? 'Tekanan Darah' : 'GAD7'}</td>

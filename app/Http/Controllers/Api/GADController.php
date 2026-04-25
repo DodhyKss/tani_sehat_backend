@@ -19,11 +19,31 @@ class GADController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $wargaId = $request->get('warga_id', $user->id);
-        if ($user->role === 'warga') $wargaId = $user->id;
+        $wargaId = $request->get('warga_id');
+        $startDate = $request->get('start_date');
+        $endDate = $request->get('end_date');
 
-        $data = GAD::where('warga_id', $wargaId)->orderBy('tgl_gad', 'desc')
-            ->paginate($request->get('per_page', 15));
+        $query = GAD::with('warga')->orderBy('tgl_gad', 'desc');
+
+        if ($user->role === 'warga') {
+            $query->where('warga_id', $user->id);
+        } else {
+            if ($wargaId) {
+                $query->where('warga_id', $wargaId);
+            } elseif ($user->role === 'kader') {
+                $assignedIds = \App\Models\Warga::where('kader_id', $user->id)->pluck('warga_id');
+                $query->whereIn('warga_id', $assignedIds);
+            }
+        }
+
+        if ($startDate) {
+            $query->where('tgl_gad', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->where('tgl_gad', '<=', $endDate);
+        }
+
+        $data = $query->paginate($request->get('per_page', 15));
 
         return response()->json(['success' => true, 'data' => $data]);
     }

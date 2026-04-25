@@ -64,33 +64,40 @@
 <script>
 let currentKaderId = null;
 let currentConversationId = null;
+let chatInterval = null;
 
 async function loadKaders() {
     const user = JSON.parse(localStorage.getItem('user'));
     try {
-        const res = await apiCall('/kaders');
+        let endpoint = '/kaders';
+        if (user.role === 'kader') endpoint = '/users/kader/' + user.id + '/warga';
+        else if (user.role === 'admin') endpoint = '/users?role=kader'; // Admin can chat with kaders
+        
+        const res = await apiCall(endpoint);
         const container = document.getElementById('chatList');
         
-        if (res && res.success && res.data.length > 0) {
-            container.innerHTML = res.data.map(k => `
-                <div onclick="selectKader(${k.id}, '${k.nama_lengkap}')" class="flex items-center gap-3 p-4 hover:bg-gray-50 cursor-pointer border-b border-gray-50 transition">
+        const list = res?.data?.data || res?.data || [];
+        if (list.length > 0) {
+            container.innerHTML = list.map(k => `
+                <div onclick="selectChat(${k.id}, '${k.nama_lengkap}')" class="flex items-center gap-3 p-4 hover:bg-gray-50 cursor-pointer border-b border-gray-50 transition">
                     <div class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0">
                         <span class="text-primary-600 font-semibold">${k.nama_lengkap.charAt(0)}</span>
                     </div>
                     <div class="flex-1 min-w-0">
                         <p class="font-semibold text-gray-800 truncate">${k.nama_lengkap}</p>
-                        <p class="text-sm text-gray-500 truncate">${k.no_hp}</p>
+                        <p class="text-sm text-gray-500 truncate">${k.no_hp || k.nik}</p>
                     </div>
                 </div>
             `).join('');
         } else {
-            container.innerHTML = '<div class="p-4 text-center text-gray-500">Tidak ada kader</div>';
+            container.innerHTML = '<div class="p-4 text-center text-gray-500">Tidak ada daftar chat</div>';
         }
     } catch (e) { console.error(e); }
 }
 
-function selectKader(kaderId, nama) {
-    currentKaderId = kaderId;
+function selectChat(userId, nama) {
+    if (chatInterval) clearInterval(chatInterval);
+    currentKaderId = userId;
     document.getElementById('chatListContainer').classList.add('hidden', 'md:block');
     document.getElementById('chatWindow').classList.remove('hidden');
     document.getElementById('emptyState').classList.add('hidden');
@@ -102,6 +109,7 @@ function selectKader(kaderId, nama) {
 }
 
 function closeChat() {
+    if (chatInterval) clearInterval(chatInterval);
     document.getElementById('chatListContainer').classList.remove('hidden', 'md:block');
     document.getElementById('chatWindow').classList.add('hidden');
     currentKaderId = null;
@@ -111,15 +119,14 @@ function closeChat() {
 async function loadOrCreateConversation() {
     const user = JSON.parse(localStorage.getItem('user'));
     try {
-        const res = await apiCall('/messages', 'POST', {
-            kader_id: currentKaderId,
-            warga_id: user.id
+        const res = await apiCall('/messages/start', 'POST', {
+            receiver_id: currentKaderId
         });
         
         if (res && res.success) {
             currentConversationId = res.data.id;
             loadMessages();
-            setInterval(loadMessages, 5000);
+            chatInterval = setInterval(loadMessages, 3000);
         }
     } catch (e) { console.error(e); }
 }
@@ -145,11 +152,11 @@ function renderMessages(messages) {
     }
     
     container.innerHTML = messages.map(m => {
-        const isMe = m.pengirim_id === user.id;
+        const isMe = m.sender_id === user.id;
         return `
             <div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
                 <div class="max-w-[75%] ${isMe ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-800'} rounded-2xl px-4 py-3">
-                    <p>${m.pesan}</p>
+                    <p>${m.message}</p>
                     <p class="text-xs ${isMe ? 'text-primary-200' : 'text-gray-400'} mt-1">${new Date(m.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</p>
                 </div>
             </div>
@@ -166,9 +173,8 @@ document.getElementById('messageForm').addEventListener('submit', async (e) => {
     if (!pesan || !currentConversationId) return;
     
     const user = JSON.parse(localStorage.getItem('user'));
-    const res = await apiCall(`/messages/${currentConversationId}`, 'POST', {
-        pesan,
-        pengirim_id: user.id
+    const res = await apiCall(`/messages/${currentConversationId}/send`, 'POST', {
+        message: pesan
     });
     
     if (res && res.success) {

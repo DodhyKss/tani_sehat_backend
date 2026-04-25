@@ -106,8 +106,8 @@ async function loadDashboard() {
             apiCall('/olahraga')
         ]);
         
-        if (statusRes?.data?.data) {
-            const status = statusRes.data.data;
+        if (statusRes?.data) {
+            const status = statusRes.data;
             
             if (status.tekanan_darah) {
                 const [sys, dias] = status.tekanan_darah.split('/').map(Number);
@@ -201,8 +201,35 @@ function renderRekomendasi(data) {
     container.innerHTML = items.length ? items.join('') : '<p class="col-span-full text-center py-8 text-gray-500">Tidak ada rekomendasi</p>';
 }
 
+function loadKaderInfo() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const container = document.getElementById('kaderInfo');
+    
+    apiCall('/users/warga-kader').then(res => {
+        const warga = res?.data?.find(w => w.id === user?.id);
+        if (warga?.kader_nama) {
+            container.innerHTML = `
+                <div class="w-12 h-12 mx-auto bg-primary-100 rounded-full flex items-center justify-center mb-3">
+                    <svg class="w-6 h-6 text-primary-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <p class="font-semibold text-gray-800">${warga.kader_nama}</p>
+                <p class="text-sm text-gray-500">Kader Anda</p>
+            `;
+        } else {
+            container.innerHTML = `
+                <div class="w-12 h-12 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-3">
+                    <svg class="w-6 h-6 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <p class="font-semibold text-gray-400">Belum Ada Kader</p>
+                <p class="text-xs text-gray-400">Hubungi admin</p>
+            `;
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     loadDashboard();
+    loadKaderInfo();
 });
 </script>
 @endsection

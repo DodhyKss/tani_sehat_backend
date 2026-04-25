@@ -118,7 +118,7 @@ async function loadData() {
         let normal = 0, waspada = 0, risiko = 0;
         
         if (tdRes?.success) {
-            tdRes.data.data?.forEach(td => {
+            (tdRes.data.data || []).forEach(td => {
                 const s = getStatusTd(td.systolic, td.diastolic);
                 if (s.label === 'Normal') normal++;
                 else if (s.label === 'Pra-Hipertensi') waspada++;
@@ -127,7 +127,7 @@ async function loadData() {
         }
         
         if (gadRes?.success) {
-            gadRes.data.data?.forEach(g => {
+            (gadRes.data.data || []).forEach(g => {
                 const s = getStatusGad(g.skor);
                 if (s.label !== 'Normal') {
                     if (s.label === 'Ringan') waspada++;
@@ -150,14 +150,14 @@ function renderHistory(tdRes, gadRes) {
     const items = [];
     
     if (tdRes?.success) {
-        tdRes.data.data?.forEach(td => {
+        (tdRes.data.data || []).forEach(td => {
             const status = getStatusTd(td.systolic, td.diastolic);
             items.push({ date: td.tgl_cek, warga: td.warga?.nama_lengkap, td: `${td.systolic}/${td.diastolic}`, tdStatus: status, gad: '-', gadStatus: null });
         });
     }
     
     if (gadRes?.success) {
-        gadRes.data.data?.forEach(g => {
+        (gadRes.data.data || []).forEach(g => {
             const status = getStatusGad(g.skor);
             items.push({ date: g.tgl_gad, warga: g.warga?.nama_lengkap, td: '-', tdStatus: null, gad: g.skor, gadStatus: status });
         });

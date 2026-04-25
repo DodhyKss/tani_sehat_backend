@@ -20,7 +20,7 @@ class GAD extends Model
 
     protected $appends = ['kategori', 'warna', 'tingkat_kecemasan'];
 
-    public function user()
+    public function warga()
     {
         return $this->belongsTo(User::class, 'warga_id');
     }

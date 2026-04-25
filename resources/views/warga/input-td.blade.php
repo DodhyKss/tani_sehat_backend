@@ -109,8 +109,8 @@ async function checkJadwal() {
     try {
         const res = await apiCall('/status-kesehatan/cek-jadwal');
         console.log('Cek Jadwal Response:', res);
-        if (res && res.data.data && res.data.data.td && res.data.data.td.is_waiting) {
-            const nextDate = new Date(res.data.data.td.next_allowed);
+        if (res && res.data && res.data.td && res.data.td.is_waiting) {
+            const nextDate = new Date(res.data.td.next_allowed);
             const now = new Date();
             const diffTime = nextDate - now;
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -172,8 +172,8 @@ document.getElementById('tdForm')?.addEventListener('submit', async (e) => {
     try {
         const res = await apiCall('/status-kesehatan/td', 'POST', data);
         
-        if (res.status === 422 || (res.data.data && res.data.data.success === false)) {
-            const errorMsg = res.data?.data?.message || 'Belum waktunya mengisi';
+        if (!res.success) {
+            const errorMsg = res.message || 'Belum waktunya mengisi';
             document.getElementById('tdForm').innerHTML = `
                 <div class="text-center py-12">
                     <div class="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
@@ -188,7 +188,7 @@ document.getElementById('tdForm')?.addEventListener('submit', async (e) => {
             return;
         }
         
-        if (res && res.data) {
+        if (res && res.success) {
             const status = getStatus(data.systolic, data.diastolic);
             document.getElementById('resultIcon').className = `w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 ${status.icon}`;
             document.getElementById('resultIcon').innerHTML = '<svg class="w-10 h-10 text-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';

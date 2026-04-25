@@ -22,16 +22,31 @@ class TekananDarahController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $wargaId = $request->get('warga_id', $user->id);
+        $wargaId = $request->get('warga_id');
+        $startDate = $request->get('start_date');
+        $endDate = $request->get('end_date');
 
-        // Warga hanya bisa lihat data sendiri
+        $query = TekananDarah::with('warga')->orderBy('tgl_cek', 'desc');
+
         if ($user->role === 'warga') {
-            $wargaId = $user->id;
+            $query->where('warga_id', $user->id);
+        } else {
+            if ($wargaId) {
+                $query->where('warga_id', $wargaId);
+            } elseif ($user->role === 'kader') {
+                $assignedIds = \App\Models\Warga::where('kader_id', $user->id)->pluck('warga_id');
+                $query->whereIn('warga_id', $assignedIds);
+            }
         }
 
-        $data = TekananDarah::where('warga_id', $wargaId)
-            ->orderBy('tgl_cek', 'desc')
-            ->paginate($request->get('per_page', 15));
+        if ($startDate) {
+            $query->where('tgl_cek', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->where('tgl_cek', '<=', $endDate);
+        }
+
+        $data = $query->paginate($request->get('per_page', 15));
 
         return response()->json([
             'success' => true,
