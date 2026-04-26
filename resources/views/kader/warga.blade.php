@@ -92,7 +92,7 @@ function getStatusGad(skor) {
 async function loadWargaList() {
     const user = JSON.parse(localStorage.getItem('user'));
     try {
-        const res = await apiCall(`/warga/by-kader/${user.id}`);
+        const res = await apiCall(`/users/kader/${user.id}/warga`);
         if (res && res.success) {
             const select = document.getElementById('filterWarga');
             res.data.forEach(w => {
@@ -141,8 +141,50 @@ async function loadData() {
         document.getElementById('statRisiko').textContent = risiko;
         document.getElementById('statTotal').textContent = normal + waspada + risiko;
         
+        renderCharts(tdRes?.data?.data || [], gadRes?.data?.data || []);
         renderHistory(tdRes, gadRes);
     } catch (e) { console.error(e); }
+}
+
+function renderCharts(tdData, gadData) {
+    const tdCtx = document.getElementById('tdChart').getContext('2d');
+    const gadCtx = document.getElementById('gadChart').getContext('2d');
+    
+    // Sort data by date
+    tdData.sort((a, b) => new Date(a.tgl_cek) - new Date(b.tgl_cek));
+    gadData.sort((a, b) => new Date(a.tgl_gad) - new Date(b.tgl_gad));
+    
+    // Process TD data
+    const tdLabels = tdData.map(d => new Date(d.tgl_cek).toLocaleDateString('id-ID', {day:'2-digit', month:'short'}));
+    const systolicData = tdData.map(d => d.systolic);
+    const diastolicData = tdData.map(d => d.diastolic);
+    
+    if (tdChart) tdChart.destroy();
+    tdChart = new Chart(tdCtx, {
+        type: 'line',
+        data: {
+            labels: tdLabels,
+            datasets: [
+                { label: 'Systolic', data: systolicData, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true, tension: 0.4 },
+                { label: 'Diastolic', data: diastolicData, borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.4 }
+            ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+    });
+    
+    // Process GAD data
+    const gadLabels = gadData.map(d => new Date(d.tgl_gad).toLocaleDateString('id-ID', {day:'2-digit', month:'short'}));
+    const scores = gadData.map(d => d.skor);
+    
+    if (gadChart) gadChart.destroy();
+    gadChart = new Chart(gadCtx, {
+        type: 'bar',
+        data: {
+            labels: gadLabels,
+            datasets: [{ label: 'Skor GAD7', data: scores, backgroundColor: '#6366f1', borderRadius: 6 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true, max: 21 } } }
+    });
 }
 
 function renderHistory(tdRes, gadRes) {

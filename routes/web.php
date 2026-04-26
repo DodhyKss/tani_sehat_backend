@@ -21,5 +21,6 @@ Route::get('/warga/rekomendasi', function () { return view('warga.rekomendasi');
 
 Route::get('/kader', function () { return view('kader.dashboard'); })->name('kader.dashboard');
 Route::get('/kader/warga', function () { return view('kader.warga'); })->name('kader.warga');
+Route::get('/kader/kesehatan', function () { return view('kader.kesehatan'); })->name('kader.kesehatan');
 
 Route::get('/chat', function () { return view('chat.index'); })->name('chat.index');

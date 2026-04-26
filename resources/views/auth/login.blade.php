@@ -67,7 +67,14 @@
             if (response.ok && result.success) {
                 localStorage.setItem('token', result.data.token);
                 localStorage.setItem('user', JSON.stringify(result.data.user));
-                window.location.href = '/';
+                
+                // Redirect based on role
+                const user = result.data.user;
+                if (user.role === 'warga') {
+                    window.location.href = '/warga';
+                } else {
+                    window.location.href = '/dashboard';
+                }
             } else {
                 showAlert(result.message || 'Login gagal. Periksa NIK dan password.', 'error');
             }

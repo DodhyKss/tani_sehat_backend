@@ -274,4 +274,16 @@ class UserController extends Controller
             'message' => 'Warga berhasil dihapus dari kader',
         ]);
     }
+
+    public function myKader(Request $request)
+    {
+        $user = $request->user();
+        
+        $wargaRelation = Warga::with('kader')->where('warga_id', $user->id)->first();
+        
+        return response()->json([
+            'success' => true,
+            'data' => $wargaRelation ? $wargaRelation->kader : null,
+        ]);
+    }
 }

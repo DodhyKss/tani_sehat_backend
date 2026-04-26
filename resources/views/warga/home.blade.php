@@ -42,6 +42,11 @@
                 </div>
             </a>
         </div>
+        
+        <!-- Kader Info -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-6" id="kaderInfo">
+            <div class="text-center py-4 text-gray-400 text-sm italic">Memuat info kader...</div>
+        </div>
     </div>
 </div>
 
@@ -67,6 +72,44 @@
     <h3 class="font-semibold text-gray-800 mb-4">Rekomendasi untuk Anda</h3>
     <div id="rekomendasiContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="col-span-full text-center py-8 text-gray-500">Memuat...</div>
+    </div>
+</div>
+<!-- Data Missing Popup -->
+<div id="reminderModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all scale-100">
+        <div class="bg-gradient-to-r from-primary-500 to-primary-600 p-6 text-white text-center">
+            <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            </div>
+            <h3 class="text-xl font-bold">Data Belum Lengkap!</h3>
+            <p class="text-primary-100 text-sm opacity-90 mt-1">Kami memerlukan data terbaru Anda untuk memberikan rekomendasi kesehatan yang tepat.</p>
+        </div>
+        <div class="p-6 space-y-4">
+            <div id="tdReminder" class="hidden flex items-center gap-4 p-4 bg-red-50 rounded-2xl border border-red-100">
+                <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-600 flex-shrink-0">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                </div>
+                <div class="flex-1">
+                    <p class="font-bold text-gray-800 text-sm">Tekanan Darah</p>
+                    <p class="text-xs text-gray-500">Terakhir kali Anda belum mengisi data TD.</p>
+                </div>
+                <a href="/warga/input-td" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm">Isi</a>
+            </div>
+            
+            <div id="gadReminder" class="hidden flex items-center gap-4 p-4 bg-yellow-50 rounded-2xl border border-yellow-100">
+                <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 flex-shrink-0">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                </div>
+                <div class="flex-1">
+                    <p class="font-bold text-gray-800 text-sm">Kuesioner GAD7</p>
+                    <p class="text-xs text-gray-500">Status kecemasan Anda belum terpantau.</p>
+                </div>
+                <a href="/warga/input-gad" class="bg-yellow-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm">Isi</a>
+            </div>
+        </div>
+        <div class="p-4 bg-gray-50 border-t border-gray-100 text-center">
+            <button onclick="closeReminder()" class="text-gray-500 text-sm font-medium hover:text-gray-700">Nanti Saja</button>
+        </div>
     </div>
 </div>
 @endsection
@@ -98,18 +141,25 @@ async function loadDashboard() {
     document.getElementById('welcomeName').textContent = user?.nama_lengkap || '-';
     
     try {
-        const [statusRes, vidRes, matRes, gamRes, olhRes] = await Promise.all([
+        const [statusRes, jadwalRes, vidRes, matRes, gamRes, olhRes] = await Promise.all([
             apiCall('/status-kesehatan'),
+            apiCall('/status-kesehatan/cek-jadwal'),
             apiCall('/video'),
             apiCall('/materi'),
             apiCall('/gambar'),
             apiCall('/olahraga')
         ]);
         
-        if (statusRes?.data) {
+        if (statusRes && statusRes.data) {
             const status = statusRes.data;
+            const jadwal = jadwalRes?.data;
+            console.log("Health Status:", status);
+            console.log("Jadwal Status:", jadwal);
             
-            if (status.tekanan_darah) {
+            let showModal = false;
+
+            // Check TD
+            if (status.tekanan_darah && status.tekanan_darah !== '0/0') {
                 const [sys, dias] = status.tekanan_darah.split('/').map(Number);
                 const tdStatus = getStatusTd(sys, dias);
                 const cardColor = getCardColor(status.kategori_td);
@@ -121,23 +171,50 @@ async function loadDashboard() {
                 `;
                 document.getElementById('kondisiSummary').textContent = tdStatus.label;
                 document.getElementById('kondisiDesc').textContent = tdStatus.desc;
+                
+                // If schedule says it's time to fill again (not waiting)
+                if (jadwal && !jadwal.td.is_waiting) {
+                    document.getElementById('tdReminder').classList.remove('hidden');
+                    showModal = true;
+                }
             } else {
-                document.getElementById('lastTd').innerHTML = '<p class="text-gray-500">Belum ada data TD. <a href="/warga/input-td" class="text-primary-600 font-medium">Input sekarang</a></p>';
+                document.getElementById('lastTd').innerHTML = '<p class="text-gray-500 italic">Belum ada data</p>';
+                document.getElementById('tdReminder').classList.remove('hidden');
+                showModal = true;
             }
             
-            if (status.skor_gad) {
+            // Check GAD
+            if (status.skor_gad !== null && status.skor_gad !== undefined) {
                 const gadStatus = getStatusGad(status.skor_gad);
                 document.getElementById('lastGad').innerHTML = `
                     <div class="text-4xl font-bold font-mono mb-2">${status.skor_gad}</div>
                     <span class="px-3 py-1.5 text-sm font-semibold rounded-full ${gadStatus.color}">${gadStatus.label}</span>
                     <p class="text-sm text-gray-500 mt-2">${new Date(status.tgl_update).toLocaleDateString('id-ID')}</p>
                 `;
+                
+                // If schedule says it's time to fill again (not waiting)
+                if (jadwal && !jadwal.gad7.is_waiting) {
+                    document.getElementById('gadReminder').classList.remove('hidden');
+                    showModal = true;
+                }
             } else {
-                document.getElementById('lastGad').innerHTML = '<p class="text-gray-500">Belum ada data GAD7. <a href="/warga/input-gad" class="text-primary-600 font-medium">Isi kuesioner</a></p>';
+                document.getElementById('lastGad').innerHTML = '<p class="text-gray-500 italic">Belum ada data</p>';
+                document.getElementById('gadReminder').classList.remove('hidden');
+                showModal = true;
+            }
+
+            if (showModal) {
+                setTimeout(() => {
+                    document.getElementById('reminderModal').classList.remove('hidden');
+                }, 1000);
             }
         } else {
-            document.getElementById('lastTd').innerHTML = '<p class="text-gray-500">Belum ada data</p>';
-            document.getElementById('lastGad').innerHTML = '<p class="text-gray-500">Belum ada data</p>';
+            console.warn("No status data found or failed to fetch");
+            document.getElementById('lastTd').innerHTML = '<p class="text-gray-500">Gagal memuat data</p>';
+            document.getElementById('lastGad').innerHTML = '<p class="text-gray-500">Gagal memuat data</p>';
+            document.getElementById('tdReminder').classList.remove('hidden');
+            document.getElementById('gadReminder').classList.remove('hidden');
+            document.getElementById('reminderModal').classList.remove('hidden');
         }
         
         renderRekomendasi({
@@ -201,18 +278,21 @@ function renderRekomendasi(data) {
     container.innerHTML = items.length ? items.join('') : '<p class="col-span-full text-center py-8 text-gray-500">Tidak ada rekomendasi</p>';
 }
 
+function closeReminder() {
+    document.getElementById('reminderModal').classList.add('hidden');
+}
+
 function loadKaderInfo() {
-    const user = JSON.parse(localStorage.getItem('user'));
     const container = document.getElementById('kaderInfo');
     
-    apiCall('/users/warga-kader').then(res => {
-        const warga = res?.data?.find(w => w.id === user?.id);
-        if (warga?.kader_nama) {
+    apiCall('/users/my-kader').then(res => {
+        const kader = res?.data;
+        if (kader) {
             container.innerHTML = `
                 <div class="w-12 h-12 mx-auto bg-primary-100 rounded-full flex items-center justify-center mb-3">
                     <svg class="w-6 h-6 text-primary-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </div>
-                <p class="font-semibold text-gray-800">${warga.kader_nama}</p>
+                <p class="font-semibold text-gray-800">${kader.nama_lengkap}</p>
                 <p class="text-sm text-gray-500">Kader Anda</p>
             `;
         } else {

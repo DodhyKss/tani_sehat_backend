@@ -18,6 +18,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::get('users/my-kader', [UserController::class, 'myKader']);
 
 // --- Admin Routes ---
     Route::middleware('role:admin')->group(function () {
@@ -61,7 +62,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('kaders', [UserController::class, 'kadersList']);
     Route::get('admins', [UserController::class, 'adminsList']);
-
 
 
     // Public content resources (viewable by all authenticated users)

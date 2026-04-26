@@ -83,8 +83,28 @@ async function logout() {
 // Ensure auth for protected pages
 function requireAuth() {
     const currentToken = localStorage.getItem('token');
-    if (!currentToken && window.location.pathname !== '/login') {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const path = window.location.pathname;
+
+    if (!currentToken && path !== '/login') {
         window.location.href = '/login';
+        return;
+    }
+
+    if (user) {
+        // Redirect root to role-specific homepage
+        if (path === '/' || path === '/dashboard') {
+            if (user.role === 'warga' && path !== '/warga') {
+                window.location.href = '/warga';
+            } else if (user.role === 'kader' && path === '/') {
+                window.location.href = '/kader';
+            }
+        }
+        
+        // Block warga from admin routes
+        if (user.role === 'warga' && (path === '/users' || path.startsWith('/admin'))) {
+            window.location.href = '/warga';
+        }
     }
 }
 
@@ -148,6 +168,7 @@ function setupKaderNav() {
     setupNav([
         { url: '/kader', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>', label: 'Dashboard', active: true },
         { url: '/kader/warga', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>', label: 'Warga Saya' },
+        { url: '/kader/kesehatan', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>', label: 'Data Kesehatan' },
         { url: '/chat', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>', label: 'Chat' }
     ]);
 }
