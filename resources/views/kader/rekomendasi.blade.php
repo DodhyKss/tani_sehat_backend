@@ -145,7 +145,7 @@ function showMateriDetail(materi) {
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             </div>
             <p class="text-gray-500 mb-6 italic">Dokumen materi tersedia untuk diunduh</p>
-            <a href="/storage/${materi.file_path}" target="_blank" class="inline-flex items-center gap-3 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-2xl font-bold transition shadow-lg shadow-purple-200">
+            <a href="/public/${materi.file_path}" target="_blank" class="inline-flex items-center gap-3 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-2xl font-bold transition shadow-lg shadow-purple-200">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 Unduh Materi (PDF)
             </a>
@@ -162,7 +162,7 @@ function showGambarDetail(gambar) {
     document.getElementById('modalTitle').textContent = gambar.judul;
     document.getElementById('modalContent').innerHTML = `
         <div class="bg-gray-100 rounded-2xl overflow-hidden mb-6">
-            <img src="/storage/${gambar.file_path}" alt="${gambar.judul}" class="w-full">
+            <img src="/public/${gambar.file_path}" alt="${gambar.judul}" class="w-full">
         </div>
         <div class="flex flex-wrap gap-2">
             <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold uppercase tracking-wider">Kategori TD: ${gambar.kategori_td}</span>

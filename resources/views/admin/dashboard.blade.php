@@ -148,43 +148,26 @@ async function loadTdCharts() {
         const res = await apiCall('/dashboard/tekanan-darah');
         if (res && res.success) {
             const data = res.data;
-            const labels = data.bar_chart.map(item => item.minggu);
+            const labels = data.bar_chart.map(item => item.label);
             new Chart(document.getElementById('tdBarChart').getContext('2d'), {
                 type: 'bar', responsive: true, maintainAspectRatio: false,
                 data: { labels, datasets: [
-                    { label: 'Normal', data: data.bar_chart.map(i => i.normal), backgroundColor: '#10b981', borderRadius: 4 },
-                    { label: 'Pra-Hipertensi', data: data.bar_chart.map(i => i.pra_hipertensi), backgroundColor: '#f59e0b', borderRadius: 4 },
-                    { label: 'Hipertensi', data: data.bar_chart.map(i => i.hipertensi), backgroundColor: '#ef4444', borderRadius: 4 }
+                    { label: 'Normal', data: data.bar_chart.map(i => i.normal), backgroundColor: '#10b981', borderRadius: 8 },
+                    { label: 'Pra-Hipertensi', data: data.bar_chart.map(i => i.pra_hipertensi), backgroundColor: '#f59e0b', borderRadius: 8 },
+                    { label: 'Hipertensi', data: data.bar_chart.map(i => i.hipertensi), backgroundColor: '#ef4444', borderRadius: 8 }
                 ]},
-                options: { plugins: { legend: { position: 'bottom' } } }
+                options: { 
+                    plugins: { legend: { position: 'bottom' } },
+                    scales: { y: { beginAtZero: true, grid: { display: false } }, x: { grid: { display: false } } }
+                }
             });
             
             const commonPieOptions = {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            usePointStyle: true,
-                            pointStyle: 'circle',
-                            padding: 15,
-                            font: { size: 10, weight: '700' },
-                            color: '#9ca3af'
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: '#fff',
-                        titleColor: '#111827',
-                        bodyColor: '#4b5563',
-                        borderColor: '#f3f4f6',
-                        borderWidth: 1,
-                        padding: 12,
-                        boxPadding: 6,
-                        usePointStyle: true,
-                    }
-                },
-                layout: { padding: 10 }
+                    legend: { position: 'bottom' }
+                }
             };
 
             new Chart(document.getElementById('tdPieChart').getContext('2d'), {
@@ -194,7 +177,6 @@ async function loadTdCharts() {
                     datasets: [{ 
                         data: data.pie_chart.map(i => i.value), 
                         backgroundColor: ['#10b981', '#f59e0b', '#ef4444'], 
-                        hoverOffset: 20,
                         borderWidth: 0 
                     }] 
                 },
@@ -209,57 +191,31 @@ async function loadGadCharts() {
         const res = await apiCall('/dashboard/gad');
         if (res && res.success) {
             const data = res.data;
-            const labels = data.bar_chart.map(item => item.minggu);
+            const labels = data.bar_chart.map(item => item.label);
             new Chart(document.getElementById('gadBarChart').getContext('2d'), {
                 type: 'bar', responsive: true, maintainAspectRatio: false,
                 data: { labels, datasets: [
-                    { label: 'Normal', data: data.bar_chart.map(i => i.normal), backgroundColor: '#10b981', borderRadius: 4 },
-                    { label: 'Ringan', data: data.bar_chart.map(i => i.ringan), backgroundColor: '#f59e0b', borderRadius: 4 },
-                    { label: 'Sedang-Tinggi', data: data.bar_chart.map(i => i.sedang_tinggi), backgroundColor: '#ef4444', borderRadius: 4 }
+                    { label: 'Normal', data: data.bar_chart.map(i => i.normal), backgroundColor: '#10b981', borderRadius: 8 },
+                    { label: 'Ringan', data: data.bar_chart.map(i => i.ringan), backgroundColor: '#f59e0b', borderRadius: 8 },
+                    { label: 'Sedang-Tinggi', data: data.bar_chart.map(i => i.sedang_tinggi), backgroundColor: '#ef4444', borderRadius: 8 }
                 ]},
-                options: { plugins: { legend: { position: 'bottom' } } }
+                options: { 
+                    plugins: { legend: { position: 'bottom' } },
+                    scales: { y: { beginAtZero: true, grid: { display: false } }, x: { grid: { display: false } } }
+                }
             });
 
-            const commonPieOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            usePointStyle: true,
-                            pointStyle: 'circle',
-                            padding: 15,
-                            font: { size: 10, weight: '700' },
-                            color: '#9ca3af'
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: '#fff',
-                        titleColor: '#111827',
-                        bodyColor: '#4b5563',
-                        borderColor: '#f3f4f6',
-                        borderWidth: 1,
-                        padding: 12,
-                        boxPadding: 6,
-                        usePointStyle: true,
-                    }
-                },
-                layout: { padding: 10 }
-            };
-
             new Chart(document.getElementById('gadPieChart').getContext('2d'), {
-                type: 'pie',
+                type: 'doughnut',
                 data: { 
                     labels: data.pie_chart.map(i => i.label), 
                     datasets: [{ 
                         data: data.pie_chart.map(i => i.value), 
                         backgroundColor: ['#10b981', '#f59e0b', '#ef4444'], 
-                        hoverOffset: 20,
                         borderWidth: 0 
                     }] 
                 },
-                options: commonPieOptions
+                options: { cutout: '75%', plugins: { legend: { position: 'bottom' } } }
             });
         }
     } catch (e) { console.error("Error loading GAD charts", e); }
@@ -279,7 +235,7 @@ async function loadProgresWarga() {
                 const getBadge = (status) => {
                     if (status === 'normal') return 'bg-green-100 text-green-700';
                     if (status === 'pra_hipertensi' || status === 'ringan') return 'bg-yellow-100 text-yellow-700';
-                    if (status === 'hipertensi' || status === 'sedang_tinggi') return 'bg-red-100 text-red-700';
+                    if (status === 'hipertensi' || status === 'sedang' || status === 'tinggi') return 'bg-red-100 text-red-700';
                     return 'bg-gray-100 text-gray-600';
                 };
 

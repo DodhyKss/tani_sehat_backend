@@ -35,7 +35,8 @@ class GAD extends Model
     {
         if ($this->skor <= 4) return 'normal';
         if ($this->skor <= 9) return 'ringan';
-        return 'sedang_tinggi';
+        if ($this->skor <= 14) return 'sedang';
+        return 'tinggi';
     }
 
     /**

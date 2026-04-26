@@ -57,25 +57,47 @@ class GADController extends Controller
         ]);
 
         $user = $request->user();
+        
+        // Calculate total score first
         $totalSkor = 0;
-
         foreach ($request->jawaban as $jwb) {
-            JawabanKuesioner::create([
-                'kuesioner_id' => $jwb['kuesioner_id'],
-                'warga_id' => $user->id,
-                'skor' => $jwb['skor'],
-            ]);
             $totalSkor += $jwb['skor'];
         }
 
+        // Create GAD record first
         $gad = GAD::create([
             'warga_id' => $user->id,
             'skor' => $totalSkor,
             'tgl_gad' => Carbon::today(),
         ]);
 
-        $mapKategori = match ($gad->kategori) {
-            'normal' => 'normal', 'ringan' => 'ringan', default => 'sedang',
+        // Save individual answers linked to GAD ID
+        foreach ($request->jawaban as $jwb) {
+            JawabanKuesioner::create([
+                'gad_id' => $gad->id,
+                'kuesioner_id' => $jwb['kuesioner_id'],
+                'warga_id' => $user->id,
+                'skor' => $jwb['skor'],
+            ]);
+        }
+
+        // Update StatusKesehatan Summary Table
+        $kategori = $gad->kategori;
+        \App\Models\StatusKesehatan::updateOrCreate(
+            ['warga_id' => $user->id],
+            [
+                'skor_gad' => $totalSkor,
+                'kategori_gad' => $kategori,
+                'tgl_update' => now(),
+            ]
+        );
+
+        $mapKategori = match ($kategori) {
+            'normal' => 'normal', 
+            'ringan' => 'ringan', 
+            'sedang' => 'sedang', 
+            'tinggi' => 'tinggi',
+            default => 'normal',
         };
 
         $rekomendasi = [
@@ -90,7 +112,7 @@ class GADController extends Controller
             'message' => 'Kuesioner GAD7 berhasil disimpan',
             'data' => [
                 'gad' => $gad, 'skor_total' => $totalSkor,
-                'kategori' => $gad->kategori, 'tingkat_kecemasan' => $gad->tingkat_kecemasan,
+                'kategori' => $kategori, 'tingkat_kecemasan' => $gad->tingkat_kecemasan,
                 'warna' => $gad->warna, 'rekomendasi' => $rekomendasi,
             ],
         ], 201);

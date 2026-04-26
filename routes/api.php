@@ -34,24 +34,29 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('admin/jadwal', [AdminController::class, 'updateJadwal']);
 
         // Kuesioner GAD7
+        Route::get('admin/kuesioner', [AdminController::class, 'indexKuesioner']);
         Route::post('admin/kuesioner', [AdminController::class, 'storeKuesioner']);
         Route::put('admin/kuesioner/{id}', [AdminController::class, 'updateKuesioner']);
         Route::delete('admin/kuesioner/{id}', [AdminController::class, 'destroyKuesioner']);
 
         // Materi
         Route::post('admin/materi', [AdminController::class, 'storeMateri']);
+        Route::post('admin/materi/{id}', [AdminController::class, 'updateMateri']); // Use POST for file upload support in multipart
         Route::delete('admin/materi/{id}', [AdminController::class, 'destroyMateri']);
 
         // Video
         Route::post('admin/video', [AdminController::class, 'storeVideo']);
+        Route::put('admin/video/{id}', [AdminController::class, 'updateVideo']);
         Route::delete('admin/video/{id}', [AdminController::class, 'destroyVideo']);
 
         // Gambar
         Route::post('admin/gambar', [AdminController::class, 'storeGambar']);
+        Route::post('admin/gambar/{id}', [AdminController::class, 'updateGambar']); // Use POST for file upload support
         Route::delete('admin/gambar/{id}', [AdminController::class, 'destroyGambar']);
 
         // Rekomendasi Olahraga
         Route::post('admin/olahraga', [AdminController::class, 'storeOlahraga']);
+        Route::put('admin/olahraga/{id}', [AdminController::class, 'updateOlahraga']);
         Route::delete('admin/olahraga/{id}', [AdminController::class, 'destroyOlahraga']);
     });
 

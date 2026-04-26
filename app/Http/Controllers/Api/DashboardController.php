@@ -21,10 +21,8 @@ class DashboardController extends Controller
     public function grafikTekananDarah(Request $request)
     {
         $user = $request->user();
-        $weeks = $request->get('weeks', 4);
-        $startDate = Carbon::now()->subWeeks($weeks)->startOfWeek();
-
-        $query = TekananDarah::where('tgl_cek', '>=', $startDate);
+        
+        $query = DB::table('status_kesehatan');
 
         // Kader: hanya lihat warga-nya
         if ($user->role === 'kader') {
@@ -32,26 +30,15 @@ class DashboardController extends Controller
             $query->whereIn('warga_id', $wargaIds);
         }
 
-        $records = $query->orderBy('tgl_cek')->get();
+        $stats = $query->select('kategori_td', DB::raw('count(*) as total'))
+            ->groupBy('kategori_td')
+            ->get();
 
-        // Group by week
-        $weeklyData = [];
         $totalPie = ['normal' => 0, 'pra_hipertensi' => 0, 'hipertensi' => 0];
-
-        foreach ($records as $rec) {
-            $weekLabel = 'Minggu ' . Carbon::parse($rec->tgl_cek)->weekOfYear;
-            if (!isset($weeklyData[$weekLabel])) {
-                $weeklyData[$weekLabel] = ['normal' => 0, 'pra_hipertensi' => 0, 'hipertensi' => 0];
+        foreach ($stats as $s) {
+            if ($s->kategori_td && isset($totalPie[$s->kategori_td])) {
+                $totalPie[$s->kategori_td] = $s->total;
             }
-            $kategori = $rec->kategori;
-            $weeklyData[$weekLabel][$kategori]++;
-            $totalPie[$kategori]++;
-        }
-
-        // Format bar chart
-        $barChart = [];
-        foreach ($weeklyData as $label => $counts) {
-            $barChart[] = ['minggu' => $label, 'normal' => $counts['normal'], 'pra_hipertensi' => $counts['pra_hipertensi'], 'hipertensi' => $counts['hipertensi']];
         }
 
         $total = array_sum($totalPie);
@@ -59,6 +46,11 @@ class DashboardController extends Controller
             ['label' => 'Normal', 'value' => $totalPie['normal'], 'warna' => 'hijau', 'persentase' => $total > 0 ? round($totalPie['normal'] / $total * 100, 1) : 0],
             ['label' => 'Pra-Hipertensi', 'value' => $totalPie['pra_hipertensi'], 'warna' => 'kuning', 'persentase' => $total > 0 ? round($totalPie['pra_hipertensi'] / $total * 100, 1) : 0],
             ['label' => 'Hipertensi', 'value' => $totalPie['hipertensi'], 'warna' => 'merah', 'persentase' => $total > 0 ? round($totalPie['hipertensi'] / $total * 100, 1) : 0],
+        ];
+
+        // For bar chart, maybe show same data but as separate bars
+        $barChart = [
+            ['label' => 'Status Terbaru', 'normal' => $totalPie['normal'], 'pra_hipertensi' => $totalPie['pra_hipertensi'], 'hipertensi' => $totalPie['hipertensi']]
         ];
 
         return response()->json([
@@ -74,34 +66,26 @@ class DashboardController extends Controller
     public function grafikGAD(Request $request)
     {
         $user = $request->user();
-        $weeks = $request->get('weeks', 4);
-        $startDate = Carbon::now()->subWeeks($weeks)->startOfWeek();
-
-        $query = GAD::where('tgl_gad', '>=', $startDate);
+        
+        $query = DB::table('status_kesehatan');
 
         if ($user->role === 'kader') {
             $wargaIds = Warga::where('kader_id', $user->id)->pluck('warga_id');
             $query->whereIn('warga_id', $wargaIds);
         }
 
-        $records = $query->orderBy('tgl_gad')->get();
+        $stats = $query->select('kategori_gad', DB::raw('count(*) as total'))
+            ->groupBy('kategori_gad')
+            ->get();
 
-        $weeklyData = [];
         $totalPie = ['normal' => 0, 'ringan' => 0, 'sedang_tinggi' => 0];
-
-        foreach ($records as $rec) {
-            $weekLabel = 'Minggu ' . Carbon::parse($rec->tgl_gad)->weekOfYear;
-            if (!isset($weeklyData[$weekLabel])) {
-                $weeklyData[$weekLabel] = ['normal' => 0, 'ringan' => 0, 'sedang_tinggi' => 0];
+        foreach ($stats as $s) {
+            if ($s->kategori_gad) {
+                $cat = $s->kategori_gad;
+                if ($cat === 'normal') $totalPie['normal'] = $s->total;
+                else if ($cat === 'ringan') $totalPie['ringan'] = $s->total;
+                else if ($cat === 'sedang' || $cat === 'tinggi') $totalPie['sedang_tinggi'] += $s->total;
             }
-            $kategori = $rec->kategori;
-            $weeklyData[$weekLabel][$kategori]++;
-            $totalPie[$kategori]++;
-        }
-
-        $barChart = [];
-        foreach ($weeklyData as $label => $counts) {
-            $barChart[] = ['minggu' => $label, 'normal' => $counts['normal'], 'ringan' => $counts['ringan'], 'sedang_tinggi' => $counts['sedang_tinggi']];
         }
 
         $total = array_sum($totalPie);
@@ -109,6 +93,10 @@ class DashboardController extends Controller
             ['label' => 'Normal', 'value' => $totalPie['normal'], 'warna' => 'hijau', 'persentase' => $total > 0 ? round($totalPie['normal'] / $total * 100, 1) : 0],
             ['label' => 'Ringan', 'value' => $totalPie['ringan'], 'warna' => 'kuning', 'persentase' => $total > 0 ? round($totalPie['ringan'] / $total * 100, 1) : 0],
             ['label' => 'Sedang-Tinggi', 'value' => $totalPie['sedang_tinggi'], 'warna' => 'merah', 'persentase' => $total > 0 ? round($totalPie['sedang_tinggi'] / $total * 100, 1) : 0],
+        ];
+
+        $barChart = [
+            ['label' => 'Status Terbaru', 'normal' => $totalPie['normal'], 'ringan' => $totalPie['ringan'], 'sedang_tinggi' => $totalPie['sedang_tinggi']]
         ];
 
         return response()->json([
@@ -188,7 +176,8 @@ class DashboardController extends Controller
             ->get();
 
         foreach ($gadAlerts as $gad) {
-            if ($gad->kategori === 'sedang_tinggi') {
+            $cat = $gad->kategori;
+            if ($cat === 'sedang' || $cat === 'tinggi') {
                 $data['peringatan'][] = [
                     'warga' => $gad->warga->nama_lengkap,
                     'tipe' => 'gad_tinggi',

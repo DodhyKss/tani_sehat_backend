@@ -36,6 +36,11 @@ class AdminController extends Controller
     }
 
     // ===== KUESIONER GAD7 =====
+    public function indexKuesioner()
+    {
+        return response()->json(['success' => true, 'data' => Kuesioner::all()]);
+    }
+
     public function storeKuesioner(Request $request)
     {
         $request->validate(['soal' => 'required|string']);
@@ -66,12 +71,42 @@ class AdminController extends Controller
             'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
             'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
         ]);
-        $path = $request->file('file')->store('materi', 'public');
-        $m = Materi::create(['judul' => $request->judul, 'file_path' => $path, 'kategori_gad' => $request->kategori_gad, 'kategori_td' => $request->kategori_td]);
+        
+        $file = $request->file('file');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/materi'), $filename);
+        
+        $m = Materi::create([
+            'judul' => $request->judul, 
+            'file_path' => 'uploads/materi/' . $filename, 
+            'kategori_gad' => $request->kategori_gad, 
+            'kategori_td' => $request->kategori_td
+        ]);
         return response()->json(['success' => true, 'data' => $m], 201);
     }
 
     public function indexMateri() { return response()->json(['success' => true, 'data' => Materi::all()]); }
+
+    public function updateMateri(Request $request, $id)
+    {
+        $m = Materi::findOrFail($id);
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+        ]);
+        
+        $data = $request->only('judul', 'kategori_gad', 'kategori_td');
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/materi'), $filename);
+            $data['file_path'] = 'uploads/materi/' . $filename;
+        }
+        
+        $m->update($data);
+        return response()->json(['success' => true, 'data' => $m]);
+    }
 
     public function destroyMateri($id) { Materi::findOrFail($id)->delete(); return response()->json(['success' => true, 'message' => 'Materi dihapus']); }
 
@@ -90,6 +125,19 @@ class AdminController extends Controller
 
     public function indexVideo() { return response()->json(['success' => true, 'data' => Video::all()]); }
 
+    public function updateVideo(Request $request, $id)
+    {
+        $v = Video::findOrFail($id);
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'link_embed' => 'required|string',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+        ]);
+        $v->update($request->only('judul', 'link_embed', 'kategori_gad', 'kategori_td'));
+        return response()->json(['success' => true, 'data' => $v]);
+    }
+
     public function destroyVideo($id) { Video::findOrFail($id)->delete(); return response()->json(['success' => true, 'message' => 'Video dihapus']); }
 
     // ===== GAMBAR =====
@@ -101,12 +149,42 @@ class AdminController extends Controller
             'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
             'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
         ]);
-        $path = $request->file('file')->store('gambar', 'public');
-        $g = Gambar::create(['judul' => $request->judul, 'file_path' => $path, 'kategori_gad' => $request->kategori_gad, 'kategori_td' => $request->kategori_td]);
+        
+        $file = $request->file('file');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/gambar'), $filename);
+        
+        $g = Gambar::create([
+            'judul' => $request->judul, 
+            'file_path' => 'uploads/gambar/' . $filename, 
+            'kategori_gad' => $request->kategori_gad, 
+            'kategori_td' => $request->kategori_td
+        ]);
         return response()->json(['success' => true, 'data' => $g], 201);
     }
 
     public function indexGambar() { return response()->json(['success' => true, 'data' => Gambar::all()]); }
+
+    public function updateGambar(Request $request, $id)
+    {
+        $g = Gambar::findOrFail($id);
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+        ]);
+        
+        $data = $request->only('judul', 'kategori_gad', 'kategori_td');
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/gambar'), $filename);
+            $data['file_path'] = 'uploads/gambar/' . $filename;
+        }
+        
+        $g->update($data);
+        return response()->json(['success' => true, 'data' => $g]);
+    }
 
     public function destroyGambar($id) { Gambar::findOrFail($id)->delete(); return response()->json(['success' => true, 'message' => 'Gambar dihapus']); }
 
@@ -123,6 +201,18 @@ class AdminController extends Controller
     }
 
     public function indexOlahraga() { return response()->json(['success' => true, 'data' => RekomendasiOlahraga::all()]); }
+
+    public function updateOlahraga(Request $request, $id)
+    {
+        $o = RekomendasiOlahraga::findOrFail($id);
+        $request->validate([
+            'nama_olahraga' => 'required|string|max:255',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+        ]);
+        $o->update($request->only('nama_olahraga', 'kategori_gad', 'kategori_td'));
+        return response()->json(['success' => true, 'data' => $o]);
+    }
 
     public function destroyOlahraga($id) { RekomendasiOlahraga::findOrFail($id)->delete(); return response()->json(['success' => true, 'message' => 'Olahraga dihapus']); }
 

@@ -13,6 +13,8 @@ Route::get('/users', function () { return view('admin.users'); })->name('users.i
 Route::get('/admin/kesehatan', function () { return view('admin.kesehatan'); })->name('admin.kesehatan');
 Route::get('/admin/jadwal', function () { return view('admin.jadwal'); })->name('admin.jadwal');
 Route::get('/admin/warga-kader', function () { return view('admin.warga-kader'); })->name('admin.warga-kader');
+Route::get('/admin/rekomendasi', function () { return view('admin.rekomendasi'); })->name('admin.rekomendasi');
+Route::get('/admin/kuesioner', function () { return view('admin.kuesioner'); })->name('admin.kuesioner');
 
 Route::get('/warga', function () { return view('warga.home'); })->name('warga.home');
 Route::get('/warga/input-td', function () { return view('warga.input-td'); })->name('warga.input-td');

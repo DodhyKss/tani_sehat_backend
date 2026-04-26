@@ -10,9 +10,15 @@ class JawabanKuesioner extends Model
 
     protected $fillable = [
         'kuesioner_id',
+        'gad_id',
         'warga_id',
         'skor',
     ];
+
+    public function gad()
+    {
+        return $this->belongsTo(GAD::class, 'gad_id');
+    }
 
     public function kuesioner()
     {
