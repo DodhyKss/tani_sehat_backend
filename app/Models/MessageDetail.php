@@ -12,6 +12,7 @@ class MessageDetail extends Model
         'message_id',
         'sender_id',
         'message',
+        'is_read',
     ];
 
     public function messageThread()

@@ -22,11 +22,10 @@ Route::middleware('auth:sanctum')->group(function () {
 // --- Admin Routes ---
     Route::middleware('role:admin')->group(function () {
         // User Management
-        Route::get('kaders', [UserController::class, 'kadersList']);
         Route::get('users/warga-kader', [UserController::class, 'wargaKaderList']);
         Route::delete('users/remove-kader/{wargaId}', [UserController::class, 'removeKader']);
         Route::post('users/assign-kader', [UserController::class, 'assignKader']);
-        Route::get('users/kader/{kaderId}/warga', [UserController::class, 'wargaByKader']);
+
         Route::apiResource('users', UserController::class);
 
         // Jadwal
@@ -54,6 +53,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('admin/olahraga', [AdminController::class, 'storeOlahraga']);
         Route::delete('admin/olahraga/{id}', [AdminController::class, 'destroyOlahraga']);
     });
+
+    // Access for Admin & Kader
+    Route::middleware('role:admin,kader')->group(function () {
+        Route::get('users/kader/{kaderId}/warga', [UserController::class, 'wargaByKader']);
+    });
+
+    Route::get('kaders', [UserController::class, 'kadersList']);
+    Route::get('admins', [UserController::class, 'adminsList']);
+
+
 
     // Public content resources (viewable by all authenticated users)
     Route::get('materi', [AdminController::class, 'indexMateri']);
@@ -89,4 +98,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('messages/start', [MessageController::class, 'startConversation']);
     Route::get('messages/{id}', [MessageController::class, 'show']);
     Route::post('messages/{id}/send', [MessageController::class, 'sendMessage']);
+    Route::delete('messages/{id}', [MessageController::class, 'destroy']);
+    Route::delete('messages/detail/{id}', [MessageController::class, 'destroyDetail']);
 });

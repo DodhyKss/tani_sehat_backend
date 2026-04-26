@@ -183,15 +183,25 @@ class UserController extends Controller
      * GET /api/users/kader/{kaderId}/warga
      * Daftar warga yang ditangani oleh kader tertentu
      */
-    public function wargaByKader($kaderId)
+    public function wargaByKader(Request $request, $kaderId)
     {
-        $relations = Warga::with('warga')
-            ->where('kader_id', $kaderId)
-            ->get();
+        $user = $request->user();
+
+        // Jika user adalah kader, pastikan dia hanya mengakses datanya sendiri
+        if ($user->role === 'kader' && $user->id != $kaderId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki akses ke data warga kader lain',
+            ], 403);
+        }
+
+        $wargas = User::whereHas('wargaRelasi', function($q) use ($kaderId) {
+            $q->where('kader_id', $kaderId);
+        })->get(['id', 'nama_lengkap', 'no_hp', 'foto']);
 
         return response()->json([
             'success' => true,
-            'data' => $relations,
+            'data' => $wargas,
         ]);
     }
     
@@ -226,7 +236,7 @@ class UserController extends Controller
      */
     public function kadersList()
     {
-        $kaders = User::where('role', 'kader')->get(['id', 'nama_lengkap', 'nik', 'no_hp']);
+        $kaders = User::where('role', 'kader')->get(['id', 'nama_lengkap', 'no_hp', 'foto']);
 
         return response()->json([
             'success' => true,
@@ -234,6 +244,16 @@ class UserController extends Controller
         ]);
     }
     
+
+    public function adminsList()
+    {
+        $admins = User::where('role', 'admin')->get(['id', 'nama_lengkap', 'no_hp', 'foto']);
+
+        return response()->json([
+            'success' => true,
+            'data' => $admins,
+        ]);
+    }
 
     public function removeKader($wargaId)
     {

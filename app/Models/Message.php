@@ -11,7 +11,13 @@ class Message extends Model
     protected $fillable = [
         'kader_id',
         'warga_id',
+        'admin_id',
     ];
+
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
+    }
 
     public function kader()
     {
