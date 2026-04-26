@@ -72,6 +72,8 @@
                 const user = result.data.user;
                 if (user.role === 'warga') {
                     window.location.href = '/warga';
+                } else if (user.role === 'kader') {
+                    window.location.href = '/kader';
                 } else {
                     window.location.href = '/dashboard';
                 }

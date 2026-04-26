@@ -195,9 +195,10 @@ class UserController extends Controller
             ], 403);
         }
 
-        $wargas = User::whereHas('wargaRelasi', function($q) use ($kaderId) {
-            $q->where('kader_id', $kaderId);
-        })->get(['id', 'nama_lengkap', 'no_hp', 'foto']);
+        $wargas = User::with(['statusKesehatan', 'firstTd', 'firstGad'])
+            ->whereHas('wargaRelasi', function($q) use ($kaderId) {
+                $q->where('kader_id', $kaderId);
+            })->get(['id', 'nama_lengkap', 'nik', 'no_hp', 'foto']);
 
         return response()->json([
             'success' => true,
