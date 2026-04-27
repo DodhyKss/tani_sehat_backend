@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\StatusKesehatanController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\ReproduksiController;
 
 // Public Routes
 Route::post('/login', [AuthController::class, 'login']);
@@ -97,6 +98,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('gad/kuesioner', [GADController::class, 'kuesioner']);
     Route::get('gad/cek-jadwal', [GADController::class, 'cekJadwal']);
     Route::apiResource('gad', GADController::class)->only(['index', 'store', 'show']);
+
+    // --- Reproduksi ---
+    Route::apiResource('reproduksi', ReproduksiController::class)->only(['index', 'store', 'destroy']);
 
     // --- Messages / Chat ---
     Route::get('messages', [MessageController::class, 'index']);
