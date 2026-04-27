@@ -83,7 +83,7 @@
         
         <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black/50 z-30 md:hidden"></div>
         
-        <main class="flex-1 min-h-screen md:p-6 p-4 pt-20 md:pt-6">
+        <main class="flex-1 min-h-screen md:p-6 p-4 pt-6 md:pt-6">
             <div id="alertMessage" class="hidden mb-6 p-4 rounded-lg shadow-sm border-l-4"></div>
             @yield('content')
         </main>
