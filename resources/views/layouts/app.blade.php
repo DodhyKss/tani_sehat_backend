@@ -27,6 +27,13 @@
         @media (max-width: 768px) {
             .sidebar-open { transform: translateX(0); }
             .sidebar-closed { transform: translateX(-100%); }
+            .content-with-bottom-nav { padding-bottom: 5rem; }
+            .overflow-x-auto { 
+                margin-left: -1rem; 
+                margin-right: -1rem; 
+                padding-left: 1rem; 
+                padding-right: 1rem; 
+            }
         }
     </style>
 </head>

@@ -6,50 +6,52 @@
     <p class="text-gray-500 text-sm">Detail riwayat kesehatan warga binaan saya</p>
 </div>
 
-<div class="flex flex-col lg:flex-row gap-4 mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-    <div class="flex-1">
-        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Pilih Warga</label>
-        <select id="filterWarga" class="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-primary-500">
-            <option value="">Semua Warga Binaan</option>
-        </select>
-    </div>
-    <div class="flex flex-col md:flex-row gap-3">
+<div class="flex flex-col gap-4 mb-6 bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Dari Tanggal</label>
-            <input type="date" id="startDate" class="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-primary-500">
+            <label class="block text-[10px] font-black text-gray-400 uppercase mb-1.5 tracking-widest">Pilih Warga</label>
+            <select id="filterWarga" class="w-full px-4 py-2.5 rounded-xl border border-gray-100 bg-gray-50 text-sm focus:ring-2 focus:ring-primary-500 transition-all outline-none">
+                <option value="">Semua Warga Binaan</option>
+            </select>
         </div>
         <div>
-            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Sampai Tanggal</label>
-            <input type="date" id="endDate" class="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-primary-500">
+            <label class="block text-[10px] font-black text-gray-400 uppercase mb-1.5 tracking-widest">Dari Tanggal</label>
+            <input type="date" id="startDate" class="w-full px-4 py-2.5 rounded-xl border border-gray-100 bg-gray-50 text-sm focus:ring-2 focus:ring-primary-500 transition-all outline-none">
+        </div>
+        <div>
+            <label class="block text-[10px] font-black text-gray-400 uppercase mb-1.5 tracking-widest">Sampai Tanggal</label>
+            <input type="date" id="endDate" class="w-full px-4 py-2.5 rounded-xl border border-gray-100 bg-gray-50 text-sm focus:ring-2 focus:ring-primary-500 transition-all outline-none">
         </div>
     </div>
-    <div class="flex items-end gap-2">
-        <button onclick="loadData()" class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition shadow-sm">Cari</button>
-        <button onclick="resetFilter()" class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium transition">Reset</button>
+    <div class="flex flex-wrap gap-2 pt-2 border-t border-gray-50">
+        <button onclick="loadData()" class="flex-1 md:flex-none bg-primary-600 hover:bg-primary-700 text-white px-8 py-2.5 rounded-xl text-sm font-bold transition shadow-lg shadow-primary-200">Cari Data</button>
+        <button onclick="resetFilter()" class="flex-1 md:flex-none bg-gray-100 hover:bg-gray-200 text-gray-600 px-6 py-2.5 rounded-xl text-sm font-bold transition">Reset</button>
     </div>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-    <div class="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
-        <p class="text-gray-500 text-xs font-bold uppercase mb-2">Total Cek TD</p>
-        <div class="text-3xl font-bold text-gray-800" id="statTotalTd">0</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6">
+    <div class="bg-white rounded-2xl p-4 md:p-5 border border-gray-100 shadow-sm">
+        <p class="text-gray-400 text-[10px] font-black uppercase mb-1 tracking-widest">Total Cek TD</p>
+        <div class="text-2xl md:text-3xl font-black text-gray-900" id="statTotalTd">0</div>
     </div>
-    <div class="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
-        <p class="text-gray-500 text-xs font-bold uppercase mb-2">Total Kuesioner GAD7</p>
-        <div class="text-3xl font-bold text-gray-800" id="statTotalGad">0</div>
+    <div class="bg-white rounded-2xl p-4 md:p-5 border border-gray-100 shadow-sm">
+        <p class="text-gray-400 text-[10px] font-black uppercase mb-1 tracking-widest">Total GAD7</p>
+        <div class="text-2xl md:text-3xl font-black text-gray-900" id="statTotalGad">0</div>
     </div>
-    <div class="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
-        <p class="text-gray-500 text-xs font-bold uppercase mb-2">Warga Berisiko</p>
-        <div class="text-3xl font-bold text-red-600" id="statRisiko">0</div>
+    <div class="bg-white rounded-2xl p-4 md:p-5 border border-gray-100 shadow-sm col-span-2 md:col-span-1">
+        <p class="text-gray-400 text-[10px] font-black uppercase mb-1 tracking-widest">Warga Berisiko</p>
+        <div class="text-2xl md:text-3xl font-black text-red-600" id="statRisiko">0</div>
     </div>
 </div>
 
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 mb-6">
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-6 mb-6">
     <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-red-500"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
         Riwayat Tekanan Darah
     </h2>
-    <div class="overflow-x-auto">
+    
+    <!-- Desktop Table -->
+    <div class="hidden md:block overflow-x-auto">
         <table class="w-full text-sm text-left">
             <thead class="bg-gray-50 text-gray-600 uppercase text-xs font-semibold">
                 <tr>
@@ -65,15 +67,23 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Mobile Cards -->
+    <div id="tdCards" class="md:hidden space-y-3">
+        <div class="text-center py-8 text-gray-500">Memuat data...</div>
+    </div>
+    
     <div id="tdPagination" class="mt-4 flex justify-center gap-2"></div>
 </div>
 
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-6">
     <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-indigo-500"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
         Riwayat GAD7
     </h2>
-    <div class="overflow-x-auto">
+    
+    <!-- Desktop Table -->
+    <div class="hidden md:block overflow-x-auto">
         <table class="w-full text-sm text-left">
             <thead class="bg-gray-50 text-gray-600 uppercase text-xs font-semibold">
                 <tr>
@@ -88,6 +98,12 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Mobile Cards -->
+    <div id="gadCards" class="md:hidden space-y-3">
+        <div class="text-center py-8 text-gray-500">Memuat data...</div>
+    </div>
+
     <div id="gadPagination" class="mt-4 flex justify-center gap-2"></div>
 </div>
 @endsection
@@ -148,12 +164,15 @@ function updateRiskStats(tdData, gadData) {
 
 function renderTdTable(data) {
     const tbody = document.getElementById('tdTable');
+    const cards = document.getElementById('tdCards');
+    
     if (!data || data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">Tidak ada data</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">Tidak ada data</td></tr>';
+        if (cards) cards.innerHTML = '<div class="text-center py-8 text-gray-500">Tidak ada data</div>';
         return;
     }
     
-    tbody.innerHTML = data.map(td => {
+    const rowsHtml = data.map(td => {
         const status = getStatusTd(td.systolic, td.diastolic);
         return `<tr class="hover:bg-gray-50">
             <td class="px-4 py-3 font-medium">${td.warga?.nama_lengkap || '-'}</td>
@@ -163,16 +182,38 @@ function renderTdTable(data) {
             <td class="px-4 py-3"><span class="px-2 py-1 text-xs font-semibold rounded-full ${status.color}">${status.label}</span></td>
         </tr>`;
     }).join('');
+
+    const cardsHtml = data.map(td => {
+        const status = getStatusTd(td.systolic, td.diastolic);
+        return `
+            <div class="bg-gray-50/50 rounded-xl p-4 border border-gray-100">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="font-bold text-gray-800">${td.warga?.nama_lengkap || '-'}</p>
+                    <span class="px-2 py-0.5 text-[10px] font-bold rounded-full ${status.color}">${status.label}</span>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500">
+                    <span>${new Date(td.tgl_cek).toLocaleDateString('id-ID')}</span>
+                    <span class="font-mono font-bold text-gray-700">${td.systolic}/${td.diastolic} mmHg</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    if (tbody) tbody.innerHTML = rowsHtml;
+    if (cards) cards.innerHTML = cardsHtml;
 }
 
 function renderGadTable(data) {
     const tbody = document.getElementById('gadTable');
+    const cards = document.getElementById('gadCards');
+    
     if (!data || data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">Tidak ada data</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">Tidak ada data</td></tr>';
+        if (cards) cards.innerHTML = '<div class="text-center py-8 text-gray-500">Tidak ada data</div>';
         return;
     }
     
-    tbody.innerHTML = data.map(gad => {
+    const rowsHtml = data.map(gad => {
         const status = getStatusGad(gad.skor);
         return `<tr class="hover:bg-gray-50">
             <td class="px-4 py-3 font-medium">${gad.warga?.nama_lengkap || '-'}</td>
@@ -181,6 +222,25 @@ function renderGadTable(data) {
             <td class="px-4 py-3"><span class="px-2 py-1 text-xs font-semibold rounded-full ${status.color}">${status.label}</span></td>
         </tr>`;
     }).join('');
+
+    const cardsHtml = data.map(gad => {
+        const status = getStatusGad(gad.skor);
+        return `
+            <div class="bg-gray-50/50 rounded-xl p-4 border border-gray-100">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="font-bold text-gray-800">${gad.warga?.nama_lengkap || '-'}</p>
+                    <span class="px-2 py-0.5 text-[10px] font-bold rounded-full ${status.color}">${status.label}</span>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500">
+                    <span>${new Date(gad.tgl_gad).toLocaleDateString('id-ID')}</span>
+                    <span class="font-mono font-bold text-gray-700">Skor: ${gad.skor}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    if (tbody) tbody.innerHTML = rowsHtml;
+    if (cards) cards.innerHTML = cardsHtml;
 }
 
 async function loadWargaList() {

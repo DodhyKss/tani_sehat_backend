@@ -7,70 +7,70 @@
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
-    <div id="kondisiCard" class="md:col-span-2 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl p-6 text-white shadow-lg">
-        <div class="flex items-start justify-between">
+    <div id="kondisiCard" class="md:col-span-2 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl p-5 md:p-6 text-white shadow-lg">
+        <div class="flex items-start justify-between gap-4">
             <div>
-                <p class="text-primary-100 text-sm mb-1">Kondisi Kesehatan Anda</p>
-                <h2 class="text-2xl font-bold mb-2" id="kondisiSummary">Memuat...</h2>
-                <p class="text-primary-100 text-sm opacity-80" id="kondisiDesc">-</p>
+                <p class="text-primary-100 text-xs md:text-sm mb-1">Kondisi Kesehatan Anda</p>
+                <h2 class="text-xl md:text-2xl font-bold mb-2" id="kondisiSummary">Memuat...</h2>
+                <p class="text-primary-100 text-xs md:text-sm opacity-80" id="kondisiDesc">-</p>
             </div>
-            <div class="p-3 bg-white/20 rounded-xl">
-                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <div class="p-2 md:p-3 bg-white/20 rounded-xl flex-shrink-0">
+                <svg class="w-6 h-6 md:w-8 md:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             </div>
         </div>
     </div>
     
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-6">
         <h3 class="font-semibold text-gray-800 mb-4">Aksi Cepat</h3>
-        <div class="space-y-3">
-            <a href="/warga/input-td" class="flex items-center gap-3 p-3 bg-red-50 hover:bg-red-100 rounded-xl transition">
-                <div class="p-2 bg-red-100 rounded-lg">
+        <div class="grid grid-cols-2 md:grid-cols-1 gap-3">
+            <a href="/warga/input-td" class="flex flex-col md:flex-row md:items-center gap-2 md:gap-3 p-3 bg-red-50 hover:bg-red-100 rounded-xl transition">
+                <div class="p-2 bg-red-100 rounded-lg w-fit">
                     <svg class="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                 </div>
                 <div>
-                    <p class="font-medium text-gray-800 text-sm">Input Tekanan Darah</p>
-                    <p class="text-xs text-gray-500">Cek TD hari ini</p>
+                    <p class="font-medium text-gray-800 text-xs md:text-sm">Input TD</p>
+                    <p class="hidden md:block text-xs text-gray-500">Cek TD hari ini</p>
                 </div>
             </a>
-            <a href="/warga/input-gad" class="flex items-center gap-3 p-3 bg-yellow-50 hover:bg-yellow-100 rounded-xl transition">
-                <div class="p-2 bg-yellow-100 rounded-lg">
+            <a href="/warga/input-gad" class="flex flex-col md:flex-row md:items-center gap-2 md:gap-3 p-3 bg-yellow-50 hover:bg-yellow-100 rounded-xl transition">
+                <div class="p-2 bg-yellow-100 rounded-lg w-fit">
                     <svg class="w-5 h-5 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                 </div>
                 <div>
-                    <p class="font-medium text-gray-800 text-sm">Kuesioner GAD7</p>
-                    <p class="text-xs text-gray-500">Isi setiap 2 minggu</p>
+                    <p class="font-medium text-gray-800 text-xs md:text-sm">GAD7</p>
+                    <p class="hidden md:block text-xs text-gray-500">Isi kuesioner</p>
                 </div>
             </a>
         </div>
         
         <!-- Kader Info -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-6" id="kaderInfo">
-            <div class="text-center py-4 text-gray-400 text-sm italic">Memuat info kader...</div>
+        <div class="bg-gray-50 rounded-2xl p-4 mt-6" id="kaderInfo">
+            <div class="text-center py-2 text-gray-400 text-xs italic">Memuat info kader...</div>
         </div>
     </div>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+<div class="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-6 mb-6">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-6">
+        <h3 class="text-sm md:font-semibold text-gray-800 mb-4 flex items-center gap-2">
             <span class="w-2 h-2 bg-red-400 rounded-full"></span>
-            Tekanan Darah Terakhir
+            TD Terakhir
         </h3>
-        <div id="lastTd" class="text-center py-8 text-gray-500">Memuat...</div>
+        <div id="lastTd" class="text-center py-4 md:py-8 text-gray-500">Memuat...</div>
     </div>
     
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-6">
+        <h3 class="text-sm md:font-semibold text-gray-800 mb-4 flex items-center gap-2">
             <span class="w-2 h-2 bg-yellow-400 rounded-full"></span>
             GAD7 Terakhir
         </h3>
-        <div id="lastGad" class="text-center py-8 text-gray-500">Memuat...</div>
+        <div id="lastGad" class="text-center py-4 md:py-8 text-gray-500">Memuat...</div>
     </div>
 </div>
 
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-6">
     <h3 class="font-semibold text-gray-800 mb-4">Rekomendasi untuk Anda</h3>
-    <div id="rekomendasiContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div id="rekomendasiContainer" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <div class="col-span-full text-center py-8 text-gray-500">Memuat...</div>
     </div>
 </div>

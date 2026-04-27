@@ -13,7 +13,8 @@
 </div>
 
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-    <div class="overflow-x-auto">
+    <!-- Desktop Table -->
+    <div class="hidden md:block overflow-x-auto">
         <table class="w-full text-left text-sm">
             <thead class="bg-gray-50 text-gray-600 uppercase text-xs font-semibold border-b border-gray-100">
                 <tr>
@@ -29,6 +30,11 @@
                 <tr><td colspan="6" class="px-6 py-8 text-center text-gray-500 flex justify-center items-center gap-3"><div class="w-5 h-5 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"></div>Memuat...</td></tr>
             </tbody>
         </table>
+    </div>
+
+    <!-- Mobile Cards -->
+    <div id="usersCards" class="md:hidden divide-y divide-gray-100">
+        <div class="p-8 text-center text-gray-500">Memuat...</div>
     </div>
     <div id="pagination" class="p-4 border-t border-gray-100 flex flex-wrap justify-center gap-2"></div>
 </div>
@@ -136,12 +142,15 @@ async function loadUsers(page = 1) {
 
 function renderUsers(users) {
     const tbody = document.getElementById('usersTableBody');
+    const cards = document.getElementById('usersCards');
+    
     if (!users || users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">Tidak ada user</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">Tidak ada user</td></tr>';
+        if (cards) cards.innerHTML = '<div class="p-8 text-center text-gray-500">Tidak ada user</div>';
         return;
     }
     
-    tbody.innerHTML = users.map(u => {
+    const rowsHtml = users.map(u => {
         const badgeClass = u.role === 'admin' ? 'bg-indigo-100 text-indigo-700' : u.role === 'kader' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700';
         return `<tr class="hover:bg-gray-50 transition">
             <td class="px-4 md:px-6 py-4 font-mono text-gray-600 text-xs md:text-sm">${u.nik}</td>
@@ -159,6 +168,35 @@ function renderUsers(users) {
             </td>
         </tr>`;
     }).join('');
+
+    const cardsHtml = users.map(u => {
+        const badgeClass = u.role === 'admin' ? 'bg-indigo-100 text-indigo-700' : u.role === 'kader' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700';
+        return `
+            <div class="p-4 bg-white hover:bg-gray-50 transition">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <p class="font-bold text-gray-800">${u.nama_lengkap}</p>
+                        <p class="text-xs font-mono text-gray-500">${u.nik}</p>
+                    </div>
+                    <span class="px-2 py-0.5 text-[10px] font-bold rounded-full uppercase ${badgeClass}">${u.role}</span>
+                </div>
+                <div class="flex justify-between items-center text-sm text-gray-600">
+                    <span>${u.no_hp}</span>
+                    <div class="flex gap-1">
+                        <button onclick='openUserModal(${JSON.stringify(u)})' class="p-2 bg-primary-50 text-primary-600 rounded-lg">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        </button>
+                        <button onclick="deleteUser(${u.id})" class="p-2 bg-red-50 text-red-600 rounded-lg">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    if (tbody) tbody.innerHTML = rowsHtml;
+    if (cards) cards.innerHTML = cardsHtml;
 }
 
 function renderPagination(data) {

@@ -49,12 +49,12 @@
     </div>
 </div>
 
-<div class="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-10">
-    <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-8 md:p-10 hover:shadow-2xl hover:shadow-primary-100/10 transition-all duration-500 overflow-hidden">
-        <div class="flex items-center justify-between mb-8">
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-8 mb-10">
+    <div class="bg-white rounded-2xl md:rounded-[2.5rem] shadow-sm border border-gray-100 p-5 md:p-10 hover:shadow-2xl hover:shadow-primary-100/10 transition-all duration-500 overflow-hidden">
+        <div class="flex items-center justify-between mb-6 md:mb-8">
             <div>
-                <h2 class="text-2xl font-black text-gray-900 tracking-tight">Tren Tekanan Darah</h2>
-                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Analisis 4 Minggu Terakhir</p>
+                <h2 class="text-xl md:text-2xl font-black text-gray-900 tracking-tight">Tren Tekanan Darah</h2>
+                <p class="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Analisis 4 Minggu Terakhir</p>
             </div>
             <div class="hidden sm:flex gap-2">
                 <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
@@ -62,21 +62,21 @@
                 <span class="w-2 h-2 rounded-full bg-rose-500"></span>
             </div>
         </div>
-        <div class="flex flex-col lg:flex-row gap-8 h-auto lg:h-72">
-            <div class="flex-1 min-h-[250px] relative">
+        <div class="flex flex-col lg:flex-row gap-6 md:gap-8 h-auto lg:h-72">
+            <div class="flex-1 min-h-[220px] md:min-h-[250px] relative">
                 <canvas id="tdBarChart"></canvas>
             </div>
-            <div class="w-full lg:w-48 xl:w-56 min-h-[250px] relative flex justify-center">
+            <div class="w-full lg:w-48 xl:w-56 min-h-[220px] md:min-h-[250px] relative flex justify-center">
                 <canvas id="tdPieChart"></canvas>
             </div>
         </div>
     </div>
 
-    <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-8 md:p-10 hover:shadow-2xl hover:shadow-indigo-100/10 transition-all duration-500 overflow-hidden">
-        <div class="flex items-center justify-between mb-8">
+    <div class="bg-white rounded-2xl md:rounded-[2.5rem] shadow-sm border border-gray-100 p-5 md:p-10 hover:shadow-2xl hover:shadow-indigo-100/10 transition-all duration-500 overflow-hidden">
+        <div class="flex items-center justify-between mb-6 md:mb-8">
             <div>
-                <h2 class="text-2xl font-black text-gray-900 tracking-tight">Tren GAD7</h2>
-                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Status Psikologis Warga</p>
+                <h2 class="text-xl md:text-2xl font-black text-gray-900 tracking-tight">Tren GAD7</h2>
+                <p class="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Status Psikologis Warga</p>
             </div>
             <div class="hidden sm:flex gap-2">
                 <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
@@ -84,37 +84,50 @@
                 <span class="w-2 h-2 rounded-full bg-rose-500"></span>
             </div>
         </div>
-        <div class="flex flex-col lg:flex-row gap-8 h-auto lg:h-72">
-            <div class="flex-1 min-h-[250px] relative">
+        <div class="flex flex-col lg:flex-row gap-6 md:gap-8 h-auto lg:h-72">
+            <div class="flex-1 min-h-[220px] md:min-h-[250px] relative">
                 <canvas id="gadBarChart"></canvas>
             </div>
-            <div class="w-full lg:w-48 xl:w-56 min-h-[250px] relative flex justify-center">
+            <div class="w-full lg:w-48 xl:w-56 min-h-[220px] md:min-h-[250px] relative flex justify-center">
                 <canvas id="gadPieChart"></canvas>
             </div>
         </div>
     </div>
 </div>
 
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
-    <div class="flex items-center justify-between mb-4">
-        <h2 class="text-lg font-bold text-gray-800">Progres Kesehatan Warga</h2>
-        <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Awal vs Akhir</span>
+<div class="bg-white rounded-2xl md:rounded-[2.5rem] shadow-sm border border-gray-100 p-5 md:p-10 mb-10 overflow-hidden">
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h2 class="text-xl md:text-2xl font-black text-gray-900 tracking-tight">Progres Kesehatan Warga</h2>
+            <p class="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Data Real-time Terbaru</p>
+        </div>
+        <a href="/admin/kesehatan" class="text-primary-600 hover:text-primary-700 text-xs md:text-sm font-bold flex items-center gap-1 group">
+            Lihat Semua 
+            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
     </div>
-    <div class="overflow-x-auto">
+    
+    <!-- Desktop Table -->
+    <div class="hidden md:block overflow-x-auto">
         <table class="w-full text-sm text-left">
-            <thead class="bg-gray-50 text-gray-600 uppercase text-xs font-semibold">
+            <thead class="bg-gray-50/50 text-gray-400 uppercase text-[10px] font-black tracking-widest border-b border-gray-100">
                 <tr>
-                    <th class="px-4 py-3">Nama Warga</th>
-                    <th class="px-4 py-3 text-center border-x border-gray-100">TD Awal</th>
-                    <th class="px-4 py-3 text-center border-r border-gray-100">TD Akhir</th>
-                    <th class="px-4 py-3 text-center border-r border-gray-100">GAD7 Awal</th>
-                    <th class="px-4 py-3 text-center">GAD7 Akhir</th>
+                    <th class="px-6 py-4">Warga</th>
+                    <th class="px-6 py-4 text-center border-x border-gray-100">TD Awal</th>
+                    <th class="px-6 py-4 text-center border-r border-gray-100">TD Akhir</th>
+                    <th class="px-6 py-4 text-center border-r border-gray-100">GAD7 Awal</th>
+                    <th class="px-6 py-4 text-center">GAD7 Akhir</th>
                 </tr>
             </thead>
-            <tbody id="progresTable" class="divide-y divide-gray-100">
-                <tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">Memuat data progres...</td></tr>
+            <tbody id="progresTable" class="divide-y divide-gray-50">
+                <tr><td colspan="5" class="px-6 py-12 text-center text-gray-400">Memuat data progres...</td></tr>
             </tbody>
         </table>
+    </div>
+
+    <!-- Mobile Cards -->
+    <div id="progresCards" class="md:hidden space-y-4">
+        <div class="text-center py-12 text-gray-400">Memuat data progres...</div>
     </div>
 </div>
 @endsection
@@ -225,42 +238,79 @@ async function loadProgresWarga() {
     try {
         const res = await apiCall('/dashboard/progres-warga');
         const tbody = document.getElementById('progresTable');
+        const cards = document.getElementById('progresCards');
+        
         if (res && res.success) {
             if (res.data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">Tidak ada data progres</td></tr>';
+                if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center text-gray-400">Tidak ada data progres</td></tr>';
+                if (cards) cards.innerHTML = '<div class="text-center py-12 text-gray-400">Tidak ada data progres</div>';
                 return;
             }
 
-            tbody.innerHTML = res.data.map(item => {
-                const getBadge = (status) => {
-                    if (status === 'normal') return 'bg-green-100 text-green-700';
-                    if (status === 'pra_hipertensi' || status === 'ringan') return 'bg-yellow-100 text-yellow-700';
-                    if (status === 'hipertensi' || status === 'sedang' || status === 'tinggi') return 'bg-red-100 text-red-700';
-                    return 'bg-gray-100 text-gray-600';
-                };
+            const getBadge = (status) => {
+                if (status === 'normal') return 'bg-green-100 text-green-700';
+                if (status === 'pra_hipertensi' || status === 'ringan') return 'bg-yellow-100 text-yellow-700';
+                if (status === 'hipertensi' || status === 'sedang' || status === 'tinggi') return 'bg-red-100 text-red-700';
+                return 'bg-gray-100 text-gray-600';
+            };
 
-                return `
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-4 py-4 font-semibold text-gray-800">${item.nama}</td>
-                        <td class="px-4 py-4 text-center border-x border-gray-100">
+            if (tbody) {
+                tbody.innerHTML = res.data.map(item => `
+                    <tr class="hover:bg-gray-50/50 transition">
+                        <td class="px-6 py-4 font-bold text-gray-900">${item.nama}</td>
+                        <td class="px-6 py-4 text-center border-x border-gray-50">
                             <div class="font-mono text-xs">${item.td.awal}</div>
                             <span class="px-2 py-0.5 text-[10px] rounded-full uppercase font-bold ${getBadge(item.td.status_awal)}">${item.td.status_awal.replace('_', ' ')}</span>
                         </td>
-                        <td class="px-4 py-4 text-center border-r border-gray-100">
+                        <td class="px-6 py-4 text-center border-r border-gray-50">
                             <div class="font-mono text-xs font-bold text-primary-700">${item.td.akhir}</div>
                             <span class="px-2 py-0.5 text-[10px] rounded-full uppercase font-bold ${getBadge(item.td.status_akhir)}">${item.td.status_akhir.replace('_', ' ')}</span>
                         </td>
-                        <td class="px-4 py-4 text-center border-r border-gray-100">
+                        <td class="px-6 py-4 text-center border-r border-gray-50">
                             <div class="font-mono text-xs">Skor: ${item.gad.awal}</div>
                             <span class="px-2 py-0.5 text-[10px] rounded-full uppercase font-bold ${getBadge(item.gad.status_awal)}">${item.gad.status_awal.replace('_', ' ')}</span>
                         </td>
-                        <td class="px-4 py-4 text-center">
+                        <td class="px-6 py-4 text-center">
                             <div class="font-mono text-xs font-bold text-primary-700">Skor: ${item.gad.akhir}</div>
                             <span class="px-2 py-0.5 text-[10px] rounded-full uppercase font-bold ${getBadge(item.gad.status_akhir)}">${item.gad.status_akhir.replace('_', ' ')}</span>
                         </td>
                     </tr>
-                `;
-            }).join('');
+                `).join('');
+            }
+
+            if (cards) {
+                cards.innerHTML = res.data.map(item => `
+                    <div class="bg-gray-50/50 rounded-2xl p-5 border border-gray-100">
+                        <p class="font-black text-gray-900 text-lg mb-4 border-b border-gray-100 pb-2">${item.nama}</p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-3">
+                                <div class="bg-white p-3 rounded-xl border border-gray-50 shadow-sm">
+                                    <p class="text-[9px] font-black text-gray-400 uppercase mb-1">TD Awal</p>
+                                    <p class="text-sm font-bold text-gray-700">${item.td.awal}</p>
+                                    <span class="text-[8px] font-bold ${getBadge(item.td.status_awal)} px-1.5 py-0.5 rounded-full uppercase">${item.td.status_awal.replace('_', ' ')}</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-gray-50 shadow-sm">
+                                    <p class="text-[9px] font-black text-gray-400 uppercase mb-1">GAD Awal</p>
+                                    <p class="text-sm font-bold text-gray-700">Skor: ${item.gad.awal}</p>
+                                    <span class="text-[8px] font-bold ${getBadge(item.gad.status_awal)} px-1.5 py-0.5 rounded-full uppercase">${item.gad.status_awal.replace('_', ' ')}</span>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="bg-primary-50/30 p-3 rounded-xl border border-primary-100 shadow-sm">
+                                    <p class="text-[9px] font-black text-primary-400 uppercase mb-1">TD Akhir</p>
+                                    <p class="text-sm font-black text-primary-700">${item.td.akhir}</p>
+                                    <span class="text-[8px] font-bold ${getBadge(item.td.status_akhir)} px-1.5 py-0.5 rounded-full uppercase">${item.td.status_akhir.replace('_', ' ')}</span>
+                                </div>
+                                <div class="bg-primary-50/30 p-3 rounded-xl border border-primary-100 shadow-sm">
+                                    <p class="text-[9px] font-black text-primary-400 uppercase mb-1">GAD Akhir</p>
+                                    <p class="text-sm font-black text-primary-700">Skor: ${item.gad.akhir}</p>
+                                    <span class="text-[8px] font-bold ${getBadge(item.gad.status_akhir)} px-1.5 py-0.5 rounded-full uppercase">${item.gad.status_akhir.replace('_', ' ')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
         }
     } catch (e) { console.error("Error loading progress table", e); }
 }

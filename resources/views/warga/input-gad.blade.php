@@ -153,9 +153,9 @@ async function renderQuestions() {
         container.innerHTML = questions.map((q, i) => `
             <div class="p-4 bg-gray-50 rounded-xl">
                 <p class="font-medium text-gray-800 mb-3">${i + 1}. ${q.soal}</p>
-                <div class="flex flex-wrap gap-2">
+                <div class="grid grid-cols-2 md:flex md:flex-wrap gap-2">
                     ${options.map(o => `
-                        <button type="button" onclick="selectAnswer(${i}, ${o.value})" class="answer-btn flex-1 min-w-[80px] px-4 py-2.5 rounded-lg border-2 border-gray-200 text-sm font-medium transition hover:border-primary-500 hover:bg-primary-50" data-q="${i}" data-val="${o.value}">
+                        <button type="button" onclick="selectAnswer(${i}, ${o.value})" class="answer-btn px-3 py-3 rounded-lg border-2 border-gray-100 text-[10px] md:text-sm font-bold transition hover:border-primary-500 hover:bg-primary-50 leading-tight" data-q="${i}" data-val="${o.value}">
                             ${o.label}
                         </button>
                     `).join('')}

@@ -153,39 +153,7 @@ class DashboardController extends Controller
             'warga_terbaru' => []
         ];
 
-        // Ambil peringatan (Hipertensi atau GAD Tinggi dalam 7 hari terakhir)
-        $tdAlerts = TekananDarah::with('warga')
-            ->whereIn('warga_id', $wargaIds)
-            ->where('tgl_cek', '>=', Carbon::now()->subDays(7))
-            ->get();
-        
-        foreach ($tdAlerts as $td) {
-            if ($td->kategori === 'hipertensi') {
-                $data['peringatan'][] = [
-                    'warga' => $td->warga->nama_lengkap,
-                    'tipe' => 'hipertensi',
-                    'pesan' => "Tekanan darah tinggi: {$td->systolic}/{$td->diastolic}",
-                    'tanggal' => Carbon::parse($td->tgl_cek)->diffForHumans()
-                ];
-            }
-        }
 
-        $gadAlerts = GAD::with('warga')
-            ->whereIn('warga_id', $wargaIds)
-            ->where('tgl_gad', '>=', Carbon::now()->subDays(7))
-            ->get();
-
-        foreach ($gadAlerts as $gad) {
-            $cat = $gad->kategori;
-            if ($cat === 'sedang' || $cat === 'tinggi') {
-                $data['peringatan'][] = [
-                    'warga' => $gad->warga->nama_lengkap,
-                    'tipe' => 'gad_tinggi',
-                    'pesan' => "Skor GAD7 tinggi: {$gad->skor}",
-                    'tanggal' => Carbon::parse($gad->tgl_gad)->diffForHumans()
-                ];
-            }
-        }
 
         // Ambil warga terbaru dengan status terakhir
         $wargaTerbaru = User::whereIn('id', $wargaIds)

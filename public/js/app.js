@@ -28,7 +28,7 @@ async function apiCall(endpoint, method = 'GET', body = null) {
 
     try {
         const response = await fetch(`${API_URL}${endpoint}`, options);
-        
+
         if (response.status === 401 && window.location.pathname !== '/login') {
             logout();
             return null;
@@ -49,22 +49,22 @@ async function apiCall(endpoint, method = 'GET', body = null) {
 }
 
 // Show alert message (Tailwind styled)
-window.showAlert = function(message, type = 'error') {
+window.showAlert = function (message, type = 'error') {
     const alertEl = document.getElementById('alertMessage');
     if (!alertEl) return;
-    
+
     // Reset classes
     alertEl.className = 'mb-6 p-4 rounded-lg shadow-sm border-l-4';
-    
+
     if (type === 'error') {
         alertEl.classList.add('bg-red-50', 'text-red-800', 'border-red-500');
     } else {
         alertEl.classList.add('bg-green-50', 'text-green-800', 'border-green-500');
     }
-    
+
     alertEl.classList.remove('hidden');
     alertEl.innerHTML = message;
-    
+
     setTimeout(() => {
         alertEl.classList.add('hidden');
     }, 5000);
@@ -100,7 +100,7 @@ function requireAuth() {
                 window.location.href = '/kader';
             }
         }
-        
+
         // Block warga from admin routes
         if (user.role === 'warga' && (path === '/users' || path.startsWith('/admin'))) {
             window.location.href = '/warga';
@@ -112,7 +112,7 @@ function requireAuth() {
 function setupUserUI() {
     const userNameEl = document.getElementById('userName');
     const userRoleEl = document.getElementById('userRole');
-    
+
     if (userNameEl && user) userNameEl.textContent = user.nama_lengkap;
     if (userRoleEl && user) userRoleEl.textContent = user.role;
 }
@@ -120,7 +120,7 @@ function setupUserUI() {
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname === '/login') return;
-    
+
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
             logout();
         });
     }
-    
+
     requireAuth();
     setupUserUI();
     setupNavAuto();
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function setupNavAuto() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user) return;
-    
+
     if (user.role === 'admin') setupAdminNav();
     else if (user.role === 'kader') setupKaderNav();
     else if (user.role === 'warga') setupWargaNav();
@@ -180,12 +180,12 @@ function setupNav(items) {
     const user = JSON.parse(localStorage.getItem('user'));
     const nav = document.getElementById('sidebarNav');
     const currentPath = window.location.pathname;
-    
+
     if (nav && user) {
         document.getElementById('sidebarAvatar').textContent = user.nama_lengkap.charAt(0);
         document.getElementById('sidebarName').textContent = user.nama_lengkap;
         document.getElementById('sidebarRole').textContent = user.role;
-        
+
         nav.innerHTML = items.map(item => {
             const isActive = currentPath === item.url || (item.url !== '/' && currentPath.startsWith(item.url));
             return `<a href="${item.url}" class="flex items-center gap-3 px-4 py-3 rounded-lg ${isActive ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50 font-medium'} transition">${item.icon} ${item.label}</a>`;
