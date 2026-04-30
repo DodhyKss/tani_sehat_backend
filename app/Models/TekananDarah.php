@@ -34,13 +34,13 @@ class TekananDarah extends Model
      */
     public function getKategoriAttribute(): string
     {
-        if ($this->systolic >= 140 || $this->diastolic >= 90) {
+        if ($this->systolic >= 140 && $this->diastolic >= 90) {
             return 'hipertensi';
         }
-        if ($this->systolic >= 120 || $this->diastolic >= 80) {
-            return 'pra_hipertensi';
+        if ($this->systolic < 120 && $this->diastolic < 80) {
+            return 'normal';
         }
-        return 'normal';
+        return 'pre_hipertensi';
     }
 
     public function getWarnaAttribute(): string

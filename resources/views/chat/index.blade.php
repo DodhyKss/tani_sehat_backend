@@ -1,84 +1,91 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-6">
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1">Chat Konsultasi</h1>
-    <p class="text-gray-500 text-sm">Konsultasi kesehatan dengan kader</p>
+<div class="mb-8">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2">Chat Konsultasi</h1>
+    <p class="text-primary-800 text-lg font-bold">Konsultasi kesehatan langsung dengan kader Anda</p>
 </div>
 
-<div class="bg-white md:rounded-2xl shadow-sm border border-gray-100 overflow-hidden h-[calc(100vh-140px)] md:h-[calc(100vh-200px)] min-h-[500px]">
+<div class="bg-gradient-to-br from-primary-600 to-primary-800 rounded-[2.5rem] shadow-2xl overflow-hidden h-[calc(100vh-140px)] md:h-[calc(100vh-220px)] min-h-[600px] border border-primary-500/30">
     <div class="flex h-full flex-col md:flex-row">
         <!-- Chat List -->
-        <div class="w-full md:w-80 h-full border-b md:border-b-0 md:border-r border-gray-100 flex flex-col" id="chatListContainer">
-            <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                <h3 class="font-semibold text-gray-800">Percakapan</h3>
-                <button onclick="openNewChatModal()" class="p-2 bg-primary-600 text-white rounded-full hover:bg-primary-700 transition shadow-sm" title="Tambah Chat Baru">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <div class="w-full md:w-96 h-full border-b md:border-b-0 md:border-r border-white/10 flex flex-col bg-primary-900/20" id="chatListContainer">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-primary-900/40">
+                <h3 class="text-xl font-black text-white tracking-tight uppercase">Percakapan</h3>
+                <button onclick="openNewChatModal()" class="p-3 bg-white text-primary-800 rounded-2xl hover:bg-primary-50 transition shadow-xl" title="Tambah Chat Baru">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 </button>
             </div>
             <div class="flex-1 overflow-y-auto" id="chatList">
-                <div class="p-4 text-center text-gray-500">Memuat...</div>
+                <div class="p-6 text-center text-primary-200 font-bold animate-pulse">Memuat...</div>
             </div>
         </div>
         
         <!-- Chat Window -->
-        <div class="flex-1 flex flex-col hidden" id="chatWindow">
-            <div class="p-4 border-b border-gray-100 flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3">
-                    <button onclick="closeChat()" class="md:hidden p-2 hover:bg-gray-100 rounded-lg">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <div class="flex-1 flex flex-col hidden bg-primary-900/10" id="chatWindow">
+            <div class="p-4 md:p-6 border-b border-white/10 flex items-center justify-between gap-3 bg-primary-800/50 backdrop-blur-md">
+                <div class="flex items-center gap-4">
+                    <button onclick="closeChat()" class="md:hidden p-2 hover:bg-white/10 rounded-xl text-white">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                     </button>
-                    <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center">
-                        <span id="kaderAvatar" class="text-primary-600 font-semibold">-</span>
+                    <div class="w-12 h-12 rounded-full bg-white/20 border-2 border-white/20 flex items-center justify-center shadow-lg">
+                        <span id="kaderAvatar" class="text-white font-black text-xl">-</span>
                     </div>
-                    <div class="flex-1">
-                        <p class="font-semibold text-gray-800" id="kaderName">-</p>
-                        <p class="text-xs text-gray-500" id="kaderStatus">Online</p>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xl font-black text-white tracking-tight truncate" id="kaderName">-</p>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                            <p class="text-sm text-primary-100 font-bold uppercase tracking-widest" id="kaderStatus">Online</p>
+                        </div>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="deleteConversation()" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition" title="Hapus Percakapan">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                    <button onclick="deleteConversation()" class="p-3 text-white/40 hover:text-white hover:bg-white/10 rounded-xl transition-all" title="Hapus Percakapan">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
                     </button>
                 </div>
             </div>
             
-            <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50" id="messagesContainer">
-                <div class="text-center text-gray-500 py-8">Memuat pesan...</div>
+            <div class="flex-1 overflow-y-auto p-6 space-y-6 bg-primary-900/10" id="messagesContainer">
+                <div class="text-center text-primary-200 py-12 text-xl font-black italic opacity-50 uppercase tracking-widest">Memuat pesan...</div>
             </div>
             
-            <div class="p-3 md:p-4 border-t border-gray-100 bg-white">
-                <form id="messageForm" class="flex gap-2 md:gap-3">
-                    <input type="text" id="messageInput" placeholder="Tulis pesan..." class="flex-1 px-4 py-2.5 md:py-3 rounded-xl bg-gray-50 border-none focus:ring-2 focus:ring-primary-500 text-sm md:text-base outline-none transition-all" autocomplete="off">
-                    <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white p-3 md:px-6 md:py-3 rounded-xl transition-all shadow-lg shadow-primary-200 active:scale-95">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="transform rotate-45 -mt-0.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            <div class="p-4 md:p-8 bg-primary-800/40 border-t border-white/10 backdrop-blur-md">
+                <form id="messageForm" class="flex items-end gap-4">
+                    <div class="flex-1 relative">
+                        <textarea id="messageInput" placeholder="Ketik pesan konsultasi..." rows="1"
+                                  class="w-full px-8 py-5 bg-white/10 border-2 border-white/20 rounded-[2rem] text-white font-black text-xl placeholder:text-white/30 focus:ring-8 focus:ring-white/5 outline-none transition-all shadow-inner resize-none overflow-hidden"
+                                  oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
+                    </div>
+                    <button type="submit" class="p-6 bg-white text-primary-800 rounded-[2rem] hover:bg-primary-50 transition-all shadow-2xl active:scale-95 group mb-1">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" class="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                     </button>
                 </form>
             </div>
         </div>
         <!-- Empty State -->
-        <div class="flex-1 flex items-center justify-center hidden md:flex" id="emptyState">
-            <div class="text-center">
-                <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4 text-gray-400">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                </div>
-                <p class="text-gray-500">Pilih percakapan untuk memulai chat</p>
+        <div class="flex-1 hidden md:flex flex-col items-center justify-center p-12 text-center bg-primary-900/10" id="emptyState">
+            <div class="w-32 h-32 bg-white/10 rounded-full flex items-center justify-center mb-8 shadow-2xl border border-white/10">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/60"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             </div>
+            <h3 class="text-3xl font-black text-white mb-3 tracking-tight">Chat Konsultasi</h3>
+            <p class="text-primary-100 text-xl font-medium max-w-sm opacity-80 leading-relaxed">Pilih salah satu percakapan di samping untuk mulai berkonsultasi dengan kader Anda.</p>
         </div>
     </div>
 </div>
 
 <!-- New Chat Modal -->
-<div id="newChatModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
-        <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-            <h3 class="font-bold text-gray-800">Pilih Kontak</h3>
-            <button onclick="closeNewChatModal()" class="text-gray-400 hover:text-gray-600">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+<div id="newChatModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md">
+    <div class="absolute inset-0 bg-black/70" onclick="closeNewChatModal()"></div>
+    <div class="relative bg-gradient-to-br from-primary-700 to-primary-900 rounded-[2.5rem] shadow-2xl w-full max-w-md overflow-hidden border border-white/20 text-white">
+        <div class="p-8 border-b border-white/10 flex justify-between items-center bg-primary-800/50">
+            <h3 class="text-2xl font-black tracking-tight uppercase">Cari Kontak</h3>
+            <button onclick="closeNewChatModal()" class="p-3 hover:bg-white/10 rounded-2xl transition-all">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </button>
         </div>
-        <div class="p-2 max-h-[60vh] overflow-y-auto" id="contactList">
-            <div class="p-4 text-center text-gray-500">Memuat kontak...</div>
+        <div class="p-6 max-h-[60vh] overflow-y-auto" id="contactList">
+            <div class="p-8 text-center text-primary-200 font-bold">Memuat daftar kontak...</div>
         </div>
     </div>
 </div>
@@ -99,24 +106,29 @@ async function loadConversations() {
         
         const list = res?.data || [];
         if (list.length > 0) {
-            container.innerHTML = list.map(c => `
-                <div onclick="selectConversation(${c.id}, '${c.partner?.nama_lengkap || 'Unknown'}')" 
-                     class="flex items-center gap-3 p-4 hover:bg-gray-50 cursor-pointer border-b border-gray-50 transition ${currentConversationId === c.id ? 'bg-primary-50 border-primary-100' : ''}">
-                    <div class="w-12 h-12 rounded-full ${c.admin_id ? 'bg-secondary-100' : 'bg-primary-100'} flex items-center justify-center flex-shrink-0">
-                        <span class="${c.admin_id ? 'text-secondary-600' : 'text-primary-600'} font-semibold">${(c.partner?.nama_lengkap || '?').charAt(0)}</span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <div class="flex justify-between items-start">
-                            <p class="font-semibold text-gray-800 truncate">${c.partner?.nama_lengkap || 'User'}</p>
-                            <span class="text-[10px] text-gray-400">${new Date(c.updated_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>
+            container.innerHTML = list.map(c => {
+                const isActive = currentConversationId === c.id;
+                const partnerName = c.partner?.nama_lengkap || 'Unknown';
+                return `
+                    <div onclick="selectConversation(${c.id}, '${partnerName}')" 
+                         class="flex items-center gap-4 p-5 cursor-pointer border-b border-white/5 transition-all
+                                ${isActive ? 'bg-white/20 shadow-inner' : 'hover:bg-white/10'}">
+                        <div class="w-14 h-14 rounded-full ${c.admin_id ? 'bg-secondary-500' : 'bg-white/20'} border-2 border-white/10 flex items-center justify-center flex-shrink-0 shadow-lg">
+                            <span class="text-white font-black text-xl">${partnerName.charAt(0)}</span>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <p class="text-sm text-gray-500 truncate">${c.latest_detail?.message || 'Klik untuk memulai chat'}</p>
-                            ${c.unread_count > 0 ? `<span class="bg-primary-600 text-white text-[10px] px-1.5 py-0.5 rounded-full">${c.unread_count}</span>` : ''}
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start mb-1">
+                                <p class="text-lg font-black text-white truncate tracking-tight">${partnerName}</p>
+                                <span class="text-[11px] font-black text-primary-200 ml-2 uppercase">${new Date(c.updated_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <p class="text-base ${isActive ? 'text-white' : 'text-primary-100/70'} truncate font-bold">${c.latest_detail?.message || 'Klik untuk memulai chat'}</p>
+                                ${c.unread_count > 0 ? `<span class="bg-white text-primary-800 text-xs font-black px-2 py-1 rounded-lg ml-2 shadow-lg">${c.unread_count}</span>` : ''}
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         } else {
             container.innerHTML = '<div class="p-8 text-center text-gray-400"><p class="text-sm">Belum ada percakapan aktif.</p><p class="text-xs mt-1">Klik tombol + untuk memulai.</p></div>';
         }
@@ -155,13 +167,13 @@ async function openNewChatModal() {
         
         if (contacts.length > 0) {
             container.innerHTML = contacts.map(k => `
-                <div onclick="startChatWith(${k.id}, '${k.nama_lengkap}')" class="flex items-center gap-3 p-3 hover:bg-gray-50 cursor-pointer rounded-xl transition">
-                    <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
-                        <span class="text-gray-600 font-semibold text-sm">${k.nama_lengkap.charAt(0)}</span>
+                <div onclick="startChatWith(${k.id}, '${k.nama_lengkap}')" class="flex items-center gap-4 p-5 hover:bg-white/10 cursor-pointer rounded-[1.5rem] transition-all group mb-2 border border-white/5">
+                    <div class="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 border-2 border-white/10 shadow-lg">
+                        <span class="text-white font-black text-xl group-hover:scale-110 transition-transform">${k.nama_lengkap.charAt(0)}</span>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="font-medium text-gray-800 truncate">${k.nama_lengkap}</p>
-                        <p class="text-xs text-gray-500 capitalize">${k.role || 'User'}</p>
+                        <p class="text-lg font-black text-white truncate tracking-tight">${k.nama_lengkap}</p>
+                        <p class="text-sm text-primary-100 font-bold uppercase tracking-widest">${k.role || 'User'}</p>
                     </div>
                 </div>
             `).join('');
@@ -258,25 +270,25 @@ function renderMessages(messages) {
     const user = JSON.parse(localStorage.getItem('user'));
     
     if (messages.length === 0) {
-        container.innerHTML = '<div class="text-center text-gray-400 py-8 text-sm italic">Belum ada pesan. Ketik sesuatu untuk memulai!</div>';
+        container.innerHTML = '<div class="text-center text-gray-600 py-12 text-lg font-bold italic">Belum ada pesan. Ketik sesuatu untuk memulai!</div>';
         return;
     }
     
     const html = messages.map(m => {
         const isMe = m.sender_id === user.id;
         return `
-            <div class="flex ${isMe ? 'justify-end' : 'justify-start'} group">
-                <div class="max-w-[75%] relative">
-                    <div class="${isMe ? 'bg-primary-600 text-white' : 'bg-white text-gray-800 border border-gray-200'} rounded-2xl px-4 py-2.5 shadow-sm">
-                        <p class="text-sm md:text-base">${m.message}</p>
-                        <div class="flex items-center justify-end gap-1 mt-1">
-                            <span class="text-[10px] ${isMe ? 'text-primary-100' : 'text-gray-400'}">${new Date(m.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>
-                            ${isMe && m.is_read ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="text-primary-200"><path d="M20 6L9 17l-5-5"/></svg>' : ''}
+            <div class="flex w-full ${isMe ? 'justify-end' : 'justify-start'} mb-8 group px-2">
+                <div class="max-w-[85%] md:max-w-[70%] relative">
+                    <div class="${isMe ? 'bg-white text-primary-900 shadow-2xl rounded-t-[2rem] rounded-bl-[2rem]' : 'bg-white/10 text-white border-2 border-white/20 rounded-t-[2rem] rounded-br-[2rem]'} px-5 md:px-8 py-4 md:py-6 shadow-xl">
+                        <p class="text-lg md:text-xl font-black leading-relaxed tracking-tight break-all whitespace-pre-wrap overflow-hidden">${m.message}</p>
+                        <div class="flex items-center justify-end gap-3 mt-4 pt-3 border-t border-current opacity-10">
+                            <span class="text-[10px] md:text-xs font-black uppercase tracking-widest">${new Date(m.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>
+                            ${isMe && m.is_read ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" class="text-primary-600"><path d="M20 6L9 17l-5-5"/></svg>' : ''}
                         </div>
                     </div>
                     <button onclick="deleteMessage(${m.id})" 
-                            class="absolute top-0 ${isMe ? '-left-8' : '-right-8'} p-1 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+                            class="absolute top-1/2 -translate-y-1/2 ${isMe ? '-left-12' : '-right-12'} p-3 text-white/30 hover:text-white opacity-0 group-hover:opacity-100 transition-all bg-white/10 rounded-xl">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
                     </button>
                 </div>
             </div>

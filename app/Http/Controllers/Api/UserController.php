@@ -198,7 +198,7 @@ class UserController extends Controller
         $wargas = User::with(['statusKesehatan', 'firstTd', 'firstGad'])
             ->whereHas('wargaRelasi', function($q) use ($kaderId) {
                 $q->where('kader_id', $kaderId);
-            })->get(['id', 'nama_lengkap', 'nik', 'no_hp', 'foto']);
+            })->get(['id', 'nama_lengkap', 'nik', 'no_hp', 'foto', 'tanggal_lahir', 'jenis_kelamin']);
 
         return response()->json([
             'success' => true,

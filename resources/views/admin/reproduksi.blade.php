@@ -1,41 +1,41 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-8">
-    <h1 class="text-2xl font-black text-gray-900 tracking-tight mb-1">Data Reproduksi Global</h1>
-    <p class="text-gray-500 text-sm font-medium">Monitoring seluruh data kesehatan reproduksi warga</p>
+<div class="mb-10">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Monitoring Reproduksi Global</h1>
+    <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Pantau Siklus & Kesehatan Reproduksi Seluruh Warga</p>
 </div>
 
-<div class="bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-sm border border-gray-100 p-4 md:p-6 mb-8">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="relative flex-1 max-w-md w-full">
-            <input type="text" id="searchWarga" placeholder="Cari NIK atau Nama..." 
-                class="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-primary-500/10 focus:bg-white transition-all outline-none font-bold text-sm text-gray-800 placeholder:text-gray-400">
-            <svg class="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+<div class="bg-white rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100 p-8 md:p-10 mb-10 overflow-hidden">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div class="relative flex-1 max-w-xl">
+            <input type="text" id="searchWarga" placeholder="Cari Nama Warga atau NIK..." 
+                class="w-full pl-14 pr-6 py-4 bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white rounded-2xl transition-all font-black text-black appearance-none outline-none">
+            <svg class="w-6 h-6 text-primary-400 absolute left-5 top-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         </div>
-        <div class="flex items-center gap-3 w-full md:w-auto">
-            <button onclick="exportData()" class="flex-1 md:flex-none justify-center px-5 py-3 bg-primary-50 text-primary-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-primary-100 transition-all flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4-4 4-4-4m4 4V4"/></svg>
-                Export
+        <div class="flex items-center gap-4">
+            <button onclick="exportData()" class="flex-1 lg:flex-none justify-center px-8 py-4 bg-primary-800 text-white rounded-2xl font-black text-xs transition-all shadow-lg shadow-primary-900/20 uppercase tracking-widest flex items-center gap-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4-4 4-4-4m4 4V4"/></svg>
+                Export PDF
             </button>
         </div>
     </div>
 </div>
 
 <!-- Desktop Table -->
-<div class="hidden md:block bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
-    <div class="overflow-x-auto">
+<div class="hidden md:block bg-white rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100 overflow-hidden">
+    <div class="overflow-x-auto px-6">
         <table class="w-full text-left">
-            <thead>
-                <tr class="bg-gray-50/50 border-b border-gray-100">
-                    <th class="px-6 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Warga</th>
-                    <th class="px-6 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Tgl Menstruasi</th>
-                    <th class="px-6 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Keterangan</th>
-                    <th class="px-6 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Aksi</th>
+            <thead class="text-primary-400 uppercase text-xs font-black tracking-[0.2em] border-b-2 border-primary-50">
+                <tr>
+                    <th class="px-6 py-8">Warga Binaan</th>
+                    <th class="px-6 py-8 text-center">Tanggal Menstruasi</th>
+                    <th class="px-6 py-8">Keterangan Kesehatan</th>
+                    <th class="px-6 py-8 text-right">Tindakan</th>
                 </tr>
             </thead>
-            <tbody id="reproduksiTable" class="divide-y divide-gray-50">
-                <tr><td colspan="4" class="px-6 py-20 text-center text-gray-400 font-medium">Memuat data...</td></tr>
+            <tbody id="reproduksiTable" class="divide-y-2 divide-primary-50">
+                <tr><td colspan="4" class="px-6 py-20 text-center text-primary-300 font-bold italic text-lg animate-pulse">Memuat data reproduksi...</td></tr>
             </tbody>
         </table>
     </div>
@@ -86,33 +86,33 @@
 
         // Render Table
         tbody.innerHTML = filtered.map(item => `
-            <tr class="hover:bg-gray-50/50 transition-colors group">
-                <td class="px-6 py-5">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center text-primary-600 font-black text-sm">
+            <tr class="hover:bg-primary-50/50 transition-colors group">
+                <td class="px-6 py-6">
+                    <div class="flex items-center gap-5">
+                        <div class="w-14 h-14 rounded-2xl bg-primary-100 flex items-center justify-center text-primary-800 font-black text-xl shadow-inner group-hover:scale-110 transition-all">
                             ${item.user.nama_lengkap.charAt(0)}
                         </div>
                         <div>
-                            <p class="font-bold text-gray-900 leading-tight">${item.user.nama_lengkap}</p>
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">${item.user.nik}</p>
+                            <p class="font-black text-black text-xl tracking-tight leading-tight group-hover:text-primary-800 transition-colors">${item.user.nama_lengkap}</p>
+                            <p class="text-[10px] font-black text-primary-400 uppercase tracking-[0.2em] mt-1">${item.user.nik}</p>
                         </div>
                     </div>
                 </td>
-                <td class="px-6 py-5 text-center">
-                    <span class="px-4 py-1.5 bg-rose-50 text-rose-600 rounded-xl text-xs font-black border border-rose-100">
-                        ${new Date(item.tgl_menstruasi).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                <td class="px-6 py-6 text-center">
+                    <span class="px-6 py-2.5 bg-amber-100 text-amber-800 rounded-2xl text-sm font-black border-2 border-amber-200 shadow-sm inline-block">
+                        ${new Date(item.tgl_menstruasi).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </span>
                 </td>
-                <td class="px-6 py-5">
-                    <p class="text-xs font-bold text-gray-600 max-w-xs truncate" title="${item.keterangan}">${item.keterangan}</p>
+                <td class="px-6 py-6">
+                    <p class="text-sm font-bold text-primary-800 max-w-xs leading-relaxed" title="${item.keterangan}">${item.keterangan}</p>
                 </td>
-                <td class="px-6 py-5 text-right">
-                    <div class="flex justify-end gap-2">
-                        <button onclick="window.location.href='/chat?warga_id=${item.user.id}'" class="p-2 text-primary-500 hover:bg-primary-50 rounded-xl transition-all">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <td class="px-6 py-6 text-right">
+                    <div class="flex justify-end gap-3">
+                        <button onclick="window.location.href='/chat?warga_id=${item.user.id}'" class="p-4 text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-2xl transition-all transform hover:scale-110 shadow-sm">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                         </button>
-                        <button onclick="deleteData(${item.id})" class="p-2 text-rose-500 hover:bg-rose-50 rounded-xl transition-all">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        <button onclick="deleteData(${item.id})" class="p-4 text-orange-600 bg-orange-50 hover:bg-orange-100 rounded-2xl transition-all transform hover:scale-110 shadow-sm">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                         </button>
                     </div>
                 </td>

@@ -2,79 +2,87 @@
 
 @section('content')
 <div class="mb-6">
-    <a href="/warga" class="inline-flex items-center gap-2 text-gray-500 hover:text-primary-600 transition mb-4">
+    <a href="/warga" class="inline-flex items-center gap-2 text-white-500 hover:text-primary-600 transition mb-4">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         Kembali
     </a>
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1">Kuesioner GAD7</h1>
-    <p class="text-gray-500 text-sm">Ukur tingkat kecemasan Anda</p>
+    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2">Kuesioner GAD7</h1>
+    <p class="text-primary-800 text-lg">Ukur tingkat kecemasan Anda dengan mudah</p>
 </div>
 
-<div class="max-w-3xl mx-auto">
-    <div class="bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl p-6 md:p-8 text-white mb-6 shadow-lg">
-        <div class="flex items-center gap-4">
-            <div class="p-3 bg-white/20 rounded-xl">
-                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+<div class="max-w-full mx-auto">
+    <div class="bg-gradient-to-br from-primary-600 to-primary-800 rounded-3xl p-6 md:p-8 text-white mb-6 shadow-xl border border-primary-500/30">
+        <div class="flex items-center gap-4 md:gap-6">
+            <div class="p-4 bg-white/20 rounded-2xl flex-shrink-0">
+                <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
             </div>
             <div>
-                <h2 class="text-xl font-bold">Generalized Anxiety Disorder 7</h2>
-                <p class="text-yellow-100 text-sm">Selama 2 minggu terakhir, seberapa sering Anda mengalami hal berikut?</p>
+                <h2 class="text-2xl md:text-3xl font-black tracking-tight">Kuesioner GAD7</h2>
+                <p class="text-primary-100 text-lg font-bold mt-1 opacity-90">Selama 2 minggu terakhir, seberapa sering Anda terganggu oleh masalah berikut?</p>
             </div>
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
-        <div id="soalContainer" class="space-y-4 mb-6"></div>
+    <div class="bg-gradient-to-br from-primary-600 to-primary-800 rounded-3xl shadow-2xl p-6 md:p-10 text-white border border-primary-500/30">
+        <div id="soalContainer" class="space-y-6 mb-10"></div>
         
-        <div id="totalScore" class="hidden bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl p-6 text-center text-white mb-6">
-            <p class="text-primary-100 text-sm mb-1">Total Skor Anda</p>
-            <div class="text-5xl font-bold" id="scoreValue">0</div>
-            <span id="scoreStatus" class="inline-block mt-3 px-4 py-2 text-sm font-semibold bg-white/20 rounded-full">-</span>
+        <div id="totalScore" class="hidden bg-primary-900/40 rounded-[2.5rem] p-10 text-center text-white mb-10 border-2 border-white/20 shadow-inner">
+            <p class="text-primary-100 font-black uppercase tracking-widest text-base mb-4">Total Skor Anda</p>
+            <div class="text-8xl font-black tracking-tighter" id="scoreValue">0</div>
+            <div class="mt-6">
+                <span id="scoreStatus" class="inline-block px-10 py-4 text-2xl font-black bg-white/20 rounded-2xl shadow-lg ring-4 ring-white/5">-</span>
+            </div>
         </div>
 
-        <button type="button" id="submitBtn" onclick="submitGad()" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-xl transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+        <button type="button" id="submitBtn" onclick="submitGad()" class="w-full bg-white hover:bg-primary-50 text-primary-800 text-2xl font-black py-6 rounded-[1.5rem] transition-all shadow-2xl flex justify-center items-center gap-3 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-30 disabled:cursor-not-allowed" disabled>
+            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
             Kirim Jawaban
         </button>
     </div>
 
-    <div class="mt-6 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h3 class="font-semibold text-gray-800 mb-4">Referensi Skor GAD7</h3>
+    <div class="mt-8 bg-gradient-to-br from-primary-600 to-primary-800 rounded-3xl shadow-xl p-8 text-white border border-primary-500/30">
+        <h3 class="font-black text-2xl text-white mb-8 tracking-tight">Referensi Skor GAD7</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">0-4</div>
+            <div class="flex items-center gap-4 p-4 bg-white/10 rounded-2xl border border-white/10">
+                <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">0-4</div>
                 <div>
-                    <p class="font-semibold text-gray-800">Normal</p>
-                    <p class="text-sm text-gray-500">Tidak ada gangguan</p>
+                    <p class="font-bold text-white text-lg">Minimal</p>
+                    <p class="text-sm text-primary-100 font-medium">Tidak ada gangguan</p>
                 </div>
             </div>
-            <div class="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg">
-                <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-sm">5-9</div>
+            <div class="flex items-center gap-4 p-4 bg-white/10 rounded-2xl border border-white/10">
+                <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">5-9</div>
                 <div>
-                    <p class="font-semibold text-gray-800">Ringan</p>
-                    <p class="text-sm text-gray-500">Pertimbangkan intervensi</p>
+                    <p class="font-bold text-white text-lg">Ringan</p>
+                    <p class="text-sm text-primary-100 font-medium">Observasi mandiri</p>
                 </div>
             </div>
-            <div class="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
-                <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white font-bold text-sm">10+</div>
+            <div class="flex items-center gap-4 p-4 bg-white/10 rounded-2xl border border-white/10">
+                <div class="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">10+</div>
                 <div>
-                    <p class="font-semibold text-gray-800">Sedang-Tinggi</p>
-                    <p class="text-sm text-gray-500">Butuh evaluasi</p>
+                    <p class="font-bold text-white text-lg">Sedang-Berat</p>
+                    <p class="text-sm text-primary-100 font-medium">Butuh evaluasi ahli</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="resultModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/50" onclick="closeResultModal()"></div>
-    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 text-center">
-        <div id="resultIcon" class="w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4"></div>
-        <h3 class="text-2xl font-bold mb-2">Hasil Kuesioner GAD7</h3>
-        <div class="text-5xl font-bold font-mono mb-2" id="resultValue">0</div>
-        <span id="resultStatus" class="px-4 py-2 text-sm font-semibold rounded-full">-</span>
-        <p class="text-gray-600 mt-4" id="resultDesc">-</p>
-        <div id="resultRekomendasi" class="mt-6 p-4 bg-gray-50 rounded-xl text-left"></div>
-        <a href="/warga" class="inline-block mt-6 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3 rounded-lg transition">Kembali ke Dashboard</a>
+<div id="resultModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md">
+    <div class="absolute inset-0 bg-black/70" onclick="closeResultModal()"></div>
+    <div class="relative bg-gradient-to-br from-primary-700 to-primary-900 rounded-[2.5rem] shadow-2xl w-full max-w-md p-10 text-center text-white border border-white/20">
+        <div id="resultIcon" class="w-24 h-24 mx-auto rounded-full flex items-center justify-center mb-6 shadow-2xl ring-4 ring-white/10"></div>
+        <h3 class="text-3xl font-black mb-4 tracking-tight">Hasil Kuesioner GAD7</h3>
+        <div class="bg-white/10 rounded-2xl p-6 mb-8">
+            <p class="text-primary-100 uppercase font-black tracking-widest text-sm mb-2">Skor Total</p>
+            <div id="resultValue" class="text-7xl font-black tracking-tighter mb-2">0</div>
+            <p id="resultStatus" class="text-2xl font-black px-4 py-2 rounded-xl inline-block">-</p>
+        </div>
+        <p id="resultDesc" class="text-primary-100 text-lg font-medium leading-relaxed mb-8" id="resultDesc">-</p>
+        <div id="resultRekomendasi" class="mt-6 p-6 bg-white/10 rounded-2xl text-left border border-white/10 mb-8"></div>
+        <a href="/warga" class="w-full inline-block bg-white text-primary-800 font-black py-5 rounded-2xl shadow-xl hover:bg-primary-50 transition-all text-xl">
+            Tutup & Kembali
+        </a>
     </div>
 </div>
 @endsection
@@ -119,11 +127,13 @@ async function checkJadwalGad() {
                     <div class="w-16 h-16 mx-auto bg-yellow-100 rounded-full flex items-center justify-center mb-4">
                         <svg class="w-8 h-8 text-yellow-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Belum Waktunya</h3>
-                    <p class="text-gray-600 mb-4">Anda sudah mengisi kuesioner GAD7.</p>
-                    <p class="text-sm text-gray-500">Bisa mengisi lagi dalam <span class="font-bold text-primary-600">${timeLeft}</span></p>
-                    <p class="text-xs text-gray-400 mt-2">(${nextDate.toLocaleString('id-ID')})</p>
-                    <a href="/warga" class="inline-block mt-6 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3 rounded-lg transition">Kembali ke Dashboard</a>
+                    <h3 class="text-2xl font-black text-white mb-3 tracking-tight">Belum Waktunya</h3>
+                    <p class="text-primary-100 text-lg mb-6 font-medium">Anda baru saja mengisi kuesioner GAD7.</p>
+                    <div class="bg-white/10 p-4 rounded-2xl mb-6">
+                        <p class="text-sm text-primary-200 uppercase font-black tracking-widest mb-1">Bisa mengisi lagi dalam</p>
+                        <p class="text-3xl font-black text-white">${timeLeft}</p>
+                    </div>
+                    <a href="/warga" class="inline-block bg-white text-primary-800 font-black text-lg px-10 py-4 rounded-2xl transition-all shadow-xl hover:bg-primary-50">Kembali ke Dashboard</a>
                 </div>
             `;
             document.getElementById('submitBtn').style.display = 'none';
@@ -137,7 +147,7 @@ async function checkJadwalGad() {
 
 async function renderQuestions() {
     const container = document.getElementById('soalContainer');
-    container.innerHTML = '<div class="text-center py-8 text-gray-400">Memuat soal...</div>';
+    container.innerHTML = '<div class="text-center py-12 text-white font-bold text-xl italic animate-pulse">Memuat kuesioner...</div>';
 
     const res = await apiCall('/gad/kuesioner');
     if (res && res.success) {
@@ -145,17 +155,20 @@ async function renderQuestions() {
         answers = new Array(questions.length).fill(null);
 
         if (questions.length === 0) {
-            container.innerHTML = '<div class="text-center py-8 text-red-500 font-bold">Kuesioner belum tersedia. Silakan hubungi admin.</div>';
+            container.innerHTML = '<div class="text-center py-12 text-white font-black text-2xl">Kuesioner belum tersedia.</div>';
             document.getElementById('submitBtn').style.display = 'none';
             return;
         }
 
         container.innerHTML = questions.map((q, i) => `
-            <div class="p-4 bg-gray-50 rounded-xl">
-                <p class="font-medium text-gray-800 mb-3">${i + 1}. ${q.soal}</p>
-                <div class="grid grid-cols-2 md:flex md:flex-wrap gap-2">
+            <div class="p-8 bg-primary-900/30 rounded-[2rem] border-2 border-white/10 shadow-lg">
+                <p class="font-black text-white mb-6 text-xl md:text-2xl leading-snug"><span class="text-primary-300">#${i + 1}</span> ${q.soal}</p>
+                <div class="grid grid-cols-1 gap-3">
                     ${options.map(o => `
-                        <button type="button" onclick="selectAnswer(${i}, ${o.value})" class="answer-btn px-3 py-3 rounded-lg border-2 border-gray-100 text-[10px] md:text-sm font-bold transition hover:border-primary-500 hover:bg-primary-50 leading-tight" data-q="${i}" data-val="${o.value}">
+                        <button type="button" onclick="selectAnswer(${i}, ${o.value})" class="answer-btn px-6 py-5 rounded-2xl border-2 border-white/10 text-lg md:text-xl font-bold transition-all bg-white/5 hover:bg-white/10 text-left flex items-center gap-4 group" data-q="${i}" data-val="${o.value}">
+                            <div class="w-8 h-8 rounded-full border-2 border-white/30 flex items-center justify-center group-hover:border-white transition-all">
+                                <div class="w-4 h-4 rounded-full bg-white opacity-0 transition-all check-indicator"></div>
+                            </div>
                             ${o.label}
                         </button>
                     `).join('')}
@@ -163,16 +176,20 @@ async function renderQuestions() {
             </div>
         `).join('');
     } else {
-        container.innerHTML = '<div class="text-center py-8 text-red-500">Gagal memuat soal.</div>';
+        container.innerHTML = '<div class="text-center py-12 text-white font-bold">Gagal memuat kuesioner.</div>';
     }
 }
 
 function selectAnswer(qIndex, value) {
     answers[qIndex] = value;
     document.querySelectorAll(`[data-q="${qIndex}"]`).forEach(btn => {
-        btn.classList.remove('border-primary-500', 'bg-primary-50', 'text-primary-700');
+        const check = btn.querySelector('.check-indicator');
+        btn.classList.remove('bg-primary-500', 'text-white', 'border-primary-400', 'shadow-2xl');
+        check.classList.add('opacity-0');
+        
         if (parseInt(btn.dataset.val) === value) {
-            btn.classList.add('border-primary-500', 'bg-primary-50', 'text-primary-700');
+            btn.classList.add('bg-primary-500', 'text-white', 'border-primary-400', 'shadow-2xl');
+            check.classList.remove('opacity-0');
         }
     });
     
@@ -220,10 +237,10 @@ async function submitGad() {
             
             // Rekomendasi from response
             const recs = res.data.rekomendasi;
-            let recHtml = '<p class="font-semibold text-gray-700 mb-2">Rekomendasi untuk Anda:</p><ul class="text-sm text-gray-600 space-y-1">';
-            if (recs.video?.length) recHtml += `<li class="flex items-center gap-2"><span class="text-blue-500">▶</span> Video: ${recs.video[0].judul}</li>`;
-            if (recs.olahraga?.length) recHtml += `<li class="flex items-center gap-2"><span class="text-orange-500">●</span> Olahraga: ${recs.olahraga[0].nama_olahraga}</li>`;
-            if (recs.materi?.length) recHtml += `<li class="flex items-center gap-2"><span class="text-purple-500">■</span> Materi: ${recs.materi[0].judul}</li>`;
+            let recHtml = '<p class="font-black text-white text-base mb-3 uppercase tracking-wider">Rekomendasi Kami:</p><ul class="text-base text-primary-100 space-y-2">';
+            if (recs.video?.length) recHtml += `<li class="flex items-center gap-3 bg-white/5 p-3 rounded-xl"><span class="text-blue-400 text-xl">▶</span> <span class="font-bold">${recs.video[0].judul}</span></li>`;
+            if (recs.olahraga?.length) recHtml += `<li class="flex items-center gap-3 bg-white/5 p-3 rounded-xl"><span class="text-orange-400 text-xl">●</span> <span class="font-bold">${recs.olahraga[0].nama_olahraga}</span></li>`;
+            if (recs.materi?.length) recHtml += `<li class="flex items-center gap-3 bg-white/5 p-3 rounded-xl"><span class="text-purple-400 text-xl">■</span> <span class="font-bold">${recs.materi[0].judul}</span></li>`;
             recHtml += '</ul>';
             
             document.getElementById('resultRekomendasi').innerHTML = recHtml;

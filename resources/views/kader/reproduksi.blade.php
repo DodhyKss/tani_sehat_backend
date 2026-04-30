@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-8">
-    <h1 class="text-2xl font-black text-gray-900 tracking-tight mb-1">Monitoring Reproduksi</h1>
-    <p class="text-gray-500 text-sm font-medium">Pantau siklus kesehatan reproduksi warga pendampingan Anda</p>
+<div class="mb-10">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Monitoring Reproduksi</h1>
+    <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Pantau Siklus & Kesehatan Reproduksi Warga Binaan</p>
 </div>
 
-<div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-6 mb-8">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="relative flex-1 max-w-md">
-            <input type="text" id="searchWarga" placeholder="Cari nama warga..." 
-                class="w-full pl-12 pr-4 py-3.5 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-primary-500/10 focus:bg-white transition-all outline-none font-bold text-gray-800 placeholder:text-gray-400">
-            <svg class="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+<div class="bg-white rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100 p-8 md:p-10 mb-10 overflow-hidden">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div class="relative flex-1 max-w-xl">
+            <input type="text" id="searchWarga" placeholder="Cari Nama Warga Binaan..." 
+                class="w-full pl-14 pr-6 py-4 bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white rounded-2xl transition-all font-black text-black appearance-none outline-none">
+            <svg class="w-6 h-6 text-primary-400 absolute left-5 top-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         </div>
-        <div class="flex items-center gap-2">
-            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-3">Filter: Semua Warga</span>
+        <div class="flex items-center gap-4">
+            <span class="text-xs font-black text-primary-300 uppercase tracking-widest px-4 border-l-4 border-primary-100">Filter: Semua Warga</span>
         </div>
     </div>
 </div>
@@ -65,40 +65,40 @@
         }
 
         list.innerHTML = filtered.map(item => `
-            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
-                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-rose-500"></div>
-                <div class="flex items-center gap-4 mb-5">
-                    <div class="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-600 font-black text-lg">
+            <div class="bg-white p-8 rounded-[2.5rem] border-2 border-primary-50 shadow-xl shadow-primary-900/5 hover:border-primary-200 transition-all group relative overflow-hidden">
+                <div class="absolute left-0 top-0 bottom-0 w-2 bg-primary-800"></div>
+                <div class="flex items-center gap-5 mb-8">
+                    <div class="w-16 h-16 rounded-2xl bg-primary-100 flex items-center justify-center text-primary-800 font-black text-2xl shadow-inner group-hover:scale-110 transition-all">
                         ${item.user.nama_lengkap.charAt(0)}
                     </div>
                     <div>
-                        <h3 class="font-black text-gray-900 leading-tight">${item.user.nama_lengkap}</h3>
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">NIK: ${item.user.nik}</p>
+                        <h3 class="font-black text-black text-2xl tracking-tight leading-tight group-hover:text-primary-800 transition-colors">${item.user.nama_lengkap}</h3>
+                        <p class="text-[10px] font-black text-primary-400 uppercase tracking-[0.2em] mt-1">NIK: ${item.user.nik}</p>
                     </div>
                 </div>
                 
                 <div class="space-y-4">
-                    <div class="bg-gray-50 p-4 rounded-2xl">
-                        <div class="flex items-center gap-2 mb-1">
-                            <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Tgl Menstruasi</span>
+                    <div class="bg-amber-50/50 p-6 rounded-2xl border border-amber-100/50">
+                        <div class="flex items-center gap-3 mb-2">
+                            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            <span class="text-[10px] font-black text-amber-800 uppercase tracking-widest">Tgl Menstruasi</span>
                         </div>
-                        <p class="text-sm font-black text-gray-800">${new Date(item.tgl_menstruasi).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                        <p class="text-lg font-black text-amber-900">${new Date(item.tgl_menstruasi).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                     </div>
-
-                    <div class="bg-gray-50 p-4 rounded-2xl">
-                        <div class="flex items-center gap-2 mb-1">
-                            <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Keterangan</span>
+ 
+                    <div class="bg-primary-50/50 p-6 rounded-2xl border border-primary-100/50">
+                        <div class="flex items-center gap-3 mb-2">
+                            <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                            <span class="text-[10px] font-black text-primary-800 uppercase tracking-widest">Keterangan</span>
                         </div>
-                        <p class="text-xs font-bold text-gray-600 leading-relaxed">${item.keterangan}</p>
+                        <p class="text-sm font-bold text-primary-800 leading-relaxed italic">"${item.keterangan}"</p>
                     </div>
                 </div>
-
-                <div class="mt-5 pt-5 border-t border-gray-50 flex justify-between items-center">
-                    <span class="text-[9px] font-black text-gray-300 uppercase tracking-widest">Input: ${new Date(item.created_at).toLocaleDateString('id-ID')}</span>
-                    <button onclick="window.location.href='/chat?warga_id=${item.user.id}'" class="text-[10px] font-black text-primary-600 hover:text-primary-700 uppercase tracking-widest flex items-center gap-1.5 bg-primary-50 px-3 py-2 rounded-xl transition-all">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+ 
+                <div class="mt-8 pt-6 border-t-2 border-primary-50 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <span class="text-[10px] font-black text-primary-200 uppercase tracking-[0.2em]">Input: ${new Date(item.created_at).toLocaleDateString('id-ID', {day:'numeric', month:'short'})}</span>
+                    <button onclick="window.location.href='/chat?warga_id=${item.user.id}'" class="w-full sm:w-auto text-xs font-black text-white bg-primary-800 hover:bg-black uppercase tracking-widest flex items-center justify-center gap-3 px-6 py-4 rounded-2xl transition-all shadow-xl shadow-primary-900/10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                         Hubungi Warga
                     </button>
                 </div>

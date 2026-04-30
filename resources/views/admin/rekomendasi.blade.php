@@ -1,25 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-4">
-    <h1 class="text-xl md:text-2xl font-bold text-gray-800">Rekomendasi</h1>
-    <p class="text-gray-500 text-xs mt-1">Kelola video, PDF, gambar & olahraga</p>
+<div class="mb-10">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Manajemen Rekomendasi</h1>
+    <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Kelola Video, PDF, Gambar, & Program Olahraga</p>
 </div>
 
 <!-- Tabs -->
-<div class="flex gap-2 mb-4 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide no-scrollbar">
-    <button onclick="switchTab('video')" class="tab-btn px-4 py-2 rounded-xl font-bold text-xs whitespace-nowrap active bg-primary-600 text-white shadow-lg shadow-primary-100" id="tab-video">Video YT</button>
-    <button onclick="switchTab('materi')" class="tab-btn px-4 py-2 rounded-xl font-bold text-xs whitespace-nowrap bg-white text-gray-600 border border-gray-100 shadow-sm" id="tab-materi">Materi PDF</button>
-    <button onclick="switchTab('gambar')" class="tab-btn px-4 py-2 rounded-xl font-bold text-xs whitespace-nowrap bg-white text-gray-600 border border-gray-100 shadow-sm" id="tab-gambar">Gambar Edukasi</button>
-    <button onclick="switchTab('olahraga')" class="tab-btn px-4 py-2 rounded-xl font-bold text-xs whitespace-nowrap bg-white text-gray-600 border border-gray-100 shadow-sm" id="tab-olahraga">Olahraga</button>
+<div class="flex gap-3 mb-10 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar">
+    <button onclick="switchTab('video')" class="tab-btn px-8 py-4 rounded-2xl font-black text-sm whitespace-nowrap active bg-primary-800 text-white shadow-xl shadow-primary-900/20 uppercase tracking-widest transition-all" id="tab-video">VIDEO EDUKASI</button>
+    <button onclick="switchTab('materi')" class="tab-btn px-8 py-4 rounded-2xl font-black text-sm whitespace-nowrap bg-white text-primary-400 border-2 border-primary-50 shadow-sm uppercase tracking-widest transition-all" id="tab-materi">MATERI PDF</button>
+    <button onclick="switchTab('gambar')" class="tab-btn px-8 py-4 rounded-2xl font-black text-sm whitespace-nowrap bg-white text-primary-400 border-2 border-primary-50 shadow-sm uppercase tracking-widest transition-all" id="tab-gambar">GAMBAR EDUKASI</button>
+    <button onclick="switchTab('olahraga')" class="tab-btn px-8 py-4 rounded-2xl font-black text-sm whitespace-nowrap bg-white text-primary-400 border-2 border-primary-50 shadow-sm uppercase tracking-widest transition-all" id="tab-olahraga">PROGRAM OLAHRAGA</button>
 </div>
 
 <!-- Header -->
-<div class="flex items-center justify-between mb-4">
-    <h2 id="sectionTitle" class="text-base font-bold text-gray-800">Daftar Video</h2>
-    <button onclick="openAddModal()" class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-1.5 rounded-lg font-bold text-xs flex items-center gap-1">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        <span class="hidden sm:inline">Tambah</span>
+<div class="flex items-center justify-between mb-6">
+    <div class="flex items-center gap-4">
+        <div class="w-2 h-10 bg-primary-800 rounded-full"></div>
+        <h2 id="sectionTitle" class="text-2xl font-black text-black tracking-tight uppercase">Daftar Video</h2>
+    </div>
+    <button onclick="openAddModal()" class="bg-primary-800 hover:bg-black text-white px-6 py-4 rounded-2xl font-black text-xs flex items-center gap-3 transition-all shadow-lg uppercase tracking-widest">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        Tambah Baru
     </button>
 </div>
 
@@ -101,9 +104,9 @@ let editMode = false;
 function switchTab(tab) {
     currentTab = tab;
     document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.className = 'tab-btn px-4 py-2 rounded-xl font-bold text-xs whitespace-nowrap bg-white text-gray-600 border border-gray-100 shadow-sm';
+        btn.className = 'tab-btn px-8 py-4 rounded-2xl font-black text-sm whitespace-nowrap bg-white text-primary-400 border-2 border-primary-50 shadow-sm uppercase tracking-widest transition-all';
     });
-    document.getElementById('tab-' + tab).className = 'tab-btn px-4 py-2 rounded-xl font-bold text-xs whitespace-nowrap active bg-primary-600 text-white shadow-lg shadow-primary-100';
+    document.getElementById('tab-' + tab).className = 'tab-btn px-8 py-4 rounded-2xl font-black text-sm whitespace-nowrap active bg-primary-800 text-white shadow-xl shadow-primary-900/20 uppercase tracking-widest transition-all';
     loadData();
 }
 
@@ -134,22 +137,22 @@ async function loadData() {
         }
         
         list.innerHTML = res.data.map(item => `
-            <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition">
-                <div class="flex items-start justify-between gap-4">
+            <div class="bg-white rounded-[2rem] border-2 border-primary-50 p-6 shadow-xl shadow-primary-900/5 hover:border-primary-200 transition-all group">
+                <div class="flex items-start justify-between gap-6">
                     <div class="flex-1 min-w-0">
-                        <p class="font-bold text-gray-900 text-sm md:text-base leading-snug">${item.judul || item.nama_olahraga}</p>
-                        ${item.link_embed ? `<p class="text-[10px] md:text-xs text-primary-600 font-medium truncate mt-1 bg-primary-50 px-2 py-0.5 rounded inline-block max-w-full">${item.link_embed}</p>` : ''}
-                        <div class="flex flex-wrap gap-2 mt-3">
-                            <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded-lg text-[9px] font-black uppercase border border-blue-100">TD: ${item.kategori_td}</span>
-                            <span class="px-2 py-1 bg-purple-50 text-purple-700 rounded-lg text-[9px] font-black uppercase border border-purple-100">GAD: ${item.kategori_gad}</span>
+                        <p class="font-black text-black text-xl md:text-2xl tracking-tight leading-tight group-hover:text-primary-800 transition-colors">${item.judul || item.nama_olahraga}</p>
+                        ${item.link_embed ? `<p class="text-xs text-primary-400 font-bold truncate mt-2 bg-primary-50/50 px-4 py-1.5 rounded-xl inline-block max-w-full italic border border-primary-100">${item.link_embed}</p>` : ''}
+                        <div class="flex flex-wrap gap-3 mt-5">
+                            <span class="px-4 py-2 bg-emerald-50 text-emerald-800 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] border-2 border-emerald-100 shadow-sm">TD: ${item.kategori_td.toUpperCase()}</span>
+                            <span class="px-4 py-2 bg-amber-50 text-amber-800 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] border-2 border-amber-100 shadow-sm">GAD: ${item.kategori_gad.toUpperCase()}</span>
                         </div>
                     </div>
-                    <div class="flex gap-2 shrink-0">
-                        <button onclick='openEditModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="p-2 text-amber-500 bg-amber-50 hover:bg-amber-100 rounded-xl transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    <div class="flex gap-3 shrink-0">
+                        <button onclick='openEditModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="p-4 text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-2xl transition-all transform hover:scale-110 shadow-sm">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                         </button>
-                        <button onclick="deleteItem(${item.id})" class="p-2 text-rose-500 bg-rose-50 hover:bg-rose-100 rounded-xl transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        <button onclick="deleteItem(${item.id})" class="p-4 text-orange-600 bg-orange-50 hover:bg-orange-100 rounded-2xl transition-all transform hover:scale-110 shadow-sm">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                         </button>
                     </div>
                 </div>

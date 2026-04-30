@@ -1,78 +1,89 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-6">
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1">Data Kesehatan Warga</h1>
-    <p class="text-gray-500 text-sm">Monitoring tekanan darah dan GAD7 warga</p>
+<div class="mb-8">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Riwayat Data Kesehatan Warga</h1>
+    <p class="text-primary-800 text-lg font-bold uppercase tracking-[0.2em] opacity-60">Monitoring Tekanan Darah & GAD-7 Keseluruhan</p>
 </div>
 
-<div class="flex flex-col lg:flex-row gap-4 mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-    <div class="flex-1">
-        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Warga</label>
-        <select id="filterWarga" class="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-primary-500">
-            <option value="">Semua Warga</option>
+<div class="flex flex-col lg:flex-row gap-6 mb-10 bg-white p-8 rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100">
+    <div class="flex-1 space-y-2">
+        <label class="text-xs font-black text-primary-800 uppercase tracking-widest ml-1">Pilih Nama Warga</label>
+        <select id="filterWarga" class="w-full px-6 py-4 rounded-2xl bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white transition-all font-black text-black appearance-none">
+            <option value="">Semua Warga TaniSehat</option>
         </select>
     </div>
-    <div class="flex flex-col md:flex-row gap-3">
-        <div>
-            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Dari Tanggal</label>
-            <input type="date" id="startDate" class="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-primary-500">
+    <div class="flex flex-col md:flex-row gap-6">
+        <div class="space-y-2">
+            <label class="text-xs font-black text-primary-800 uppercase tracking-widest ml-1">Dari Tanggal</label>
+            <input type="date" id="startDate" class="w-full px-6 py-4 rounded-2xl bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white transition-all font-bold text-black">
         </div>
-        <div>
-            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Sampai Tanggal</label>
-            <input type="date" id="endDate" class="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-primary-500">
+        <div class="space-y-2">
+            <label class="text-xs font-black text-primary-800 uppercase tracking-widest ml-1">Sampai Tanggal</label>
+            <input type="date" id="endDate" class="w-full px-6 py-4 rounded-2xl bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white transition-all font-bold text-black">
         </div>
     </div>
-    <div class="flex items-end gap-2">
-        <button onclick="loadData()" class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition shadow-sm">Cari</button>
-        <button onclick="resetFilter()" class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium transition">Reset</button>
-    </div>
-</div>
-
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-    <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-4 md:p-5 text-white shadow-md">
-        <div class="flex items-center justify-between mb-2">
-            <span class="text-green-100 text-xs md:text-sm font-medium uppercase tracking-wider">Normal</span>
-            <svg class="w-6 h-6 md:w-8 md:h-8 text-green-200 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        </div>
-        <div class="text-2xl md:text-3xl font-bold" id="statNormal">-</div>
-        <div class="text-green-100 text-[10px] mt-1">Kondisi sehat</div>
-    </div>
-    <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-2xl p-4 md:p-5 text-white shadow-md">
-        <div class="flex items-center justify-between mb-2">
-            <span class="text-yellow-100 text-xs md:text-sm font-medium uppercase tracking-wider">Waspada</span>
-            <svg class="w-6 h-6 md:w-8 md:h-8 text-yellow-200 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        </div>
-        <div class="text-2xl md:text-3xl font-bold" id="statWaspada">-</div>
-        <div class="text-yellow-100 text-[10px] mt-1">Pra-hipertensi / Ringan</div>
-    </div>
-    <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-4 md:p-5 text-white shadow-md">
-        <div class="flex items-center justify-between mb-2">
-            <span class="text-red-100 text-xs md:text-sm font-medium uppercase tracking-wider">Risiko Tinggi</span>
-            <svg class="w-6 h-6 md:w-8 md:h-8 text-red-200 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        </div>
-        <div class="text-2xl md:text-3xl font-bold" id="statRisiko">-</div>
-        <div class="text-red-100 text-[10px] mt-1">Hipertensi / Sedang-Tinggi</div>
+    <div class="flex items-end gap-3">
+        <button onclick="loadData()" class="bg-primary-800 hover:bg-black text-white px-8 py-4 rounded-2xl font-black text-sm transition-all shadow-lg uppercase tracking-widest">CARI DATA</button>
+        <button onclick="resetFilter()" class="bg-primary-50 hover:bg-primary-100 text-primary-800 px-6 py-4 rounded-2xl font-black text-sm transition-all uppercase tracking-widest">RESET</button>
     </div>
 </div>
 
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-6 mb-6">
-    <h2 class="text-lg font-bold text-gray-800 mb-4">Riwayat Tekanan Darah</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
+    <div class="bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-[2rem] p-6 md:p-8 text-white shadow-xl border border-white/10">
+        <div class="flex items-center justify-between mb-4">
+            <span class="text-emerald-100 text-sm font-black uppercase tracking-widest opacity-60">Status Normal</span>
+            <div class="p-3 bg-white/20 rounded-2xl">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+        </div>
+        <div class="text-4xl md:text-5xl font-black" id="statNormal">-</div>
+        <div class="text-emerald-100 text-xs font-bold mt-3 uppercase tracking-wider">Kondisi sangat sehat</div>
+    </div>
+    <div class="bg-gradient-to-br from-amber-500 to-amber-700 rounded-[2rem] p-6 md:p-8 text-white shadow-xl border border-white/10">
+        <div class="flex items-center justify-between mb-4">
+            <span class="text-amber-100 text-sm font-black uppercase tracking-widest opacity-60">Status Waspada</span>
+            <div class="p-3 bg-white/20 rounded-2xl">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+        </div>
+        <div class="text-4xl md:text-5xl font-black" id="statWaspada">-</div>
+        <div class="text-amber-100 text-xs font-bold mt-3 uppercase tracking-wider">Pra-hipertensi / Ringan</div>
+    </div>
+    <div class="bg-gradient-to-br from-orange-500 to-orange-700 rounded-[2rem] p-6 md:p-8 text-white shadow-xl border border-white/10">
+        <div class="flex items-center justify-between mb-4">
+            <span class="text-orange-100 text-sm font-black uppercase tracking-widest opacity-60">Risiko Tinggi</span>
+            <div class="p-3 bg-white/20 rounded-2xl">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+        </div>
+        <div class="text-4xl md:text-5xl font-black" id="statRisiko">-</div>
+        <div class="text-orange-100 text-xs font-bold mt-3 uppercase tracking-wider">Hipertensi / Sedang-Tinggi</div>
+    </div>
+</div>
+
+<div class="bg-white rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100 p-8 md:p-10 mb-10 overflow-hidden">
+    <div class="flex items-center justify-between mb-8 pb-4 border-b-2 border-primary-50">
+        <h2 class="text-2xl md:text-3xl font-black text-black tracking-tight">Riwayat Tekanan Darah</h2>
+        <button onclick="exportTdToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl font-black text-xs flex items-center gap-2 transition-all shadow-lg shadow-emerald-900/10 uppercase tracking-widest">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            EXCEL
+        </button>
+    </div>
     
-    <!-- Desktop Table -->
-    <div class="hidden md:block overflow-x-auto">
-        <table class="w-full text-sm text-left">
-            <thead class="bg-gray-50 text-gray-600 uppercase text-xs font-semibold">
+    <div class="hidden md:block overflow-x-auto -mx-10 px-10">
+        <table class="w-full text-left">
+            <thead class="text-primary-400 uppercase text-xs font-black tracking-[0.2em] border-b-2 border-primary-50">
                 <tr>
-                    <th class="px-4 py-3">Warga</th>
-                    <th class="px-4 py-3">Tanggal</th>
-                    <th class="px-4 py-3">Systole</th>
-                    <th class="px-4 py-3">Diastole</th>
-                    <th class="px-4 py-3">Status</th>
+                    <th class="px-6 py-6">Nama Warga (NIK)</th>
+                    <th class="px-6 py-6 text-center">Profil</th>
+                    <th class="px-6 py-6">Tanggal Cek</th>
+                    <th class="px-6 py-6 text-center">Hasil (mmHg)</th>
+                    <th class="px-6 py-6 text-center">Status</th>
                 </tr>
             </thead>
-            <tbody id="tdTable" class="divide-y divide-gray-100">
-                <tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">Memuat data...</td></tr>
+            <tbody id="tdTable" class="divide-y-2 divide-primary-50">
+                <tr><td colspan="4" class="px-6 py-12 text-center text-primary-300 font-bold italic">Memuat data...</td></tr>
             </tbody>
         </table>
     </div>
@@ -85,22 +96,28 @@
     <div id="tdPagination" class="mt-4 flex justify-center gap-2"></div>
 </div>
 
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-6">
-    <h2 class="text-lg font-bold text-gray-800 mb-4">Riwayat GAD7</h2>
+<div class="bg-white rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100 p-8 md:p-10 mb-10 overflow-hidden">
+    <div class="flex items-center justify-between mb-8 pb-4 border-b-2 border-primary-50">
+        <h2 class="text-2xl md:text-3xl font-black text-black tracking-tight">Riwayat GAD-7</h2>
+        <button onclick="exportGadToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl font-black text-xs flex items-center gap-2 transition-all shadow-lg shadow-emerald-900/10 uppercase tracking-widest">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            EXCEL
+        </button>
+    </div>
     
-    <!-- Desktop Table -->
-    <div class="hidden md:block overflow-x-auto">
-        <table class="w-full text-sm text-left">
-            <thead class="bg-gray-50 text-gray-600 uppercase text-xs font-semibold">
+    <div class="hidden md:block overflow-x-auto -mx-10 px-10">
+        <table class="w-full text-left">
+            <thead class="text-primary-400 uppercase text-xs font-black tracking-[0.2em] border-b-2 border-primary-50">
                 <tr>
-                    <th class="px-4 py-3">Warga</th>
-                    <th class="px-4 py-3">Tanggal</th>
-                    <th class="px-4 py-3">Skor</th>
-                    <th class="px-4 py-3">Status</th>
+                    <th class="px-6 py-6">Nama Warga (NIK)</th>
+                    <th class="px-6 py-6 text-center">Profil</th>
+                    <th class="px-6 py-6">Tanggal Cek</th>
+                    <th class="px-6 py-6 text-center">Skor GAD-7</th>
+                    <th class="px-6 py-6 text-center">Status</th>
                 </tr>
             </thead>
-            <tbody id="gadTable" class="divide-y divide-gray-100">
-                <tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">Memuat data...</td></tr>
+            <tbody id="gadTable" class="divide-y-2 divide-primary-50">
+                <tr><td colspan="4" class="px-6 py-12 text-center text-primary-300 font-bold italic">Memuat data...</td></tr>
             </tbody>
         </table>
     </div>
@@ -115,19 +132,67 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 <script>
+let tdFullData = [];
+let gadFullData = [];
+
+async function exportTdToExcel() {
+    if (tdFullData.length === 0) { showAlert('Tidak ada data untuk diekspor'); return; }
+    const excelData = tdFullData.map(td => ({
+        'Nama Warga': td.warga?.nama_lengkap || '-',
+        'NIK': td.warga?.nik || '-',
+        'Umur': td.warga?.tanggal_lahir ? calculateAge(td.warga.tanggal_lahir) : '-',
+        'L/P': td.warga?.jenis_kelamin || '-',
+        'Tanggal Cek': new Date(td.tgl_cek).toLocaleDateString('id-ID'),
+        'Systolic': td.systolic,
+        'Diastolic': td.diastolic,
+        'Status': getStatusTd(td.systolic, td.diastolic).label
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Riwayat TD");
+    XLSX.writeFile(workbook, `Riwayat_TD_TaniSehat_${new Date().toISOString().split('T')[0]}.xlsx`);
+}
+
+async function exportGadToExcel() {
+    if (gadFullData.length === 0) { showAlert('Tidak ada data untuk diekspor'); return; }
+    const excelData = gadFullData.map(gad => ({
+        'Nama Warga': gad.warga?.nama_lengkap || '-',
+        'NIK': gad.warga?.nik || '-',
+        'Umur': gad.warga?.tanggal_lahir ? calculateAge(gad.warga.tanggal_lahir) : '-',
+        'L/P': gad.warga?.jenis_kelamin || '-',
+        'Tanggal Cek': new Date(gad.tgl_gad).toLocaleDateString('id-ID'),
+        'Skor GAD-7': gad.skor,
+        'Status': getStatusGad(gad.skor).label
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Riwayat GAD7");
+    XLSX.writeFile(workbook, `Riwayat_GAD7_TaniSehat_${new Date().toISOString().split('T')[0]}.xlsx`);
+}
 let currentFilter = 'week';
 
+function calculateAge(birthDate) {
+    if (!birthDate) return '-';
+    const birth = new Date(birthDate);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+    return age;
+}
+
 function getStatusTd(systolic, diastolic) {
-    if (systolic < 120 && diastolic < 80) return { label: 'Normal', color: 'bg-green-100 text-green-700' };
-    if (systolic <= 139 && diastolic <= 89) return { label: 'Pra-Hipertensi', color: 'bg-yellow-100 text-yellow-700' };
-    return { label: 'Hipertensi', color: 'bg-red-100 text-red-700' };
+    if (systolic >= 140 && diastolic >= 90) return { label: 'Hipertensi', color: 'bg-orange-100 text-orange-800' };
+    if (systolic < 120 && diastolic < 80) return { label: 'Normal', color: 'bg-emerald-100 text-emerald-800' };
+    return { label: 'Pra-Hipertensi', color: 'bg-amber-100 text-amber-800' };
 }
 
 function getStatusGad(skor) {
-    if (skor <= 4) return { label: 'Normal', color: 'bg-green-100 text-green-700' };
-    if (skor <= 9) return { label: 'Ringan', color: 'bg-yellow-100 text-yellow-700' };
-    return { label: 'Sedang-Tinggi', color: 'bg-red-100 text-red-700' };
+    if (skor <= 4) return { label: 'Normal', color: 'bg-emerald-100 text-emerald-800' };
+    if (skor <= 9) return { label: 'Ringan', color: 'bg-amber-100 text-amber-800' };
+    return { label: 'Sedang-Tinggi', color: 'bg-orange-100 text-orange-800' };
 }
 
 function filterData(filter) {
@@ -144,15 +209,17 @@ async function loadData() {
     
     try {
         const [tdRes, gadRes] = await Promise.all([
-            apiCall(`/tekanan-darah?warga_id=${wargaId}&start_date=${start}&end_date=${end}`),
-            apiCall(`/gad?warga_id=${wargaId}&start_date=${start}&end_date=${end}`)
+            apiCall(`/tekanan-darah?warga_id=${wargaId}&start_date=${start}&end_date=${end}&per_page=1000`),
+            apiCall(`/gad?warga_id=${wargaId}&start_date=${start}&end_date=${end}&per_page=1000`)
         ]);
         
         if (tdRes && tdRes.success) {
+            tdFullData = tdRes.data.data || [];
             renderTdTable(tdRes.data.data || []);
             renderPagination(tdRes.data, 'tdPagination', 'loadTdData');
         }
         if (gadRes && gadRes.success) {
+            gadFullData = gadRes.data.data || [];
             renderGadTable(gadRes.data.data || []);
             renderPagination(gadRes.data, 'gadPagination', 'loadGadData');
         }
@@ -176,26 +243,35 @@ function renderTdTable(data) {
         else if (status.label === 'Pra-Hipertensi') waspada++;
         else risiko++;
         
-        return `<tr class="hover:bg-gray-50">
-            <td class="px-4 py-3 font-medium">${td.warga?.nama_lengkap || '-'}</td>
-            <td class="px-4 py-3">${new Date(td.tgl_cek).toLocaleDateString('id-ID')}</td>
-            <td class="px-4 py-3 font-mono">${td.systolic}</td>
-            <td class="px-4 py-3 font-mono">${td.diastolic}</td>
-            <td class="px-4 py-3"><span class="px-2 py-1 text-xs font-semibold rounded-full ${status.color}">${status.label}</span></td>
+        return `<tr class="hover:bg-primary-50/50 transition-colors">
+            <td class="px-6 py-6">
+                <div class="font-black text-black text-lg leading-tight">${td.warga?.nama_lengkap || '-'}</div>
+                <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">NIK: ${td.warga?.nik || '-'}</div>
+            </td>
+            <td class="px-6 py-6 text-center">
+                <div class="font-black text-primary-800 text-sm">${td.warga?.tanggal_lahir ? calculateAge(td.warga.tanggal_lahir) : '-'} Thn</div>
+                <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">${td.warga?.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan'}</div>
+            </td>
+            <td class="px-6 py-6 font-bold text-primary-400">${new Date(td.tgl_cek).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'})}</td>
+            <td class="px-6 py-6 text-center font-black text-xl text-primary-800">${td.systolic}/${td.diastolic}</td>
+            <td class="px-6 py-6 text-center"><span class="px-4 py-1.5 text-[10px] font-black rounded-lg uppercase tracking-widest shadow-sm ${status.color}">${status.label}</span></td>
         </tr>`;
     }).join('');
 
     const cardsHtml = data.map(td => {
         const status = getStatusTd(td.systolic, td.diastolic);
         return `
-            <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                <div class="flex justify-between items-start mb-2">
-                    <p class="font-bold text-gray-800">${td.warga?.nama_lengkap || '-'}</p>
-                    <span class="px-2 py-0.5 text-[10px] font-bold rounded-full ${status.color}">${status.label}</span>
+            <div class="bg-white rounded-[2rem] p-6 shadow-xl shadow-primary-900/5 border border-primary-100 mb-4">
+                <div class="flex justify-between items-start mb-4 border-b-2 border-primary-50 pb-4">
+                    <div>
+                        <p class="font-black text-black text-xl leading-tight">${td.warga?.nama_lengkap || '-'}</p>
+                        <p class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">NIK: ${td.warga?.nik || '-'} • ${td.warga?.tanggal_lahir ? calculateAge(td.warga.tanggal_lahir) : '-'} Thn • ${td.warga?.jenis_kelamin}</p>
+                    </div>
+                    <span class="px-3 py-1 text-[9px] font-black rounded-lg uppercase tracking-widest shadow-sm ${status.color}">${status.label}</span>
                 </div>
-                <div class="flex justify-between text-xs text-gray-500">
-                    <span>${new Date(td.tgl_cek).toLocaleDateString('id-ID')}</span>
-                    <span class="font-mono font-bold text-gray-700">${td.systolic}/${td.diastolic} mmHg</span>
+                <div class="flex justify-between items-center bg-primary-50/50 p-4 rounded-2xl">
+                    <span class="text-[10px] font-black text-primary-400 uppercase tracking-widest">${new Date(td.tgl_cek).toLocaleDateString('id-ID')}</span>
+                    <span class="text-xl font-black text-primary-800">${td.systolic}/${td.diastolic} <span class="text-xs font-bold opacity-60">mmHg</span></span>
                 </div>
             </div>
         `;
@@ -221,25 +297,35 @@ function renderGadTable(data) {
     
     const rowsHtml = data.map(gad => {
         const status = getStatusGad(gad.skor);
-        return `<tr class="hover:bg-gray-50">
-            <td class="px-4 py-3 font-medium">${gad.warga?.nama_lengkap || '-'}</td>
-            <td class="px-4 py-3">${new Date(gad.tgl_gad).toLocaleDateString('id-ID')}</td>
-            <td class="px-4 py-3 font-mono font-bold">${gad.skor}</td>
-            <td class="px-4 py-3"><span class="px-2 py-1 text-xs font-semibold rounded-full ${status.color}">${status.label}</span></td>
+        return `<tr class="hover:bg-primary-50/50 transition-colors">
+            <td class="px-6 py-6">
+                <div class="font-black text-black text-lg leading-tight">${gad.warga?.nama_lengkap || '-'}</div>
+                <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">NIK: ${gad.warga?.nik || '-'}</div>
+            </td>
+            <td class="px-6 py-6 text-center">
+                <div class="font-black text-primary-800 text-sm">${gad.warga?.tanggal_lahir ? calculateAge(gad.warga.tanggal_lahir) : '-'} Thn</div>
+                <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">${gad.warga?.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan'}</div>
+            </td>
+            <td class="px-6 py-6 font-bold text-primary-400">${new Date(gad.tgl_gad).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'})}</td>
+            <td class="px-6 py-6 text-center font-black text-2xl text-primary-800">${gad.skor}</td>
+            <td class="px-6 py-6 text-center"><span class="px-4 py-1.5 text-[10px] font-black rounded-lg uppercase tracking-widest shadow-sm ${status.color}">${status.label}</span></td>
         </tr>`;
     }).join('');
 
     const cardsHtml = data.map(gad => {
         const status = getStatusGad(gad.skor);
         return `
-            <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                <div class="flex justify-between items-start mb-2">
-                    <p class="font-bold text-gray-800">${gad.warga?.nama_lengkap || '-'}</p>
-                    <span class="px-2 py-0.5 text-[10px] font-bold rounded-full ${status.color}">${status.label}</span>
+            <div class="bg-white rounded-[2rem] p-6 shadow-xl shadow-primary-900/5 border border-primary-100 mb-4">
+                <div class="flex justify-between items-start mb-4 border-b-2 border-primary-50 pb-4">
+                    <div>
+                        <p class="font-black text-black text-xl leading-tight">${gad.warga?.nama_lengkap || '-'}</p>
+                        <p class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">NIK: ${gad.warga?.nik || '-'} • ${gad.warga?.tanggal_lahir ? calculateAge(gad.warga.tanggal_lahir) : '-'} Thn • ${gad.warga?.jenis_kelamin}</p>
+                    </div>
+                    <span class="px-3 py-1 text-[9px] font-black rounded-lg uppercase tracking-widest shadow-sm ${status.color}">${status.label}</span>
                 </div>
-                <div class="flex justify-between text-xs text-gray-500">
-                    <span>${new Date(gad.tgl_gad).toLocaleDateString('id-ID')}</span>
-                    <span class="font-mono font-bold text-gray-700">Skor: ${gad.skor}</span>
+                <div class="flex justify-between items-center bg-primary-50/50 p-4 rounded-2xl">
+                    <span class="text-[10px] font-black text-primary-400 uppercase tracking-widest">${new Date(gad.tgl_gad).toLocaleDateString('id-ID')}</span>
+                    <span class="text-2xl font-black text-primary-800"><span class="text-xs font-bold opacity-60">SKOR:</span> ${gad.skor}</span>
                 </div>
             </div>
         `;
@@ -251,10 +337,13 @@ function renderGadTable(data) {
 
 async function loadWargaList() {
     try {
-        const res = await apiCall('/users?role=warga');
+        const user = JSON.parse(localStorage.getItem('user'));
+        const endpoint = user.role === 'kader' ? `/users/kader/${user.id}/warga` : '/users?role=warga&per_page=1000';
+        const res = await apiCall(endpoint);
         if (res && res.success) {
             const select = document.getElementById('filterWarga');
-            res.data.data.forEach(w => {
+            const data = user.role === 'kader' ? res.data : res.data.data;
+            data.forEach(w => {
                 const opt = document.createElement('option');
                 opt.value = w.id;
                 opt.textContent = w.nama_lengkap;
@@ -280,7 +369,7 @@ function renderPagination(data, containerId, loadFn) {
     let html = '';
     for (let i = 1; i <= data.last_page; i++) {
         const isActive = i === data.current_page;
-        html += `<button onclick="${loadFn}(${i})" class="px-3 py-1 rounded-md ${isActive ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'} transition text-xs font-medium">${i}</button>`;
+        html += `<button onclick="${loadFn}(${i})" class="px-5 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${isActive ? 'bg-primary-800 text-white shadow-lg' : 'bg-primary-50 text-primary-800 hover:bg-primary-100'}">${i}</button>`;
     }
     container.innerHTML = html;
 }

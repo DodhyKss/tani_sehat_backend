@@ -6,89 +6,98 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         Kembali
     </a>
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1">Input Tekanan Darah</h1>
-    <p class="text-gray-500 text-sm">Catat tekanan darah Anda hari ini</p>
+    <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">Input Tekanan Darah</h1>
+    <p class="text-gray-600 text-lg">Catat tekanan darah Anda dengan mudah</p>
 </div>
 
-<div class="max-w-2xl mx-auto">
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+<div class="max-w-full mx-auto">
+    <div class="bg-gradient-to-br from-primary-600 to-primary-800 rounded-3xl shadow-xl p-6 md:p-8 text-white border border-primary-500/30">
         <div class="text-center mb-8">
-            <div class="inline-flex justify-center items-center p-4 bg-red-50 rounded-full mb-4">
-                <svg class="w-10 h-10 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <div class="inline-flex justify-center items-center p-4 bg-white/20 rounded-full mb-4">
+                <svg class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             </div>
-            <h2 class="text-xl font-bold text-gray-800">Ukur Tekanan Darah Anda</h2>
-            <p class="text-gray-500 text-sm mt-2">Masukkan hasil pengukuran dari alat tensimeter</p>
+            <h2 class="text-2xl font-bold text-white">Ukur Tekanan Darah Anda</h2>
+            <p class="text-primary-100 text-lg font-medium mt-2">Masukkan hasil pengukuran dari alat tensimeter</p>
         </div>
 
         <form id="tdForm" class="space-y-6">
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Sistole (mmHg)</label>
-                    <input type="number" id="systolic" min="60" max="250" required placeholder="120" class="w-full px-4 py-4 rounded-xl border border-gray-200 text-center text-2xl font-bold focus:ring-2 focus:ring-primary-500">
+                    <label class="block text-lg font-bold text-white/90 mb-2">Sistole (mmHg)</label>
+                    <input type="number" id="systolic" min="60" max="250" required placeholder="120" class="w-full px-4 py-5 rounded-2xl bg-white/10 border-2 border-white/20 text-center text-3xl font-extrabold text-white focus:ring-4 focus:ring-primary-500/30 focus:border-white/50 transition-all placeholder:text-white/30 outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Diastole (mmHg)</label>
-                    <input type="number" id="diastolic" min="40" max="150" required placeholder="80" class="w-full px-4 py-4 rounded-xl border border-gray-200 text-center text-2xl font-bold focus:ring-2 focus:ring-primary-500">
+                    <label class="block text-lg font-bold text-white/90 mb-2">Diastole (mmHg)</label>
+                    <input type="number" id="diastolic" min="40" max="150" required placeholder="80" class="w-full px-4 py-5 rounded-2xl bg-white/10 border-2 border-white/20 text-center text-3xl font-extrabold text-white focus:ring-4 focus:ring-primary-500/30 focus:border-white/50 transition-all placeholder:text-white/30 outline-none">
                 </div>
             </div>
 
-            <div class="bg-gray-50 rounded-xl p-4">
-                <p class="text-sm text-gray-500 text-center mb-2">Tanggal Pengukuran</p>
-                <input type="date" id="tgl_cek" required class="w-full px-4 py-3 rounded-lg border border-gray-200 text-center font-semibold focus:ring-2 focus:ring-primary-500">
+            <div class="bg-primary-900/30 rounded-2xl p-4 border border-primary-400/20">
+                <p class="text-base font-bold text-primary-100 text-center mb-2">Tanggal Pengukuran</p>
+                <input type="date" id="tgl_cek" required class="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-center font-bold text-lg text-white focus:ring-4 focus:ring-primary-500/30 focus:border-white/50 transition-all outline-none">
             </div>
 
-            <div id="previewResult" class="hidden bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 text-center border border-green-200">
-                <h3 class="font-semibold text-gray-700 mb-2">Preview Hasil</h3>
-                <div class="text-3xl font-bold mb-2" id="previewSystolic">-</div>
-                <div class="text-gray-500 text-sm mb-3">mmHg</div>
-                <span id="previewStatus" class="px-4 py-2 text-sm font-semibold rounded-full">-</span>
+            <div id="previewResult" class="hidden bg-primary-900/40 rounded-[2rem] p-8 text-center border-2 border-white/20 shadow-2xl backdrop-blur-md">
+                <h3 class="font-bold text-white/70 uppercase tracking-widest text-sm mb-4">Analisa Hasil</h3>
+                <div class="text-6xl font-black mb-3 text-white tracking-tighter" id="previewSystolic">-</div>
+                <div class="text-primary-100 text-lg font-bold mb-6">mmHg</div>
+                <div class="inline-block">
+                    <span id="previewStatus" class="px-8 py-3 text-xl font-black rounded-2xl shadow-lg ring-4 ring-white/10">-</span>
+                </div>
             </div>
 
-            <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-xl transition shadow-lg flex justify-center items-center gap-2">
-                <span>Simpan Hasil</span>
-                <div class="loader" id="loader"></div>
+            <button type="submit" class="w-full bg-white hover:bg-primary-50 text-primary-800 text-2xl font-black py-6 rounded-[1.5rem] transition-all shadow-2xl flex justify-center items-center gap-3 transform hover:scale-[1.02] active:scale-[0.98] mt-8">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                <span>SIMPAN SEKARANG</span>
+                <div class="loader border-primary-800" id="loader"></div>
             </button>
         </form>
     </div>
 
-    <div class="mt-6 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h3 class="font-semibold text-gray-800 mb-4">Referensi Kategori</h3>
+    <div class="mt-6 bg-gradient-to-br from-primary-600 to-primary-800 rounded-3xl shadow-xl p-6 text-white border border-primary-500/30">
+        <h3 class="font-bold text-xl text-white mb-6">Referensi Kategori</h3>
         <div class="space-y-3">
-            <div class="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                <div class="w-4 h-4 bg-green-500 rounded-full"></div>
+            <div class="flex items-center gap-4 p-4 bg-white/10 rounded-xl border border-white/10">
+                <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">N</div>
                 <div class="flex-1">
-                    <p class="font-semibold text-gray-800">Normal</p>
-                    <p class="text-sm text-gray-500">Sistole &lt;120 dan Diastole &lt;80</p>
+                    <p class="font-bold text-white text-lg">Normal</p>
+                    <p class="text-base text-primary-100 font-medium text-xs">Sistole < 120 DAN Diastole < 80</p>
                 </div>
             </div>
-            <div class="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg">
-                <div class="w-4 h-4 bg-yellow-500 rounded-full"></div>
+            <div class="flex items-center gap-4 p-4 bg-white/10 rounded-xl border border-white/10">
+                <div class="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">H</div>
                 <div class="flex-1">
-                    <p class="font-semibold text-gray-800">Pra-Hipertensi</p>
-                    <p class="text-sm text-gray-500">Sistole 120-139 atau Diastole 80-89</p>
+                    <p class="font-bold text-white text-lg">Hipertensi</p>
+                    <p class="text-base text-primary-100 font-medium text-xs">Sistole ≥ 140 DAN Diastole ≥ 90</p>
                 </div>
             </div>
-            <div class="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
-                <div class="w-4 h-4 bg-red-500 rounded-full"></div>
+            <div class="flex items-center gap-4 p-4 bg-white/10 rounded-xl border border-white/10">
+                <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">P</div>
                 <div class="flex-1">
-                    <p class="font-semibold text-gray-800">Hipertensi</p>
-                    <p class="text-sm text-gray-500">Sistole ≥140 atau Diastole ≥90</p>
+                    <p class="font-bold text-white text-lg">Pra-Hipertensi</p>
+                    <p class="text-base text-primary-100 font-medium text-xs">Kondisi di antara Normal dan Hipertensi</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="resultModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/50" onclick="closeResultModal()"></div>
-    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 text-center">
-        <div id="resultIcon" class="w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4"></div>
-        <h3 class="text-2xl font-bold mb-2" id="resultTitle">Hasil</h3>
-        <div class="text-4xl font-bold font-mono mb-2" id="resultValue">-</div>
-        <p class="text-gray-500 mb-2">mmHg</p>
-        <span id="resultStatus" class="px-4 py-2 text-sm font-semibold rounded-full">-</span>
-        <p class="text-gray-600 mt-4" id="resultDesc">-</p>
-        <a href="/warga" class="inline-block mt-6 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3 rounded-lg transition">Kembali ke Dashboard</a>
+<div id="resultModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md">
+    <div class="absolute inset-0 bg-black/70" onclick="closeResultModal()"></div>
+    <div class="relative bg-gradient-to-br from-primary-700 to-primary-900 rounded-[2.5rem] shadow-2xl w-full max-w-md p-10 text-center text-white border border-white/20">
+        <div id="resultIcon" class="w-24 h-24 mx-auto rounded-full flex items-center justify-center mb-6 shadow-2xl ring-4 ring-white/10"></div>
+        <h3 class="text-3xl font-black mb-4 tracking-tight" id="resultTitle">Hasil</h3>
+        <div class="bg-white/10 rounded-2xl p-8 mb-8">
+            <div class="text-7xl font-black tracking-tighter mb-2" id="resultValue">-</div>
+            <p class="text-primary-200 uppercase font-black tracking-widest text-sm">mmHg</p>
+        </div>
+        <div class="inline-block mb-8">
+            <span id="resultStatus" class="px-8 py-3 text-2xl font-black rounded-2xl shadow-lg ring-4 ring-white/10">-</span>
+        </div>
+        <p class="text-primary-100 text-lg font-medium leading-relaxed mb-10" id="resultDesc">-</p>
+        <a href="/warga" class="w-full inline-block bg-white text-primary-800 font-black py-5 rounded-2xl shadow-xl hover:bg-primary-50 transition-all text-xl">
+            Selesai
+        </a>
     </div>
 </div>
 @endsection
@@ -100,9 +109,9 @@ document.getElementById('tgl_cek').value = today;
 document.getElementById('tgl_cek').max = today;
 
 function getStatus(systolic, diastolic) {
-    if (systolic < 120 && diastolic < 80) return { label: 'Normal', color: 'bg-green-100 text-green-700', icon: 'bg-green-100', desc: 'Kondisi sehat. Pertahankan pola hidup baik!' };
-    if (systolic <= 139 && diastolic <= 89) return { label: 'Pra-Hipertensi', color: 'bg-yellow-100 text-yellow-700', icon: 'bg-yellow-100', desc: 'Perlu waspada. Jaga pola makan dan olahraga teratur.' };
-    return { label: 'Hipertensi', color: 'bg-red-100 text-red-700', icon: 'bg-red-100', desc: 'Risiko tinggi. Segera konsultasikan dengan kader kesehatan.' };
+    if (systolic >= 140 && diastolic >= 90) return { label: 'Hipertensi', color: 'bg-orange-100 text-orange-800', icon: 'bg-orange-100', desc: 'Risiko tinggi. Segera konsultasikan dengan kader kesehatan.' };
+    if (systolic < 120 && diastolic < 80) return { label: 'Normal', color: 'bg-emerald-100 text-emerald-700', icon: 'bg-emerald-100', desc: 'Kondisi sehat. Pertahankan pola hidup baik!' };
+    return { label: 'Pra-Hipertensi', color: 'bg-amber-100 text-amber-700', icon: 'bg-amber-100', desc: 'Perlu waspada. Jaga pola makan dan olahraga teratur.' };
 }
 
 async function checkJadwal() {
@@ -122,15 +131,17 @@ async function checkJadwal() {
             else timeLeft = `${Math.ceil(diffTime / (1000 * 60))} menit`;
             
             document.getElementById('tdForm').innerHTML = `
-                <div class="text-center py-12">
-                    <div class="w-16 h-16 mx-auto bg-yellow-100 rounded-full flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-yellow-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                <div class="text-center py-12 bg-primary-900/30 rounded-3xl border-2 border-primary-400/20 px-6">
+                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Belum Waktunya</h3>
-                    <p class="text-gray-600 mb-4">Anda sudah mengisi Tekanan Darah.</p>
-                    <p class="text-sm text-gray-500">Bisa mengisi lagi dalam <span class="font-bold text-primary-600">${timeLeft}</span></p>
-                    <p class="text-xs text-gray-400 mt-2">(${nextDate.toLocaleString('id-ID')})</p>
-                    <a href="/warga" class="inline-block mt-6 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3 rounded-lg transition">Kembali ke Dashboard</a>
+                    <h3 class="text-2xl font-black text-white mb-3 tracking-tight">Belum Waktunya</h3>
+                    <p class="text-primary-100 text-lg mb-6 font-medium">Anda baru saja mengisi data Tekanan Darah.</p>
+                    <div class="bg-white/10 p-4 rounded-2xl mb-6">
+                        <p class="text-sm text-primary-200 uppercase font-black tracking-widest mb-1">Bisa mengisi lagi dalam</p>
+                        <p class="text-3xl font-black text-white">${timeLeft}</p>
+                    </div>
+                    <a href="/warga" class="inline-block bg-white text-primary-800 font-black text-lg px-10 py-4 rounded-2xl transition-all shadow-xl hover:bg-primary-50">Kembali ke Dashboard</a>
                 </div>
             `;
             return false;

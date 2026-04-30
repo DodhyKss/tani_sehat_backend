@@ -1,65 +1,74 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-6">
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1">Dashboard Admin</h1>
-    <p class="text-gray-500 text-sm">Monitoring seluruh data kesehatan warga</p>
+<div class="mb-8">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2">Dashboard Admin</h1>
+    <p class="text-primary-800 text-lg font-bold">Monitoring real-time kesehatan warga TaniSehat</p>
 </div>
 
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-6 hover:shadow-md transition">
-        <div class="flex items-center justify-between mb-3">
-            <div class="p-2 bg-primary-50 rounded-lg">
-                <svg class="w-5 h-5 md:w-6 md:h-6 text-primary-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-10">
+    <div class="bg-gradient-to-br from-primary-600 to-primary-800 rounded-[2rem] p-6 md:p-8 text-white shadow-xl shadow-primary-900/10 border border-primary-500/20">
+        <div class="flex items-center justify-between mb-6">
+            <div class="p-3 bg-white/20 rounded-2xl">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
-            <span class="text-xs text-gray-400 font-medium">Total</span>
+            <span class="text-xs font-black uppercase tracking-widest opacity-60">Total</span>
         </div>
-        <h3 class="text-gray-500 text-xs md:text-sm font-medium mb-1">Total Warga</h3>
-        <div class="text-2xl md:text-3xl font-bold text-primary-600" id="valWarga">-</div>
+        <h3 class="text-primary-100 text-sm font-bold uppercase tracking-wider mb-2">Total Warga</h3>
+        <div class="text-3xl md:text-5xl font-black" id="valWarga">-</div>
     </div>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-6 hover:shadow-md transition">
-        <div class="flex items-center justify-between mb-3">
-            <div class="p-2 bg-green-50 rounded-lg">
-                <svg class="w-5 h-5 md:w-6 md:h-6 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    
+    <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-[2rem] p-6 md:p-8 text-white shadow-xl shadow-blue-900/10 border border-blue-500/20">
+        <div class="flex items-center justify-between mb-6">
+            <div class="p-3 bg-white/20 rounded-2xl">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             </div>
-            <span class="text-xs text-gray-400 font-medium">Hari ini</span>
+            <span class="text-xs font-black uppercase tracking-widest opacity-60">Hari Ini</span>
         </div>
-        <h3 class="text-gray-500 text-xs md:text-sm font-medium mb-1">Cek TD</h3>
-        <div class="text-2xl md:text-3xl font-bold text-green-600" id="valTd">-</div>
+        <h3 class="text-blue-100 text-sm font-bold uppercase tracking-wider mb-2">Cek TD</h3>
+        <div class="text-3xl md:text-5xl font-black" id="valTd">-</div>
     </div>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-6 hover:shadow-md transition">
-        <div class="flex items-center justify-between mb-3">
-            <div class="p-2 bg-yellow-50 rounded-lg">
-                <svg class="w-5 h-5 md:w-6 md:h-6 text-yellow-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
+
+    <div class="bg-gradient-to-br from-orange-600 to-orange-800 rounded-[2rem] p-6 md:p-8 text-white shadow-xl shadow-orange-900/10 border border-orange-500/20">
+        <div class="flex items-center justify-between mb-6">
+            <div class="p-3 bg-white/20 rounded-2xl">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
             </div>
-            <span class="text-xs text-gray-400 font-medium">Hari ini</span>
+            <span class="text-xs font-black uppercase tracking-widest opacity-60">Hari Ini</span>
         </div>
-        <h3 class="text-gray-500 text-xs md:text-sm font-medium mb-1">Cek GAD7</h3>
-        <div class="text-2xl md:text-3xl font-bold text-yellow-600" id="valGad">-</div>
+        <h3 class="text-orange-100 text-sm font-bold uppercase tracking-wider mb-2">Cek GAD7</h3>
+        <div class="text-3xl md:text-5xl font-black" id="valGad">-</div>
     </div>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-6 hover:shadow-md transition">
-        <div class="flex items-center justify-between mb-3">
-            <div class="p-2 bg-indigo-50 rounded-lg">
-                <svg class="w-5 h-5 md:w-6 md:h-6 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+
+    <div class="bg-gradient-to-br from-purple-600 to-purple-800 rounded-[2rem] p-6 md:p-8 text-white shadow-xl shadow-purple-900/10 border border-purple-500/20">
+        <div class="flex items-center justify-between mb-6">
+            <div class="p-3 bg-white/20 rounded-2xl">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             </div>
-            <span class="text-xs text-gray-400 font-medium">Total</span>
+            <span class="text-xs font-black uppercase tracking-widest opacity-60">Total</span>
         </div>
-        <h3 class="text-gray-500 text-xs md:text-sm font-medium mb-1">Total Kader</h3>
-        <div class="text-2xl md:text-3xl font-bold text-indigo-600" id="valKader">-</div>
+        <h3 class="text-purple-100 text-sm font-bold uppercase tracking-wider mb-2">Total Kader</h3>
+        <div class="text-3xl md:text-5xl font-black" id="valKader">-</div>
     </div>
 </div>
 
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-8 mb-10">
-    <div class="bg-white rounded-2xl md:rounded-[2.5rem] shadow-sm border border-gray-100 p-5 md:p-10 hover:shadow-2xl hover:shadow-primary-100/10 transition-all duration-500 overflow-hidden">
+    <div id="capture-td-status" class="bg-white rounded-2xl md:rounded-[2.5rem] shadow-sm border border-gray-100 p-5 md:p-10 hover:shadow-2xl hover:shadow-primary-100/10 transition-all duration-500 overflow-hidden">
         <div class="flex items-center justify-between mb-6 md:mb-8">
             <div>
-                <h2 class="text-xl md:text-2xl font-black text-gray-900 tracking-tight">Tren Tekanan Darah</h2>
-                <p class="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Analisis 4 Minggu Terakhir</p>
+                <h2 class="text-xl md:text-2xl font-black text-gray-900 tracking-tight">Status Tekanan Darah</h2>
+                <p class="text-[9px] md:text-[10px] font-black text-primary-400 uppercase tracking-[0.2em] mt-1">Distribusi Keseluruhan Warga</p>
             </div>
-            <div class="hidden sm:flex gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+            <div class="flex items-center gap-3">
+                <div class="hidden sm:flex gap-2 mr-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                    <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                </div>
+                <button onclick="copyChart('capture-td-status')" class="p-2.5 bg-primary-50 text-primary-600 hover:bg-primary-100 rounded-xl transition-all shadow-sm flex items-center gap-2 group">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    <span class="text-[10px] font-black uppercase tracking-widest hidden md:inline">Salin</span>
+                </button>
             </div>
         </div>
         <div class="flex flex-col lg:flex-row gap-6 md:gap-8 h-auto lg:h-72">
@@ -72,16 +81,22 @@
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl md:rounded-[2.5rem] shadow-sm border border-gray-100 p-5 md:p-10 hover:shadow-2xl hover:shadow-indigo-100/10 transition-all duration-500 overflow-hidden">
+    <div id="capture-gad-status" class="bg-white rounded-2xl md:rounded-[2.5rem] shadow-sm border border-gray-100 p-5 md:p-10 hover:shadow-2xl hover:shadow-indigo-100/10 transition-all duration-500 overflow-hidden">
         <div class="flex items-center justify-between mb-6 md:mb-8">
             <div>
-                <h2 class="text-xl md:text-2xl font-black text-gray-900 tracking-tight">Tren GAD7</h2>
-                <p class="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Status Psikologis Warga</p>
+                <h2 class="text-xl md:text-2xl font-black text-gray-900 tracking-tight">Status GAD-7</h2>
+                <p class="text-[9px] md:text-[10px] font-black text-primary-400 uppercase tracking-[0.2em] mt-1">Kesehatan Psikologis Keseluruhan</p>
             </div>
-            <div class="hidden sm:flex gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+            <div class="flex items-center gap-3">
+                <div class="hidden sm:flex gap-2 mr-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                    <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                </div>
+                <button onclick="copyChart('capture-gad-status')" class="p-2.5 bg-primary-50 text-primary-600 hover:bg-primary-100 rounded-xl transition-all shadow-sm flex items-center gap-2 group">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    <span class="text-[10px] font-black uppercase tracking-widest hidden md:inline">Salin</span>
+                </button>
             </div>
         </div>
         <div class="flex flex-col lg:flex-row gap-6 md:gap-8 h-auto lg:h-72">
@@ -95,63 +110,143 @@
     </div>
 </div>
 
-<div class="bg-white rounded-2xl md:rounded-[2.5rem] shadow-sm border border-gray-100 p-5 md:p-10 mb-10 overflow-hidden">
-    <div class="flex items-center justify-between mb-8">
+<div class="bg-white rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100 p-6 md:p-10 mb-10 overflow-hidden">
+    <div class="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
         <div>
-            <h2 class="text-xl md:text-2xl font-black text-gray-900 tracking-tight">Progres Kesehatan Warga</h2>
-            <p class="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Data Real-time Terbaru</p>
+            <h2 class="text-2xl md:text-3xl font-black text-black tracking-tight">Progres Kesehatan Warga</h2>
+            <p class="text-primary-800 text-base font-bold mt-1 uppercase tracking-widest opacity-60">Data Real-time Terbaru</p>
         </div>
-        <a href="/admin/kesehatan" class="text-primary-600 hover:text-primary-700 text-xs md:text-sm font-bold flex items-center gap-1 group">
-            Lihat Semua 
-            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        <div class="flex flex-wrap items-center gap-3">
+            <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl font-black text-sm flex items-center gap-2 transition-all shadow-lg shadow-emerald-900/10 uppercase tracking-widest">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                EXCEL
+            </button>
+            <a href="/admin/kesehatan" class="bg-primary-50 text-primary-800 hover:bg-primary-100 px-6 py-3 rounded-2xl font-black text-sm flex items-center gap-2 transition-all group uppercase tracking-widest">
+                LIHAT RIWAYAT
+                <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
     </div>
     
-    <!-- Desktop Table -->
-    <div class="hidden md:block overflow-x-auto">
-        <table class="w-full text-sm text-left">
-            <thead class="bg-gray-50/50 text-gray-400 uppercase text-[10px] font-black tracking-widest border-b border-gray-100">
+    <div class="hidden md:block overflow-x-auto -mx-10 px-10">
+        <table class="w-full text-left">
+            <thead class="text-primary-400 uppercase text-xs font-black tracking-[0.2em] border-b-2 border-primary-50">
                 <tr>
-                    <th class="px-6 py-4">Warga</th>
-                    <th class="px-6 py-4 text-center border-x border-gray-100">TD Awal</th>
-                    <th class="px-6 py-4 text-center border-r border-gray-100">TD Akhir</th>
-                    <th class="px-6 py-4 text-center border-r border-gray-100">GAD7 Awal</th>
-                    <th class="px-6 py-4 text-center">GAD7 Akhir</th>
+                    <th class="px-6 py-6">Warga (NIK)</th>
+                    <th class="px-6 py-6 text-center">Profil</th>
+                    <th class="px-6 py-6 text-center">TD Awal</th>
+                    <th class="px-6 py-6 text-center">TD Akhir</th>
+                    <th class="px-6 py-6 text-center">GAD7 Awal</th>
+                    <th class="px-6 py-6 text-center">GAD7 Akhir</th>
+                    <th class="px-6 py-6 text-center">Status</th>
                 </tr>
             </thead>
-            <tbody id="progresTable" class="divide-y divide-gray-50">
-                <tr><td colspan="5" class="px-6 py-12 text-center text-gray-400">Memuat data progres...</td></tr>
+            <tbody id="progresTable" class="divide-y-2 divide-primary-50">
+                <tr><td colspan="5" class="px-6 py-20 text-center text-primary-300 font-bold italic animate-pulse text-xl">Memuat data progres...</td></tr>
             </tbody>
         </table>
     </div>
 
-    <!-- Mobile Cards -->
-    <div id="progresCards" class="md:hidden space-y-4">
-        <div class="text-center py-12 text-gray-400">Memuat data progres...</div>
+    <div id="progresCards" class="md:hidden space-y-6">
+        <div class="text-center py-12 text-primary-300 font-bold italic">Memuat data progres...</div>
     </div>
 </div>
 @endsection
 
 @section('scripts')
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user && user.role === 'admin') {
-        loadSummary();
-        loadTdCharts();
-        loadGadCharts();
-        loadProgresWarga();
+let progresData = [];
+
+async function exportToExcel() {
+    if (progresData.length === 0) {
+        showAlert('Tidak ada data untuk diekspor');
+        return;
     }
+    
+    const excelData = progresData.map(item => ({
+        'Nama Warga': item.nama,
+        'NIK': item.nik,
+        'Umur': item.umur,
+        'L/P': item.jenis_kelamin,
+        'TD Awal': item.td.awal,
+        'Status TD Awal': item.td.status_awal.toUpperCase().replace('_', ' '),
+        'TD Akhir': item.td.akhir,
+        'Status TD Akhir': item.td.status_akhir.toUpperCase().replace('_', ' '),
+        'GAD7 Awal (Skor)': item.gad.awal,
+        'Status GAD7 Awal': item.gad.status_awal.toUpperCase().replace('_', ' '),
+        'GAD7 Akhir (Skor)': item.gad.akhir,
+        'Status GAD7 Akhir': item.gad.status_akhir.toUpperCase().replace('_', ' '),
+        'Status Perubahan': item.status_perubahan
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Progres Kesehatan");
+    XLSX.writeFile(workbook, `Progres_Kesehatan_TaniSehat_${new Date().toISOString().split('T')[0]}.xlsx`);
+}
+
+async function copyChart(sectionId) {
+    const element = document.getElementById(sectionId);
+    if (!element) return;
+    
+    // Hide buttons during capture
+    const buttons = element.querySelectorAll('button');
+    buttons.forEach(b => b.style.display = 'none');
+
+    try {
+        const canvas = await html2canvas(element, {
+            backgroundColor: '#ffffff',
+            scale: 2,
+            logging: false,
+            useCORS: true
+        });
+
+        canvas.toBlob(async (blob) => {
+            try {
+                await navigator.clipboard.write([
+                    new ClipboardItem({ 'image/png': blob })
+                ]);
+                showAlert('Grafik & Data berhasil disalin ke clipboard!', 'success');
+            } catch (err) {
+                console.error(err);
+                showAlert('Gagal menyalin ke clipboard.');
+            }
+        });
+    } catch (err) {
+        console.error(err);
+        showAlert('Gagal menangkap gambar.');
+    } finally {
+        buttons.forEach(b => b.style.display = '');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadSummary();
+    loadTdCharts();
+    loadGadCharts();
+    loadProgresWarga();
 });
 
 async function loadSummary() {
     try {
-        const res = await apiCall('/dashboard/summary');
+        const user = JSON.parse(localStorage.getItem('user'));
+        const endpoint = user.role === 'kader' ? `/kader/dashboard?kader_id=${user.id}` : '/dashboard/summary';
+        const res = await apiCall(endpoint);
+        
         if (res && res.success) {
-            document.getElementById('valWarga').textContent = res.data.total_warga;
-            document.getElementById('valKader').textContent = res.data.total_kader;
-            document.getElementById('valTd').textContent = res.data.total_td_hari_ini;
-            document.getElementById('valGad').textContent = res.data.total_gad_hari_ini;
+            if (user.role === 'kader') {
+                document.getElementById('valWarga').textContent = res.data.warga_count;
+                document.getElementById('valTd').textContent = res.data.td_today;
+                document.getElementById('valGad').textContent = res.data.gad_today;
+                document.getElementById('valChat').textContent = res.data.new_chat;
+            } else {
+                document.getElementById('valWarga').textContent = res.data.total_warga;
+                document.getElementById('valTd').textContent = res.data.total_td_hari_ini;
+                document.getElementById('valGad').textContent = res.data.total_gad_hari_ini;
+                document.getElementById('valKader').textContent = res.data.total_kader;
+            }
         }
     } catch (e) { console.error("Error loading summary", e); }
 }
@@ -165,9 +260,9 @@ async function loadTdCharts() {
             new Chart(document.getElementById('tdBarChart').getContext('2d'), {
                 type: 'bar', responsive: true, maintainAspectRatio: false,
                 data: { labels, datasets: [
-                    { label: 'Normal', data: data.bar_chart.map(i => i.normal), backgroundColor: '#10b981', borderRadius: 8 },
-                    { label: 'Pra-Hipertensi', data: data.bar_chart.map(i => i.pra_hipertensi), backgroundColor: '#f59e0b', borderRadius: 8 },
-                    { label: 'Hipertensi', data: data.bar_chart.map(i => i.hipertensi), backgroundColor: '#ef4444', borderRadius: 8 }
+                    { label: 'Normal', data: data.bar_chart.map(i => i.normal), backgroundColor: '#059669', borderRadius: 12 },
+                    { label: 'Pra-Hipertensi', data: data.bar_chart.map(i => i.pra_hipertensi), backgroundColor: '#d97706', borderRadius: 12 },
+                    { label: 'Hipertensi', data: data.bar_chart.map(i => i.hipertensi), backgroundColor: '#ea580c', borderRadius: 12 }
                 ]},
                 options: { 
                     plugins: { legend: { position: 'bottom' } },
@@ -186,14 +281,25 @@ async function loadTdCharts() {
             new Chart(document.getElementById('tdPieChart').getContext('2d'), {
                 type: 'doughnut',
                 data: { 
-                    labels: data.pie_chart.map(i => i.label), 
+                    labels: data.pie_chart.map(i => `${i.label} (${i.persentase}%)`), 
                     datasets: [{ 
-                        data: data.pie_chart.map(i => i.value), 
-                        backgroundColor: ['#10b981', '#f59e0b', '#ef4444'], 
+                        data: data.pie_chart.map(i => i.persentase), 
+                        backgroundColor: ['#10b981', '#f59e0b', '#ea580c'], 
                         borderWidth: 0 
                     }] 
                 },
-                options: { ...commonPieOptions, cutout: '75%' }
+                options: { 
+                    ...commonPieOptions, 
+                    cutout: '75%',
+                    plugins: {
+                        ...commonPieOptions.plugins,
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => ` ${context.label}: ${context.raw}%`
+                            }
+                        }
+                    }
+                }
             });
         }
     } catch (e) { console.error("Error loading TD charts", e); }
@@ -208,9 +314,9 @@ async function loadGadCharts() {
             new Chart(document.getElementById('gadBarChart').getContext('2d'), {
                 type: 'bar', responsive: true, maintainAspectRatio: false,
                 data: { labels, datasets: [
-                    { label: 'Normal', data: data.bar_chart.map(i => i.normal), backgroundColor: '#10b981', borderRadius: 8 },
-                    { label: 'Ringan', data: data.bar_chart.map(i => i.ringan), backgroundColor: '#f59e0b', borderRadius: 8 },
-                    { label: 'Sedang-Tinggi', data: data.bar_chart.map(i => i.sedang_tinggi), backgroundColor: '#ef4444', borderRadius: 8 }
+                    { label: 'Normal', data: data.bar_chart.map(i => i.normal), backgroundColor: '#059669', borderRadius: 12 },
+                    { label: 'Ringan', data: data.bar_chart.map(i => i.ringan), backgroundColor: '#d97706', borderRadius: 12 },
+                    { label: 'Sedang-Tinggi', data: data.bar_chart.map(i => i.sedang_tinggi), backgroundColor: '#ea580c', borderRadius: 12 }
                 ]},
                 options: { 
                     plugins: { legend: { position: 'bottom' } },
@@ -221,14 +327,24 @@ async function loadGadCharts() {
             new Chart(document.getElementById('gadPieChart').getContext('2d'), {
                 type: 'doughnut',
                 data: { 
-                    labels: data.pie_chart.map(i => i.label), 
+                    labels: data.pie_chart.map(i => `${i.label} (${i.persentase}%)`), 
                     datasets: [{ 
-                        data: data.pie_chart.map(i => i.value), 
-                        backgroundColor: ['#10b981', '#f59e0b', '#ef4444'], 
+                        data: data.pie_chart.map(i => i.persentase), 
+                        backgroundColor: ['#10b981', '#f59e0b', '#ea580c'], 
                         borderWidth: 0 
                     }] 
                 },
-                options: { cutout: '75%', plugins: { legend: { position: 'bottom' } } }
+                options: { 
+                    cutout: '75%', 
+                    plugins: { 
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => ` ${context.label}: ${context.raw}%`
+                            }
+                        }
+                    } 
+                }
             });
         }
     } catch (e) { console.error("Error loading GAD charts", e); }
@@ -241,6 +357,7 @@ async function loadProgresWarga() {
         const cards = document.getElementById('progresCards');
         
         if (res && res.success) {
+            progresData = res.data;
             if (res.data.length === 0) {
                 if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center text-gray-400">Tidak ada data progres</td></tr>';
                 if (cards) cards.innerHTML = '<div class="text-center py-12 text-gray-400">Tidak ada data progres</div>';
@@ -248,31 +365,43 @@ async function loadProgresWarga() {
             }
 
             const getBadge = (status) => {
-                if (status === 'normal') return 'bg-green-100 text-green-700';
-                if (status === 'pra_hipertensi' || status === 'ringan') return 'bg-yellow-100 text-yellow-700';
-                if (status === 'hipertensi' || status === 'sedang' || status === 'tinggi') return 'bg-red-100 text-red-700';
-                return 'bg-gray-100 text-gray-600';
+                if (status === 'normal') return 'bg-emerald-100 text-emerald-800';
+                if (status === 'pra_hipertensi' || status === 'pre_hipertensi' || status === 'ringan') return 'bg-amber-100 text-amber-800';
+                if (status === 'hipertensi' || status === 'sedang' || status === 'tinggi') return 'bg-orange-100 text-orange-800';
+                return 'bg-primary-50 text-primary-400';
             };
 
             if (tbody) {
                 tbody.innerHTML = res.data.map(item => `
-                    <tr class="hover:bg-gray-50/50 transition">
-                        <td class="px-6 py-4 font-bold text-gray-900">${item.nama}</td>
-                        <td class="px-6 py-4 text-center border-x border-gray-50">
-                            <div class="font-mono text-xs">${item.td.awal}</div>
-                            <span class="px-2 py-0.5 text-[10px] rounded-full uppercase font-bold ${getBadge(item.td.status_awal)}">${item.td.status_awal.replace('_', ' ')}</span>
+                    <tr class="hover:bg-primary-50/50 transition-colors group">
+                        <td class="px-6 py-6">
+                            <div class="font-black text-black text-lg leading-tight">${item.nama}</div>
+                            <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">NIK: ${item.nik || '-'}</div>
                         </td>
-                        <td class="px-6 py-4 text-center border-r border-gray-50">
-                            <div class="font-mono text-xs font-bold text-primary-700">${item.td.akhir}</div>
-                            <span class="px-2 py-0.5 text-[10px] rounded-full uppercase font-bold ${getBadge(item.td.status_akhir)}">${item.td.status_akhir.replace('_', ' ')}</span>
+                        <td class="px-6 py-6 text-center">
+                            <div class="font-black text-primary-800 text-sm">${item.umur} Thn</div>
+                            <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">${item.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan'}</div>
                         </td>
-                        <td class="px-6 py-4 text-center border-r border-gray-50">
-                            <div class="font-mono text-xs">Skor: ${item.gad.awal}</div>
-                            <span class="px-2 py-0.5 text-[10px] rounded-full uppercase font-bold ${getBadge(item.gad.status_awal)}">${item.gad.status_awal.replace('_', ' ')}</span>
+                        <td class="px-6 py-6 text-center border-x border-primary-50">
+                            <div class="font-black text-base text-primary-800 mb-1">${item.td.awal}</div>
+                            <span class="px-3 py-1 text-[10px] rounded-lg uppercase font-black tracking-widest ${getBadge(item.td.status_awal)}">${item.td.status_awal.replace('_', ' ')}</span>
                         </td>
-                        <td class="px-6 py-4 text-center">
-                            <div class="font-mono text-xs font-bold text-primary-700">Skor: ${item.gad.akhir}</div>
-                            <span class="px-2 py-0.5 text-[10px] rounded-full uppercase font-bold ${getBadge(item.gad.status_akhir)}">${item.gad.status_akhir.replace('_', ' ')}</span>
+                        <td class="px-6 py-6 text-center border-r border-primary-50">
+                            <div class="font-black text-xl text-primary-600 mb-1">${item.td.akhir}</div>
+                            <span class="px-3 py-1 text-[10px] rounded-lg uppercase font-black tracking-widest ${getBadge(item.td.status_akhir)}">${item.td.status_akhir.replace('_', ' ')}</span>
+                        </td>
+                        <td class="px-6 py-6 text-center border-r border-primary-50">
+                            <div class="font-black text-base text-primary-800 mb-1">SKOR: ${item.gad.awal}</div>
+                            <span class="px-3 py-1 text-[10px] rounded-lg uppercase font-black tracking-widest ${getBadge(item.gad.status_awal)}">${item.gad.status_awal.replace('_', ' ')}</span>
+                        </td>
+                        <td class="px-6 py-6 text-center border-r border-primary-50">
+                            <div class="font-black text-xl text-primary-600 mb-1">SKOR: ${item.gad.akhir}</div>
+                            <span class="px-3 py-1 text-[10px] rounded-lg uppercase font-black tracking-widest ${getBadge(item.gad.status_akhir)}">${item.gad.status_akhir.replace('_', ' ')}</span>
+                        </td>
+                        <td class="px-6 py-6 text-center">
+                            <span class="px-4 py-2 rounded-2xl text-xs font-black uppercase tracking-widest ${item.status_perubahan === 'Ada Perubahan' ? 'bg-amber-100 text-amber-800 border-2 border-amber-200' : (item.status_perubahan === 'Tetap' ? 'bg-emerald-100 text-emerald-800' : 'bg-primary-50 text-primary-300')}">
+                                ${item.status_perubahan}
+                            </span>
                         </td>
                     </tr>
                 `).join('');
@@ -280,31 +409,36 @@ async function loadProgresWarga() {
 
             if (cards) {
                 cards.innerHTML = res.data.map(item => `
-                    <div class="bg-gray-50/50 rounded-2xl p-5 border border-gray-100">
-                        <p class="font-black text-gray-900 text-lg mb-4 border-b border-gray-100 pb-2">${item.nama}</p>
+                    <div class="bg-white rounded-[2rem] p-6 shadow-xl shadow-primary-900/5 border border-primary-100 mb-4">
+                        <div class="border-b-2 border-primary-50 pb-4 mb-6 flex justify-between items-start">
+                            <div>
+                                <p class="font-black text-black text-2xl leading-tight">${item.nama}</p>
+                                <p class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">NIK: ${item.nik || '-'} • ${item.umur} Thn • ${item.jenis_kelamin}</p>
+                            </div>
+                        </div>
                         <div class="grid grid-cols-2 gap-4">
-                            <div class="space-y-3">
-                                <div class="bg-white p-3 rounded-xl border border-gray-50 shadow-sm">
-                                    <p class="text-[9px] font-black text-gray-400 uppercase mb-1">TD Awal</p>
-                                    <p class="text-sm font-bold text-gray-700">${item.td.awal}</p>
-                                    <span class="text-[8px] font-bold ${getBadge(item.td.status_awal)} px-1.5 py-0.5 rounded-full uppercase">${item.td.status_awal.replace('_', ' ')}</span>
+                            <div class="space-y-4">
+                                <div class="bg-primary-50/50 p-4 rounded-2xl border border-primary-100">
+                                    <p class="text-[10px] font-black text-primary-400 uppercase tracking-widest mb-1">TD Awal</p>
+                                    <p class="text-lg font-black text-primary-900">${item.td.awal}</p>
+                                    <span class="text-[9px] font-black ${getBadge(item.td.status_awal)} px-2 py-1 rounded-lg uppercase tracking-wider">${item.td.status_awal.replace('pre_hipertensi', 'Pra-Hipertensi').replace('_', ' ')}</span>
                                 </div>
-                                <div class="bg-white p-3 rounded-xl border border-gray-50 shadow-sm">
-                                    <p class="text-[9px] font-black text-gray-400 uppercase mb-1">GAD Awal</p>
-                                    <p class="text-sm font-bold text-gray-700">Skor: ${item.gad.awal}</p>
-                                    <span class="text-[8px] font-bold ${getBadge(item.gad.status_awal)} px-1.5 py-0.5 rounded-full uppercase">${item.gad.status_awal.replace('_', ' ')}</span>
+                                <div class="bg-primary-50/50 p-4 rounded-2xl border border-primary-100">
+                                    <p class="text-[10px] font-black text-primary-400 uppercase tracking-widest mb-1">GAD Awal</p>
+                                    <p class="text-lg font-black text-primary-900">Skor: ${item.gad.awal}</p>
+                                    <span class="text-[9px] font-black ${getBadge(item.gad.status_awal)} px-2 py-1 rounded-lg uppercase tracking-wider">${item.gad.status_awal.replace('_', ' ')}</span>
                                 </div>
                             </div>
-                            <div class="space-y-3">
-                                <div class="bg-primary-50/30 p-3 rounded-xl border border-primary-100 shadow-sm">
-                                    <p class="text-[9px] font-black text-primary-400 uppercase mb-1">TD Akhir</p>
-                                    <p class="text-sm font-black text-primary-700">${item.td.akhir}</p>
-                                    <span class="text-[8px] font-bold ${getBadge(item.td.status_akhir)} px-1.5 py-0.5 rounded-full uppercase">${item.td.status_akhir.replace('_', ' ')}</span>
+                            <div class="space-y-4">
+                                <div class="bg-primary-800 p-4 rounded-2xl shadow-lg">
+                                    <p class="text-[10px] font-black text-white/50 uppercase tracking-widest mb-1">TD Akhir</p>
+                                    <p class="text-xl font-black text-white">${item.td.akhir}</p>
+                                    <span class="text-[9px] font-black ${getBadge(item.td.status_akhir)} px-2 py-1 rounded-lg uppercase tracking-wider shadow-sm">${item.td.status_akhir.replace('pre_hipertensi', 'Pra-Hipertensi').replace('_', ' ')}</span>
                                 </div>
-                                <div class="bg-primary-50/30 p-3 rounded-xl border border-primary-100 shadow-sm">
-                                    <p class="text-[9px] font-black text-primary-400 uppercase mb-1">GAD Akhir</p>
-                                    <p class="text-sm font-black text-primary-700">Skor: ${item.gad.akhir}</p>
-                                    <span class="text-[8px] font-bold ${getBadge(item.gad.status_akhir)} px-1.5 py-0.5 rounded-full uppercase">${item.gad.status_akhir.replace('_', ' ')}</span>
+                                <div class="bg-primary-800 p-4 rounded-2xl shadow-lg">
+                                    <p class="text-[10px] font-black text-white/50 uppercase tracking-widest mb-1">GAD Akhir</p>
+                                    <p class="text-xl font-black text-white">Skor: ${item.gad.akhir}</p>
+                                    <span class="text-[9px] font-black ${getBadge(item.gad.status_akhir)} px-2 py-1 rounded-lg uppercase tracking-wider shadow-sm">${item.gad.status_akhir.replace('_', ' ')}</span>
                                 </div>
                             </div>
                         </div>

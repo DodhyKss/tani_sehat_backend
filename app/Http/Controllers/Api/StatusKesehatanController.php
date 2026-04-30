@@ -127,12 +127,12 @@ class StatusKesehatanController extends Controller
         $systolic = $request->systolic;
         $diastolic = $request->diastolic;
         
-        if ($systolic < 120 && $diastolic < 80) {
-            $kategori = 'normal';
-        } elseif ($systolic <= 139 && $diastolic <= 89) {
-            $kategori = 'pre_hipertensi';
-        } else {
+        if ($systolic >= 140 && $diastolic >= 90) {
             $kategori = 'hipertensi';
+        } elseif ($systolic < 120 && $diastolic < 80) {
+            $kategori = 'normal';
+        } else {
+            $kategori = 'pre_hipertensi';
         }
         
         $tekananDarah = TekananDarah::create([

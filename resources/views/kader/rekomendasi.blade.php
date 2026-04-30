@@ -1,59 +1,63 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-6">
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1">Pusat Rekomendasi & Edukasi</h1>
-    <p class="text-gray-500 text-sm">Lihat semua materi edukasi untuk dibagikan ke warga</p>
+<div class="mb-10">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Pusat Rekomendasi & Edukasi</h1>
+    <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Materi Edukasi Berkualitas Untuk Warga Binaan</p>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-    <div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl p-6 text-white shadow-lg">
-        <div class="flex items-center gap-3 mb-4">
-            <div class="p-2 bg-white/20 rounded-lg">
-                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+    <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-[2.5rem] p-8 text-white shadow-2xl border border-white/10 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-[5rem] -mr-10 -mt-10 transition-all group-hover:scale-110"></div>
+        <div class="flex items-center gap-4 mb-6 relative z-10">
+            <div class="p-3 bg-white/20 rounded-2xl">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             </div>
-            <span class="font-semibold">Video Edukasi</span>
+            <span class="text-xl font-black uppercase tracking-widest opacity-80">Video Edukasi</span>
         </div>
-        <div id="videosContainer" class="space-y-3">
-            <div class="text-center py-4 text-blue-100">Memuat...</div>
+        <div id="videosContainer" class="space-y-4 relative z-10">
+            <div class="text-center py-6 text-blue-100 font-bold italic opacity-60 animate-pulse">Memuat materi...</div>
         </div>
     </div>
     
-    <div class="bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl p-6 text-white shadow-lg">
-        <div class="flex items-center gap-3 mb-4">
-            <div class="p-2 bg-white/20 rounded-lg">
-                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    <div class="bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-[2.5rem] p-8 text-white shadow-2xl border border-white/10 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-[5rem] -mr-10 -mt-10 transition-all group-hover:scale-110"></div>
+        <div class="flex items-center gap-4 mb-6 relative z-10">
+            <div class="p-3 bg-white/20 rounded-2xl">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             </div>
-            <span class="font-semibold">Materi Pembelajaran</span>
+            <span class="text-xl font-black uppercase tracking-widest opacity-80">Materi PDF</span>
         </div>
-        <div id="materisContainer" class="space-y-3">
-            <div class="text-center py-4 text-purple-100">Memuat...</div>
+        <div id="materisContainer" class="space-y-4 relative z-10">
+            <div class="text-center py-6 text-indigo-100 font-bold italic opacity-60 animate-pulse">Memuat materi...</div>
         </div>
     </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <div class="bg-gradient-to-br from-green-500 to-green-700 rounded-2xl p-6 text-white shadow-lg">
-        <div class="flex items-center gap-3 mb-4">
-            <div class="p-2 bg-white/20 rounded-lg">
-                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-[2.5rem] p-8 text-white shadow-2xl border border-white/10 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-[5rem] -mr-10 -mt-10 transition-all group-hover:scale-110"></div>
+        <div class="flex items-center gap-4 mb-6 relative z-10">
+            <div class="p-3 bg-white/20 rounded-2xl">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             </div>
-            <span class="font-semibold">Gambar Edukasi</span>
+            <span class="text-xl font-black uppercase tracking-widest opacity-80">Gambar Edukasi</span>
         </div>
-        <div id="gambarsContainer" class="space-y-3">
-            <div class="text-center py-4 text-green-100">Memuat...</div>
+        <div id="gambarsContainer" class="space-y-4 relative z-10">
+            <div class="text-center py-6 text-emerald-100 font-bold italic opacity-60 animate-pulse">Memuat materi...</div>
         </div>
     </div>
     
-    <div class="bg-gradient-to-br from-orange-500 to-orange-700 rounded-2xl p-6 text-white shadow-lg">
-        <div class="flex items-center gap-3 mb-4">
-            <div class="p-2 bg-white/20 rounded-lg">
-                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+    <div class="bg-gradient-to-br from-orange-600 to-orange-800 rounded-[2.5rem] p-8 text-white shadow-2xl border border-white/10 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-[5rem] -mr-10 -mt-10 transition-all group-hover:scale-110"></div>
+        <div class="flex items-center gap-4 mb-6 relative z-10">
+            <div class="p-3 bg-white/20 rounded-2xl">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
             </div>
-            <span class="font-semibold">Rekomendasi Olahraga</span>
+            <span class="text-xl font-black uppercase tracking-widest opacity-80">Program Olahraga</span>
         </div>
-        <div id="olahragasContainer" class="space-y-3">
-            <div class="text-center py-4 text-orange-100">Memuat...</div>
+        <div id="olahragasContainer" class="space-y-4 relative z-10">
+            <div class="text-center py-6 text-orange-100 font-bold italic opacity-60 animate-pulse">Memuat materi...</div>
         </div>
     </div>
 </div>
@@ -98,10 +102,10 @@ function renderItems(containerId, items, color, detailFn) {
     }
     container.innerHTML = items.map(item => `
         <div onclick='${detailFn.name}(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
-             class="bg-white/10 hover:bg-white/20 rounded-xl p-4 cursor-pointer transition flex items-center justify-between group">
-            <p class="font-bold text-sm truncate mr-4">${item.judul}</p>
-            <div class="p-1.5 bg-white/20 rounded-lg group-hover:bg-white group-hover:text-${color}-600 transition">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+             class="bg-white/10 hover:bg-white/30 rounded-2xl p-5 cursor-pointer transition-all flex items-center justify-between group border border-white/5">
+            <p class="font-black text-lg truncate mr-6 uppercase tracking-tight">${item.judul}</p>
+            <div class="p-2 bg-white/20 rounded-xl group-hover:bg-white group-hover:text-black transition-all transform group-hover:translate-x-1">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg>
             </div>
         </div>
     `).join('');
@@ -114,11 +118,11 @@ function renderOlahragas(olahragas) {
         return;
     }
     container.innerHTML = olahragas.map(o => `
-        <div class="bg-white/10 rounded-xl p-4 flex items-center gap-3">
-            <div class="p-2 bg-white/20 rounded-lg">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
+        <div class="bg-white/10 rounded-2xl p-5 flex items-center gap-4 border border-white/5">
+            <div class="p-3 bg-white/20 rounded-xl">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 2v20M2 12h20"/></svg>
             </div>
-            <p class="font-bold text-sm">${o.nama_olahraga}</p>
+            <p class="font-black text-lg uppercase tracking-tight">${o.nama_olahraga}</p>
         </div>
     `).join('');
 }

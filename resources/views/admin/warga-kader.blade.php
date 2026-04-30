@@ -1,60 +1,67 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-6">
-    <h1 class="text-2xl font-bold text-gray-800 mb-1">Manajemen Kader Warga</h1>
-    <p class="text-gray-500 text-sm">Atur relasi kader dan warga</p>
+<div class="mb-10">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Manajemen Kader & Warga</h1>
+    <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Atur Relasi & Penugasan Kader Terhadap Warga</p>
 </div>
 
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-        <div class="relative flex-1 max-w-md">
-            <input type="text" id="searchWarga" placeholder="Cari nama atau NIK..." 
-                class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+<div class="bg-white rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100 p-8 md:p-10 mb-10 overflow-hidden">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
+        <div class="relative flex-1 max-w-xl">
+            <input type="text" id="searchWarga" placeholder="Cari Nama Warga atau NIK..." 
+                class="w-full pl-14 pr-6 py-4 bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white rounded-2xl transition-all font-black text-black appearance-none outline-none">
+            <svg class="w-6 h-6 text-primary-400 absolute left-5 top-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         </div>
-        <button onclick="openAssignModal()" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-xl font-medium transition">
-            + Assign Warga
+        <button onclick="openAssignModal()" class="bg-primary-800 hover:bg-black text-white px-8 py-4 rounded-2xl font-black text-sm transition-all shadow-lg shadow-primary-900/20 uppercase tracking-widest flex items-center justify-center gap-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M12 4v16m8-8H4"/></svg>
+            Tugaskan Warga
         </button>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="w-full">
-            <thead>
-                <tr class="border-b border-gray-100">
-                    <th class="text-left py-3 px-2 text-sm font-semibold text-gray-600">Nama</th>
-                    <th class="text-left py-3 px-2 text-sm font-semibold text-gray-600">NIK</th>
-                    <th class="text-left py-3 px-2 text-sm font-semibold text-gray-600">No. HP</th>
-                    <th class="text-left py-3 px-2 text-sm font-semibold text-gray-600">Kader</th>
-                    <th class="text-left py-3 px-2 text-sm font-semibold text-gray-600">Aksi</th>
+    <div class="hidden md:block overflow-x-auto -mx-10 px-10">
+        <table class="w-full text-left">
+            <thead class="text-primary-400 uppercase text-xs font-black tracking-[0.2em] border-b-2 border-primary-50">
+                <tr>
+                    <th class="px-6 py-6">Informasi Warga</th>
+                    <th class="px-6 py-6">NIK / Identitas</th>
+                    <th class="px-6 py-6">No. Telepon</th>
+                    <th class="px-6 py-6">Kader Penanggung Jawab</th>
+                    <th class="px-6 py-6 text-center">Tindakan</th>
                 </tr>
             </thead>
-            <tbody id="wargaTable">
-                <tr><td colspan="5" class="py-8 text-center text-gray-500">Memuat...</td></tr>
+            <tbody id="wargaTable" class="divide-y-2 divide-primary-50">
+                <tr><td colspan="5" class="px-6 py-12 text-center text-primary-300 font-bold italic">Memuat data warga...</td></tr>
             </tbody>
         </table>
     </div>
 </div>
 
-<div id="assignModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
-        <h3 class="text-lg font-bold text-gray-800 mb-4">Assign Warga ke Kader</h3>
-        <form id="assignForm">
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Pilih Warga</label>
-                <select id="wargaSelect" class="w-full p-2 border border-gray-200 rounded-xl" required>
-                    <option value="">-- Pilih Warga --</option>
+<div id="assignModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-6">
+    <div class="absolute inset-0 bg-primary-900/40 backdrop-blur-md" onclick="closeAssignModal()"></div>
+    <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-xl overflow-hidden border border-primary-100">
+        <div class="p-10 border-b-2 border-primary-50 flex justify-between items-center bg-primary-50/30">
+            <h3 class="text-2xl font-black text-black tracking-tight">Tugaskan Warga ke Kader</h3>
+            <button onclick="closeAssignModal()" class="p-3 hover:bg-primary-100 rounded-2xl transition-all">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <form id="assignForm" class="p-10 space-y-8">
+            <div class="space-y-3">
+                <label class="text-xs font-black text-primary-800 uppercase tracking-widest ml-1">Pilih Warga</label>
+                <select id="wargaSelect" class="w-full px-6 py-5 bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white rounded-2xl transition-all font-black text-black appearance-none outline-none" required>
+                    <option value="">-- Pilih Warga TaniSehat --</option>
                 </select>
             </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Pilih Kader</label>
-                <select id="kaderSelect" class="w-full p-2 border border-gray-200 rounded-xl" required>
-                    <option value="">-- Pilih Kader --</option>
+            <div class="space-y-3">
+                <label class="text-xs font-black text-primary-800 uppercase tracking-widest ml-1">Pilih Kader Penanggung Jawab</label>
+                <select id="kaderSelect" class="w-full px-6 py-5 bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white rounded-2xl transition-all font-black text-black appearance-none outline-none" required>
+                    <option value="">-- Pilih Kader Penanggung Jawab --</option>
                 </select>
             </div>
-            <div class="flex gap-3 justify-end">
-                <button type="button" onclick="closeAssignModal()" class="px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50">Batal</button>
-                <button type="submit" class="px-4 py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-700">Simpan</button>
+            <div class="flex gap-4 pt-4">
+                <button type="button" onclick="closeAssignModal()" class="flex-1 px-8 py-5 border-2 border-primary-100 text-primary-800 rounded-2xl font-black transition-all hover:bg-primary-50 uppercase tracking-widest">BATAL</button>
+                <button type="submit" class="flex-1 px-8 py-5 bg-primary-800 text-white rounded-2xl font-black transition-all hover:bg-black shadow-xl shadow-primary-900/20 uppercase tracking-widest">SIMPAN PENUGASAN</button>
             </div>
         </form>
     </div>
@@ -91,19 +98,19 @@ function renderTable(filter = '') {
     }
     
     tbody.innerHTML = filtered.map(w => `
-        <tr class="border-b border-gray-50 hover:bg-gray-50">
-            <td class="py-3 px-2">${w.nama_lengkap || '-'}</td>
-            <td class="py-3 px-2">${w.nik || '-'}</td>
-            <td class="py-3 px-2">${w.no_hp || '-'}</td>
-            <td class="py-3 px-2">
+        <tr class="hover:bg-primary-50/50 transition-colors">
+            <td class="px-6 py-6 font-black text-black text-xl">${w.nama_lengkap || '-'}</td>
+            <td class="px-6 py-6 font-bold text-primary-400 tracking-wider">${w.nik || '-'}</td>
+            <td class="px-6 py-6 font-bold text-primary-800">${w.no_hp || '-'}</td>
+            <td class="px-6 py-6">
                 ${w.kader_nama 
-                    ? `<span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">${w.kader_nama}</span>` 
-                    : `<span class="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs">Belum ada</span>`}
+                    ? `<span class="px-4 py-1.5 bg-emerald-100 text-emerald-800 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-sm">${w.kader_nama}</span>` 
+                    : `<span class="px-4 py-1.5 bg-primary-50 text-primary-300 rounded-lg text-[10px] font-black uppercase tracking-widest">Belum Ada Kader</span>`}
             </td>
-            <td class="py-3 px-2">
+            <td class="px-6 py-6 text-center">
                 ${w.kader_id 
-                    ? `<button onclick="removeKader(${w.id})" class="text-red-500 hover:text-red-700 text-sm">Hapus</button>`
-                    : `<button onclick="selectWarga(${w.id})" class="text-primary-600 hover:text-primary-800 text-sm">Assign</button>`}
+                    ? `<button onclick="removeKader(${w.id})" class="px-4 py-2 bg-orange-50 text-orange-600 hover:bg-orange-600 hover:text-white rounded-xl font-black text-xs transition-all uppercase tracking-widest">Hapus Penugasan</button>`
+                    : `<button onclick="selectWarga(${w.id})" class="px-4 py-2 bg-primary-800 text-white hover:bg-black rounded-xl font-black text-xs transition-all uppercase tracking-widest shadow-lg shadow-primary-900/20">Tugaskan</button>`}
             </td>
         </tr>
     `).join('');

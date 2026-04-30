@@ -36,8 +36,13 @@ class DashboardController extends Controller
 
         $totalPie = ['normal' => 0, 'pra_hipertensi' => 0, 'hipertensi' => 0];
         foreach ($stats as $s) {
-            if ($s->kategori_td && isset($totalPie[$s->kategori_td])) {
-                $totalPie[$s->kategori_td] = $s->total;
+            if (!$s->kategori_td) continue;
+            $cat = $s->kategori_td;
+            // Map pre_hipertensi from DB to pra_hipertensi for frontend consistency
+            if ($cat === 'pre_hipertensi') $cat = 'pra_hipertensi';
+            
+            if (isset($totalPie[$cat])) {
+                $totalPie[$cat] = $s->total;
             }
         }
 
@@ -199,8 +204,21 @@ class DashboardController extends Controller
             $firstGad = $w->gad->first();
             $lastGad = $w->gad->last();
 
+            $hasTdChange = ($firstTd && $lastTd && $firstTd->kategori !== $lastTd->kategori);
+            $hasGadChange = ($firstGad && $lastGad && $firstGad->kategori !== $lastGad->kategori);
+            
+            $statusPerubahan = ($hasTdChange || $hasGadChange) ? 'Ada Perubahan' : 'Tetap';
+            
+            if (!$firstTd && !$firstGad) {
+                $statusPerubahan = 'Belum Ada Data';
+            }
+
             return [
                 'nama' => $w->nama_lengkap,
+                'nik' => $w->nik,
+                'umur' => $w->tanggal_lahir ? \Carbon\Carbon::parse($w->tanggal_lahir)->age : '-',
+                'jenis_kelamin' => $w->jenis_kelamin ?? '-',
+                'status_perubahan' => $statusPerubahan,
                 'td' => [
                     'awal' => $firstTd ? "{$firstTd->systolic}/{$firstTd->diastolic}" : '-',
                     'akhir' => $lastTd ? "{$lastTd->systolic}/{$lastTd->diastolic}" : '-',

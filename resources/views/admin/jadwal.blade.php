@@ -1,80 +1,85 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-6">
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1">Pengaturan Jadwal Pengisian</h1>
-    <p class="text-gray-500 text-sm">Atur interval waktu pengisian kesehatan</p>
+<div class="mb-10">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Pengaturan Jadwal Pengisian</h1>
+    <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Atur Interval Waktu Pengisian Data Kesehatan</p>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <div class="flex items-center gap-3 mb-6">
-            <div class="p-3 bg-red-50 rounded-xl">
-                <svg class="w-6 h-6 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="bg-white rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100 p-8 md:p-10 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-bl-[4rem] -mr-8 -mt-8 transition-all group-hover:scale-110"></div>
+        <div class="flex items-center gap-5 mb-10 relative z-10">
+            <div class="p-4 bg-emerald-100 rounded-2xl text-emerald-600">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             </div>
             <div>
-                <h2 class="text-lg font-bold text-gray-800">Tekanan Darah</h2>
-                <p class="text-sm text-gray-500">Popup saat login</p>
+                <h2 class="text-2xl font-black text-black tracking-tight">Tekanan Darah</h2>
+                <p class="text-xs font-black text-emerald-600 uppercase tracking-widest">Popup Pengisian Saat Login</p>
             </div>
         </div>
         
-        <form id="tdForm" class="space-y-4">
-            <div class="flex items-center gap-4">
-                <label class="text-sm text-gray-600 w-20">Setiap</label>
-                <input type="number" id="tdJumlah" min="1" max="365" class="w-24 px-3 py-2 rounded-lg border border-gray-200 text-center font-semibold focus:ring-2 focus:ring-primary-500" value="1">
-                <select id="tdTipe" class="flex-1 px-3 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary-500">
+        <form id="tdForm" class="space-y-6 relative z-10">
+            <div class="flex items-center gap-4 bg-primary-50/50 p-6 rounded-2xl border border-primary-100">
+                <label class="text-xs font-black text-primary-800 uppercase tracking-widest w-24">Setiap</label>
+                <input type="number" id="tdJumlah" min="1" max="365" class="w-24 px-4 py-3 bg-white border-2 border-primary-100 rounded-xl text-center font-black text-black focus:border-primary-600 outline-none transition-all" value="1">
+                <select id="tdTipe" class="flex-1 px-4 py-3 bg-white border-2 border-primary-100 rounded-xl font-black text-black focus:border-primary-600 outline-none transition-all appearance-none">
                     <option value="hours">Jam</option>
                     <option value="day" selected>Hari</option>
                     <option value="week">Minggu</option>
                 </select>
             </div>
-            <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-lg transition shadow-sm">
-                Simpan Pengaturan TD
+            <button type="submit" class="w-full bg-emerald-600 hover:bg-black text-white font-black py-5 rounded-2xl transition-all shadow-xl shadow-emerald-900/20 uppercase tracking-widest text-sm">
+                SIMPAN JADWAL TEKANAN DARAH
             </button>
         </form>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <div class="flex items-center gap-3 mb-6">
-            <div class="p-3 bg-yellow-50 rounded-xl">
-                <svg class="w-6 h-6 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    <div class="bg-white rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100 p-8 md:p-10 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-bl-[4rem] -mr-8 -mt-8 transition-all group-hover:scale-110"></div>
+        <div class="flex items-center gap-5 mb-10 relative z-10">
+            <div class="p-4 bg-amber-100 rounded-2xl text-amber-600">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
             </div>
             <div>
-                <h2 class="text-lg font-bold text-gray-800">Kuesioner GAD7</h2>
-                <p class="text-sm text-gray-500">Setiap 2 minggu sekali</p>
+                <h2 class="text-2xl font-black text-black tracking-tight">Kuesioner GAD-7</h2>
+                <p class="text-xs font-black text-amber-600 uppercase tracking-widest">Popup Evaluasi Kesehatan Mental</p>
             </div>
         </div>
         
-        <form id="gadForm" class="space-y-4">
-            <div class="flex items-center gap-4">
-                <label class="text-sm text-gray-600 w-20">Setiap</label>
-                <input type="number" id="gadJumlah" min="1" max="365" class="w-24 px-3 py-2 rounded-lg border border-gray-200 text-center font-semibold focus:ring-2 focus:ring-primary-500" value="2">
-                <select id="gadTipe" class="flex-1 px-3 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary-500">
+        <form id="gadForm" class="space-y-6 relative z-10">
+            <div class="flex items-center gap-4 bg-primary-50/50 p-6 rounded-2xl border border-primary-100">
+                <label class="text-xs font-black text-primary-800 uppercase tracking-widest w-24">Setiap</label>
+                <input type="number" id="gadJumlah" min="1" max="365" class="w-24 px-4 py-3 bg-white border-2 border-primary-100 rounded-xl text-center font-black text-black focus:border-primary-600 outline-none transition-all" value="2">
+                <select id="gadTipe" class="flex-1 px-4 py-3 bg-white border-2 border-primary-100 rounded-xl font-black text-black focus:border-primary-600 outline-none transition-all appearance-none">
                     <option value="hours">Jam</option>
-                    <option value="day" selected>hari</option>
+                    <option value="day" selected>Hari</option>
                     <option value="week">Minggu</option>
                 </select>
             </div>
-            <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-lg transition shadow-sm">
-                Simpan Pengaturan GAD7
+            <button type="submit" class="w-full bg-amber-600 hover:bg-black text-white font-black py-5 rounded-2xl transition-all shadow-xl shadow-amber-900/20 uppercase tracking-widest text-sm">
+                SIMPAN JADWAL KUESIONER GAD-7
             </button>
         </form>
     </div>
 </div>
 
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-6">
-    <h2 class="text-lg font-bold text-gray-800 mb-4">Pengaturan Saat Ini</h2>
-    <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-            <thead class="bg-gray-50 text-gray-600 uppercase text-xs font-semibold">
+<div class="bg-white rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100 p-8 md:p-10 mt-10 overflow-hidden">
+    <div class="flex items-center justify-between mb-8">
+        <h2 class="text-2xl md:text-3xl font-black text-black tracking-tight">Konfigurasi Jadwal Aktif</h2>
+        <div class="w-16 h-2 bg-primary-50 rounded-full"></div>
+    </div>
+    <div class="hidden md:block overflow-x-auto -mx-10 px-10">
+        <table class="w-full text-left">
+            <thead class="text-primary-400 uppercase text-xs font-black tracking-[0.2em] border-b-2 border-primary-50">
                 <tr>
-                    <th class="px-4 py-3 text-left">Jenis</th>
-                    <th class="px-4 py-3 text-left">Interval</th>
-                    <th class="px-4 py-3 text-left">Terakhir Diupdate</th>
+                    <th class="px-6 py-6 text-left">Jenis Pengisian</th>
+                    <th class="px-6 py-6 text-left">Interval Waktu</th>
+                    <th class="px-6 py-6 text-left">Terakhir Diperbarui</th>
                 </tr>
             </thead>
-            <tbody id="jadwalTable" class="divide-y divide-gray-100">
-                <tr><td colspan="3" class="px-4 py-8 text-center text-gray-500">Memuat data...</td></tr>
+            <tbody id="jadwalTable" class="divide-y-2 divide-primary-50">
+                <tr><td colspan="3" class="px-6 py-12 text-center text-primary-300 font-bold italic">Memuat data konfigurasi...</td></tr>
             </tbody>
         </table>
     </div>
@@ -100,11 +105,11 @@ async function loadJadwal() {
             });
             
             tbody.innerHTML = res.data.map(j => {
-                const tipeLabel = { hours: 'jam', day: 'hari', week: 'minggu' };
-                return `<tr class="hover:bg-gray-50">
-                    <td class="px-4 py-3 font-medium">${j.jenis_pengisian === 'td' ? 'Tekanan Darah' : 'GAD7'}</td>
-                    <td class="px-4 py-3">Setiap ${j.jumlah} ${tipeLabel[j.tipe]}</td>
-                    <td class="px-4 py-3 text-gray-500">${new Date(j.updated_at).toLocaleString('id-ID')}</td>
+                const tipeLabel = { hours: 'Jam', day: 'Hari', week: 'Minggu' };
+                return `<tr class="hover:bg-primary-50/50 transition-colors">
+                    <td class="px-6 py-6 font-black text-black text-xl">${j.jenis_pengisian === 'td' ? 'Tekanan Darah' : 'GAD-7'}</td>
+                    <td class="px-6 py-6 font-bold text-primary-800">Setiap <span class="text-xl font-black">${j.jumlah}</span> ${tipeLabel[j.tipe]}</td>
+                    <td class="px-6 py-6 font-bold text-primary-400 italic">${new Date(j.updated_at).toLocaleString('id-ID', {day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'})}</td>
                 </tr>`;
             }).join('');
         } else {
