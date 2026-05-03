@@ -14,6 +14,17 @@ use App\Http\Controllers\Api\ReproduksiController;
 
 // Public Routes
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/file', function (\Illuminate\Http\Request $request) {
+    $path = $request->query('path');
+    if (!$path) return response()->json(['error' => 'Path required'], 400);
+    $fullPath = base_path('public/' . $path);
+    if (file_exists($fullPath)) {
+        return response()->file($fullPath, [
+            'Access-Control-Allow-Origin' => '*'
+        ]);
+    }
+    return response()->json(['error' => 'File not found'], 404);
+});
 
 // Protected Routes
 Route::middleware('auth:sanctum')->group(function () {
