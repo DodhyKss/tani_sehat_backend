@@ -10,7 +10,7 @@ Dokumentasi ini berisi daftar dan detail endpoint API yang digunakan untuk memba
     "Authorization": "Bearer <TOKEN_ANDA>"
   }
   ```
-- Jika Anda menguji menggunakan emulator Android ke server lokal Laravel (`php artisan serve`), gunakan Base URL: `http://10.0.2.2:8000/api`.
+- Jika Anda menguji menggunakan emulator Android ke server lokal Laravel (`php artisan serve`), gunakan Base URL: `http://localhost:8000/api`.
 
 ---
 

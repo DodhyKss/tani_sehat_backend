@@ -82,6 +82,15 @@ class TekananDarahController extends Controller
             default => 'normal',
         };
 
+        \App\Models\StatusKesehatan::updateOrCreate(
+            ['warga_id' => $user->id],
+            [
+                'tekanan_darah' => $td->systolic . '/' . $td->diastolic,
+                'kategori_td' => $kategoriTd,
+                'tgl_update' => now(),
+            ]
+        );
+
         $rekomendasi = [
             'materi' => Materi::where('kategori_td', $mapKategori)->get(),
             'video' => Video::where('kategori_td', $mapKategori)->get(),
