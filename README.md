@@ -1,58 +1,457 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Dokumentasi API Tani Sehat - Role Warga (Untuk Flutter)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Dokumentasi ini berisi daftar dan detail endpoint API yang digunakan untuk membangun aplikasi mobile (Android/iOS) menggunakan Flutter khusus untuk **Role Warga**. 
 
-## About Laravel
+**Penting:**
+- Semua request (kecuali login) wajib menggunakan header:
+  ```json
+  {
+    "Accept": "application/json",
+    "Authorization": "Bearer <TOKEN_ANDA>"
+  }
+  ```
+- Jika Anda menguji menggunakan emulator Android ke server lokal Laravel (`php artisan serve`), gunakan Base URL: `http://10.0.2.2:8000/api`.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 1. Autentikasi (Auth)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 1.1 Login
+- **Endpoint:** `POST /login`
+- **Deskripsi:** Endpoint untuk mendapatkan akses token.
+- **Body (JSON):**
+  ```json
+  {
+    "nik": "1234567890123456",
+    "password": "password123"
+  }
+  ```
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "message": "Login berhasil",
+    "data": {
+      "token": "1|abcdefghijklmnopqrstuvwxyz...",
+      "user": {
+        "id": 3,
+        "nik": "1234567890123456",
+        "nama_lengkap": "Budi Santoso",
+        "role": "warga"
+      }
+    }
+  }
+  ```
 
-## Learning Laravel
+### 1.2 Get Data User Saat Ini
+- **Endpoint:** `GET /me`
+- **Deskripsi:** Mendapatkan detail informasi user yang sedang login beserta status kesehatannya.
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": 3,
+      "nik": "1234567890123456",
+      "nama_lengkap": "Budi Santoso",
+      "role": "warga",
+      "status_kesehatan": {
+        "tekanan_darah": "120/80",
+        "kategori_td": "normal",
+        "skor_gad": 5,
+        "kategori_gad": "ringan"
+      }
+    }
+  }
+  ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 1.3 Logout
+- **Endpoint:** `POST /logout`
+- **Deskripsi:** Menghapus token sesi saat ini.
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "message": "Logout berhasil"
+  }
+  ```
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## 2. Fitur Chat (Konsultasi)
 
-## Agentic Development
+Fitur ini digunakan oleh warga untuk berkomunikasi dengan Kader atau Admin.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 2.1 Mendapatkan Daftar Kontak (Kader & Admin)
+Warga dapat memulai chat dengan Kader atau Admin.
+- **Endpoint Admin:** `GET /admins`
+- **Endpoint Kader:** `GET /kaders`
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "id": 1,
+        "nama_lengkap": "Admin Utama",
+        "role": "admin"
+      },
+      {
+        "id": 2,
+        "nama_lengkap": "Siti Kader",
+        "role": "kader"
+      }
+    ]
+  }
+  ```
 
-```bash
-composer require laravel/boost --dev
+### 2.2 Memulai Chat Baru (Start Conversation)
+- **Endpoint:** `POST /messages/start`
+- **Deskripsi:** Membuat ruang chat baru atau mengembalikan ID ruang chat jika sudah pernah berinteraksi.
+- **Body (JSON):**
+  ```json
+  {
+    "receiver_id": 2
+  }
+  ```
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": 15,
+      "user1_id": 3,
+      "user2_id": 2,
+      "updated_at": "2026-05-03T10:00:00.000000Z"
+    }
+  }
+  ```
 
-php artisan boost:install
+### 2.3 Daftar Percakapan (Inbox)
+- **Endpoint:** `GET /messages`
+- **Deskripsi:** Mengambil semua daftar percakapan (list chat) milik user.
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "id": 15,
+        "unread_count": 2,
+        "partner": {
+          "id": 2,
+          "nama_lengkap": "Siti Kader",
+          "role": "kader"
+        },
+        "latest_detail": {
+          "message": "Halo, jangan lupa cek tekanan darah ya pak.",
+          "created_at": "2026-05-03T10:05:00.000000Z"
+        }
+      }
+    ]
+  }
+  ```
+
+### 2.4 Detail Pesan dalam Percakapan (Isi Chat)
+- **Endpoint:** `GET /messages/{conversation_id}`
+- **Deskripsi:** Mengambil riwayat pesan di dalam satu ruang chat.
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": 15,
+      "details": [
+        {
+          "id": 101,
+          "sender_id": 2,
+          "message": "Halo, jangan lupa cek tekanan darah ya pak.",
+          "is_read": true,
+          "created_at": "2026-05-03T10:05:00.000000Z"
+        },
+        {
+          "id": 102,
+          "sender_id": 3,
+          "message": "Baik bu kader, terima kasih pengingatnya.",
+          "is_read": false,
+          "created_at": "2026-05-03T10:07:00.000000Z"
+        }
+      ]
+    }
+  }
+  ```
+
+### 2.5 Mengirim Pesan
+- **Endpoint:** `POST /messages/{conversation_id}/send`
+- **Body (JSON):**
+  ```json
+  {
+    "message": "Halo bu kader, saya sudah isi datanya."
+  }
+  ```
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "message": "Pesan terkirim",
+    "data": {
+      "id": 103,
+      "message": "Halo bu kader, saya sudah isi datanya."
+    }
+  }
+  ```
+
+### 2.6 Menghapus Pesan Milik Sendiri
+- **Endpoint:** `DELETE /messages/detail/{message_id}`
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "message": "Pesan berhasil dihapus"
+  }
+  ```
+
+---
+
+## 3. Data Kesehatan (Tekanan Darah & GAD-7)
+
+### 3.1 Cek Jadwal (Apakah sudah waktunya mengisi?)
+- **Endpoint TD:** `GET /status-kesehatan/cek-jadwal?jenis=td`
+- **Endpoint GAD-7:** `GET /status-kesehatan/cek-jadwal?jenis=gad7`
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "harus_isi": true,
+    "message": "Saatnya mengisi data tekanan darah Anda."
+  }
+  ```
+
+### 3.2 Mengambil Daftar Kuesioner GAD-7
+- **Endpoint:** `GET /gad/kuesioner`
+- **Deskripsi:** Mendapatkan daftar pertanyaan GAD-7 untuk ditampilkan di Flutter.
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "id": 1,
+        "pertanyaan": "Merasa gugup, cemas atau tegang"
+      },
+      {
+        "id": 2,
+        "pertanyaan": "Tidak mampu menghentikan atau mengendalikan kekhawatiran"
+      }
+    ]
+  }
+  ```
+
+### 3.3 Menyimpan Data Tekanan Darah (TD)
+- **Endpoint:** `POST /tekanan-darah` ATAU `POST /status-kesehatan/td`
+- **Body (JSON):**
+  ```json
+  {
+    "systolic": 120,
+    "diastolic": 80
+  }
+  ```
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "message": "Data tekanan darah berhasil disimpan"
+  }
+  ```
+
+### 3.4 Menyimpan Data GAD-7
+- **Endpoint:** `POST /gad` ATAU `POST /status-kesehatan/gad`
+- **Body (JSON):**
+  ```json
+  {
+    "skor": 15,
+    "jawaban": {
+      "1": 3,
+      "2": 2,
+      "3": 3,
+      "4": 1,
+      "5": 2,
+      "6": 1,
+      "7": 3
+    }
+  }
+  ```
+  *(Catatan: `jawaban` merupakan key-value dari `id_pertanyaan` dan `skor_jawaban` 0-3)*
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "message": "Data GAD-7 berhasil disimpan"
+  }
+  ```
+
+### 3.5 Riwayat Data Kesehatan
+- **Endpoint Riwayat TD:** `GET /tekanan-darah`
+- **Endpoint Riwayat GAD-7:** `GET /gad`
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "id": 1,
+        "systolic": 120,
+        "diastolic": 80,
+        "created_at": "2026-05-01T10:00:00.000000Z"
+      }
+    ]
+  }
+  ```
+
+---
+
+## 4. Reproduksi
+
+### 4.1 Mengambil Data Reproduksi
+- **Endpoint:** `GET /reproduksi`
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "id": 1,
+        "jumlah_anak": 2,
+        "penggunaan_kb": "Pil",
+        "masalah_reproduksi": "Tidak ada",
+        "created_at": "2026-05-01T10:00:00.000000Z"
+      }
+    ]
+  }
+  ```
+
+### 4.2 Menambah Data Reproduksi
+- **Endpoint:** `POST /reproduksi`
+- **Body (JSON):**
+  ```json
+  {
+    "jumlah_anak": 2,
+    "penggunaan_kb": "Pil",
+    "masalah_reproduksi": "Tidak ada"
+  }
+  ```
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "message": "Data berhasil disimpan"
+  }
+  ```
+
+### 4.3 Menghapus Data Reproduksi
+- **Endpoint:** `DELETE /reproduksi/{id}`
+- **Response Sukses (200 OK):**
+  ```json
+  {
+    "success": true,
+    "message": "Data reproduksi berhasil dihapus"
+  }
+  ```
+
+---
+
+## 5. Rekomendasi & Edukasi Kesehatan
+
+Warga dapat melihat materi edukasi berdasarkan hasil kesehatan mereka. Semua API di bawah menggunakan method **GET**.
+
+- **Semua Rekomendasi:** `GET /rekomendasi`
+- **Materi Teks:** `GET /materi`
+- **Video Edukasi:** `GET /video`
+- **Gambar/Infografis:** `GET /gambar`
+- **Rekomendasi Olahraga:** `GET /olahraga`
+
+**Contoh Response Sukses `GET /rekomendasi`:**
+```json
+{
+  "success": true,
+  "data": {
+    "video": [
+      {
+        "id": 1,
+        "judul": "Cara Mengatasi Hipertensi",
+        "link_embed": "https://www.youtube.com/embed/xxxxx",
+        "kategori_td": "hipertensi",
+        "kategori_gad": "semua"
+      }
+    ],
+    "olahraga": [
+      {
+        "id": 2,
+        "nama_olahraga": "Jalan Santai",
+        "kategori_td": "hipertensi",
+        "kategori_gad": "ringan"
+      }
+    ],
+    "materi": [],
+    "gambar": []
+  }
+}
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## Contoh Implementasi Http Request di Flutter (Dart)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Berikut adalah contoh cara memanggil API Login dan mengambil daftar Chat menggunakan package `http` di Flutter.
 
-## Code of Conduct
+```dart
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+class ApiService {
+  static const String baseUrl = 'http://10.0.2.2:8000/api';
+  String? token;
 
-## Security Vulnerabilities
+  // 1. Contoh Login
+  Future<void> login(String nik, String password) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/login'),
+      headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'nik': nik,
+        'password': password,
+      }),
+    );
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      token = data['data']['token'];
+      print('Login Berhasil! Token: $token');
+    } else {
+      print('Login Gagal: ${response.body}');
+    }
+  }
 
-## License
+  // 2. Contoh Mengambil List Chat Warga
+  Future<void> fetchInbox() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/messages'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token', // Sertakan token di sini
+      },
+    );
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      List chats = data['data'];
+      for (var chat in chats) {
+        print("Chat dari: ${chat['partner']['nama_lengkap']}");
+        print("Pesan terakhir: ${chat['latest_detail']['message']}");
+      }
+    } else {
+      print('Gagal mengambil pesan');
+    }
+  }
+}
+```
