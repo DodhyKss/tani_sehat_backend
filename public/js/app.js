@@ -191,7 +191,40 @@ function setupNav(items) {
 
         nav.innerHTML = items.map(item => {
             const isActive = currentPath === item.url || (item.url !== '/' && currentPath.startsWith(item.url));
-            return `<a href="${item.url}" class="flex items-center gap-4 px-4 py-3.5 rounded-xl text-lg ${isActive ? 'bg-primary-50 text-primary-800 font-black shadow-lg' : 'text-primary-100 hover:bg-primary-700 hover:text-white font-bold'} transition-all">${item.icon} <span>${item.label}</span></a>`;
+            return `<a href="${item.url}" class="flex items-center gap-4 px-4 py-3.5 rounded-xl text-lg ${isActive ? 'bg-primary-50 text-primary-800 font-black shadow-lg' : 'text-white hover:bg-primary-700 hover:text-white font-bold'} transition-all">${item.icon} <span>${item.label}</span></a>`;
         }).join('');
     }
+}
+
+window.renderTablePagination = function(data, containerId, loadFn) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    if (!data.last_page || data.last_page <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+    
+    let html = '<div class="flex flex-wrap items-center justify-center gap-2 mt-6">';
+    
+    // Prev
+    if (data.current_page > 1) {
+        html += `<button onclick="${loadFn}(${data.current_page - 1})" class="px-4 py-2 rounded-xl bg-white border border-primary-200 text-primary-800 font-bold hover:bg-primary-50 shadow-sm transition-all text-xs">Prev</button>`;
+    }
+
+    // Numbers (Max 5 pages shown)
+    const startPage = Math.max(1, data.current_page - 2);
+    const endPage = Math.min(data.last_page, startPage + 4);
+
+    for (let i = startPage; i <= endPage; i++) {
+        const isActive = i === data.current_page;
+        html += `<button onclick="${loadFn}(${i})" class="w-10 h-10 rounded-xl font-black text-xs transition-all ${isActive ? 'bg-primary-800 text-white shadow-lg shadow-primary-900/20' : 'bg-white border border-primary-100 text-primary-800 hover:bg-primary-50'}">${i}</button>`;
+    }
+
+    // Next
+    if (data.current_page < data.last_page) {
+        html += `<button onclick="${loadFn}(${data.current_page + 1})" class="px-4 py-2 rounded-xl bg-white border border-primary-200 text-primary-800 font-bold hover:bg-primary-50 shadow-sm transition-all text-xs">Next</button>`;
+    }
+    
+    html += '</div>';
+    container.innerHTML = html;
 }

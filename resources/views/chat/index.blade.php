@@ -1,91 +1,116 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-8">
-    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2">Chat Konsultasi</h1>
-    <p class="text-primary-800 text-lg font-bold">Konsultasi kesehatan langsung dengan kader Anda</p>
-</div>
+<style>
+    .chat-container {
+        height: calc(100dvh - 90px);
+    }
+    @media (min-width: 768px) {
+        .chat-container {
+            height: calc(100dvh - 120px);
+        }
+    }
+    /* Mobile fullscreen chat */
+    .chat-fullscreen {
+        position: fixed !important;
+        top: 0; left: 0; right: 0; bottom: 0;
+        z-index: 55;
+        height: 100dvh !important;
+        border-radius: 0 !important;
+        border: none !important;
+        margin: 0 !important;
+    }
+    @media (min-width: 768px) {
+        .chat-fullscreen {
+            position: static !important;
+            height: auto !important;
+            border-radius: inherit !important;
+            border: inherit !important;
+        }
+    }
+</style>
 
-<div class="bg-gradient-to-br from-primary-600 to-primary-800 rounded-[2.5rem] shadow-2xl overflow-hidden h-[calc(100vh-140px)] md:h-[calc(100vh-220px)] min-h-[600px] border border-primary-500/30">
+<div id="chatMainContainer" class="bg-white rounded-2xl md:rounded-[2.5rem] shadow-2xl border-2 md:border-4 border-primary-100 overflow-hidden chat-container">
     <div class="flex h-full flex-col md:flex-row">
         <!-- Chat List -->
-        <div class="w-full md:w-96 h-full border-b md:border-b-0 md:border-r border-white/10 flex flex-col bg-primary-900/20" id="chatListContainer">
-            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-primary-900/40">
-                <h3 class="text-xl font-black text-white tracking-tight uppercase">Percakapan</h3>
-                <button onclick="openNewChatModal()" class="p-3 bg-white text-primary-800 rounded-2xl hover:bg-primary-50 transition shadow-xl" title="Tambah Chat Baru">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <div class="w-full md:w-72 lg:w-80 h-full border-b md:border-b-0 md:border-r-2 lg:border-r-4 border-primary-100 flex flex-col bg-white" id="chatListContainer">
+            <div class="p-4 md:p-6 lg:p-8 border-b-2 md:border-b-4 border-primary-50 flex justify-between items-center bg-primary-50/50 flex-shrink-0">
+                <h3 class="text-base md:text-xl lg:text-2xl font-black text-primary-900 tracking-tight uppercase">Percakapan</h3>
+                <button onclick="openNewChatModal()" class="p-2 md:p-4 bg-primary-800 text-white rounded-lg md:rounded-2xl hover:bg-black transition-all shadow-lg shadow-primary-900/40 active:scale-95" title="Tambah Chat Baru">
+                    <svg class="w-4 h-4 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 </button>
             </div>
-            <div class="flex-1 overflow-y-auto" id="chatList">
-                <div class="p-6 text-center text-primary-200 font-bold animate-pulse">Memuat...</div>
+            <div class="flex-1 overflow-y-auto custom-scrollbar" id="chatList">
+                <div class="p-8 md:p-12 text-center text-primary-300 font-black animate-pulse uppercase tracking-widest text-[10px] md:text-xs">Memuat data...</div>
             </div>
         </div>
         
         <!-- Chat Window -->
-        <div class="flex-1 flex flex-col hidden bg-primary-900/10" id="chatWindow">
-            <div class="p-4 md:p-6 border-b border-white/10 flex items-center justify-between gap-3 bg-primary-800/50 backdrop-blur-md">
-                <div class="flex items-center gap-4">
-                    <button onclick="closeChat()" class="md:hidden p-2 hover:bg-white/10 rounded-xl text-white">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <div class="flex-1 flex flex-col hidden bg-slate-50" id="chatWindow">
+            <!-- Chat Header -->
+            <div class="p-3 md:p-6 border-b-2 md:border-b-4 border-primary-50 flex items-center justify-between gap-2 md:gap-4 bg-primary-800 md:bg-white z-10 shadow-md flex-shrink-0">
+                <div class="flex items-center gap-3 md:gap-5 min-w-0">
+                    <button onclick="closeChat()" class="md:hidden p-2.5 bg-white/20 text-white rounded-xl hover:bg-white/30 transition-all flex-shrink-0 active:scale-95">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                     </button>
-                    <div class="w-12 h-12 rounded-full bg-white/20 border-2 border-white/20 flex items-center justify-center shadow-lg">
-                        <span id="kaderAvatar" class="text-white font-black text-xl">-</span>
+                    <div class="w-9 h-9 md:w-14 md:h-14 rounded-full bg-white/20 md:bg-primary-800 text-white flex items-center justify-center shadow-xl font-black text-sm md:text-2xl border-2 border-white/30 md:border-white flex-shrink-0" id="partnerAvatar">
+                        -
                     </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-xl font-black text-white tracking-tight truncate" id="kaderName">-</p>
-                        <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                            <p class="text-sm text-primary-100 font-bold uppercase tracking-widest" id="kaderStatus">Online</p>
+                    <div class="min-w-0">
+                        <p class="text-sm md:text-2xl font-black text-white md:text-black tracking-tighter truncate leading-none mb-0.5" id="partnerName">-</p>
+                        <div class="flex items-center gap-1 md:gap-2">
+                            <span class="w-1.5 h-1.5 md:w-2.5 md:h-2.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
+                            <p class="text-[8px] md:text-[11px] text-emerald-300 md:text-emerald-700 font-black uppercase tracking-[0.1em] md:tracking-[0.2em]" id="partnerStatus">Terhubung</p>
                         </div>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="deleteConversation()" class="p-3 text-white/40 hover:text-white hover:bg-white/10 rounded-xl transition-all" title="Hapus Percakapan">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-                    </button>
-                </div>
+                <button onclick="deleteConversation()" class="p-2 md:p-4 text-white/70 md:text-primary-800 hover:text-rose-400 md:hover:text-rose-600 hover:bg-white/10 md:hover:bg-rose-50 rounded-lg md:rounded-2xl transition-all border-2 border-transparent hover:border-rose-100 flex-shrink-0" title="Hapus Percakapan">
+                    <svg class="w-4 h-4 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
             </div>
             
-            <div class="flex-1 overflow-y-auto p-6 space-y-6 bg-primary-900/10" id="messagesContainer">
-                <div class="text-center text-primary-200 py-12 text-xl font-black italic opacity-50 uppercase tracking-widest">Memuat pesan...</div>
+            <!-- Messages Area - this is the only scrollable part -->
+            <div class="flex-1 overflow-y-auto p-3 md:p-8 space-y-3 md:space-y-8 custom-scrollbar bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:20px_20px] md:[background-size:32px_32px]" id="messagesContainer">
+                <div class="text-center text-primary-300 py-12 text-[10px] md:text-sm font-black italic uppercase tracking-widest opacity-50">Memuat pesan...</div>
             </div>
             
-            <div class="p-4 md:p-8 bg-primary-800/40 border-t border-white/10 backdrop-blur-md">
-                <form id="messageForm" class="flex items-end gap-4">
+            <!-- Input Area - always at bottom -->
+            <div class="p-2 md:p-6 bg-white border-t-2 md:border-t-4 border-primary-50 shadow-[0_-5px_20px_rgba(0,0,0,0.02)] flex-shrink-0">
+                <form id="messageForm" class="flex items-end gap-2 md:gap-4 max-w-6xl mx-auto">
                     <div class="flex-1 relative">
-                        <textarea id="messageInput" placeholder="Ketik pesan konsultasi..." rows="1"
-                                  class="w-full px-8 py-5 bg-white/10 border-2 border-white/20 rounded-[2rem] text-white font-black text-xl placeholder:text-white/30 focus:ring-8 focus:ring-white/5 outline-none transition-all shadow-inner resize-none overflow-hidden"
-                                  oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
+                        <textarea id="messageInput" placeholder="Ketik pesan..." rows="1"
+                                  class="w-full px-4 md:px-8 py-2.5 md:py-5 bg-slate-50 border-2 md:border-4 border-slate-100 rounded-xl md:rounded-[2rem] text-sm md:text-lg font-bold text-black placeholder:text-slate-300 focus:border-primary-800 focus:bg-white outline-none transition-all resize-none shadow-inner max-h-24 md:max-h-40"
+                                  oninput="this.style.height = ''; this.style.height = Math.min(this.scrollHeight, window.innerWidth < 768 ? 96 : 160) + 'px'"></textarea>
                     </div>
-                    <button type="submit" class="p-6 bg-white text-primary-800 rounded-[2rem] hover:bg-primary-50 transition-all shadow-2xl active:scale-95 group mb-1">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" class="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    <button type="submit" class="p-2.5 md:p-5 bg-primary-800 text-white rounded-full hover:bg-black transition-all shadow-xl shadow-primary-900/30 active:scale-90 group mb-0.5 border-2 md:border-4 border-white flex-shrink-0">
+                        <svg class="w-5 h-5 md:w-7 md:h-7 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                     </button>
                 </form>
             </div>
         </div>
         <!-- Empty State -->
-        <div class="flex-1 hidden md:flex flex-col items-center justify-center p-12 text-center bg-primary-900/10" id="emptyState">
-            <div class="w-32 h-32 bg-white/10 rounded-full flex items-center justify-center mb-8 shadow-2xl border border-white/10">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/60"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <div class="flex-1 hidden md:flex flex-col items-center justify-center p-20 text-center bg-slate-50" id="emptyState">
+            {{-- <div class="w-40 h-40 bg-white rounded-full flex items-center justify-center mb-10 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border-4 border-primary-50">
+                <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-primary-200"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             </div>
-            <h3 class="text-3xl font-black text-white mb-3 tracking-tight">Chat Konsultasi</h3>
-            <p class="text-primary-100 text-xl font-medium max-w-sm opacity-80 leading-relaxed">Pilih salah satu percakapan di samping untuk mulai berkonsultasi dengan kader Anda.</p>
+            <h3 class="text-4xl font-black text-black mb-4 tracking-tighter">Pusat Konsultasi</h3>
+            <p class="text-primary-600 text-xl font-bold max-w-md opacity-70 leading-relaxed uppercase tracking-[0.2em]">Pilih salah satu percakapan di samping untuk mulai mengobrol.</p> --}}
         </div>
     </div>
 </div>
 
 <!-- New Chat Modal -->
-<div id="newChatModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md">
-    <div class="absolute inset-0 bg-black/70" onclick="closeNewChatModal()"></div>
-    <div class="relative bg-gradient-to-br from-primary-700 to-primary-900 rounded-[2.5rem] shadow-2xl w-full max-w-md overflow-hidden border border-white/20 text-white">
-        <div class="p-8 border-b border-white/10 flex justify-between items-center bg-primary-800/50">
-            <h3 class="text-2xl font-black tracking-tight uppercase">Cari Kontak</h3>
-            <button onclick="closeNewChatModal()" class="p-3 hover:bg-white/10 rounded-2xl transition-all">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+<div id="newChatModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
+    <div class="absolute inset-0 bg-primary-900/60 backdrop-blur-xl" onclick="closeNewChatModal()"></div>
+    <div class="relative bg-white rounded-2xl md:rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden border-2 md:border-4 border-white">
+        <div class="p-6 md:p-10 border-b-2 md:border-b-4 border-slate-50 flex justify-between items-center bg-slate-50/50">
+            <h3 class="text-xl md:text-3xl font-black text-black tracking-tighter uppercase">Mulai Chat Baru</h3>
+            <button onclick="closeNewChatModal()" class="p-3 md:p-4 hover:bg-white rounded-2xl md:rounded-3xl transition-all shadow-sm border-2 border-transparent hover:border-slate-100">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </button>
         </div>
-        <div class="p-6 max-h-[60vh] overflow-y-auto" id="contactList">
-            <div class="p-8 text-center text-primary-200 font-bold">Memuat daftar kontak...</div>
+        <div class="p-4 md:p-8 max-h-[60vh] overflow-y-auto custom-scrollbar space-y-3 md:space-y-4" id="contactList">
+            <div class="p-12 text-center text-primary-300 font-black animate-pulse uppercase tracking-widest text-xs">Memuat daftar kontak...</div>
         </div>
     </div>
 </div>
@@ -94,43 +119,45 @@
 
 @section('scripts')
 <script>
-let currentKaderId = null;
 let currentConversationId = null;
 let chatInterval = null;
 
-// Mengambil daftar percakapan aktif
 async function loadConversations() {
     try {
         const res = await apiCall('/messages');
         const container = document.getElementById('chatList');
-        
         const list = res?.data || [];
+        
         if (list.length > 0) {
             container.innerHTML = list.map(c => {
                 const isActive = currentConversationId === c.id;
-                const partnerName = c.partner?.nama_lengkap || 'Unknown';
+                const partnerName = c.partner?.nama_lengkap || 'Pengguna Tidak Dikenal';
+                const rawMessage = c.latest_detail?.message || 'Klik untuk memulai chat';
+                const words = rawMessage.split(' ');
+                const truncatedMessage = words.length > 5 ? words.slice(0, 5).join(' ') + '...' : rawMessage;
+
                 return `
                     <div onclick="selectConversation(${c.id}, '${partnerName}')" 
-                         class="flex items-center gap-4 p-5 cursor-pointer border-b border-white/5 transition-all
-                                ${isActive ? 'bg-white/20 shadow-inner' : 'hover:bg-white/10'}">
-                        <div class="w-14 h-14 rounded-full ${c.admin_id ? 'bg-secondary-500' : 'bg-white/20'} border-2 border-white/10 flex items-center justify-center flex-shrink-0 shadow-lg">
-                            <span class="text-white font-black text-xl">${partnerName.charAt(0)}</span>
+                         class="flex items-center gap-3 md:gap-5 p-3 md:p-5 cursor-pointer border-b-2 border-slate-50 transition-all
+                                ${isActive ? 'bg-primary-50 border-l-[6px] md:border-l-[10px] border-l-primary-800 shadow-inner' : 'hover:bg-slate-50'}">
+                        <div class="w-10 h-10 md:w-14 md:h-14 rounded-full ${isActive ? 'bg-primary-800' : 'bg-primary-100'} flex items-center justify-center flex-shrink-0 shadow-lg border-2 border-white transition-all">
+                            <span class="${isActive ? 'text-white' : 'text-primary-800'} font-black text-sm md:text-xl">${partnerName.charAt(0)}</span>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <div class="flex justify-between items-start mb-1">
-                                <p class="text-lg font-black text-white truncate tracking-tight">${partnerName}</p>
-                                <span class="text-[11px] font-black text-primary-200 ml-2 uppercase">${new Date(c.updated_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>
+                            <div class="flex justify-between items-start mb-0.5">
+                                <p class="text-sm md:text-lg font-black text-black truncate tracking-tighter">${partnerName}</p>
+                                <span class="text-[8px] md:text-[10px] font-black text-primary-400 ml-2 uppercase tracking-widest bg-white px-1.5 py-0.5 rounded-md border border-slate-100 shadow-sm flex-shrink-0">${new Date(c.updated_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>
                             </div>
-                            <div class="flex justify-between items-center">
-                                <p class="text-base ${isActive ? 'text-white' : 'text-primary-100/70'} truncate font-bold">${c.latest_detail?.message || 'Klik untuk memulai chat'}</p>
-                                ${c.unread_count > 0 ? `<span class="bg-white text-primary-800 text-xs font-black px-2 py-1 rounded-lg ml-2 shadow-lg">${c.unread_count}</span>` : ''}
+                            <div class="flex justify-between items-center gap-2">
+                                <p class="text-[11px] md:text-sm ${isActive ? 'text-primary-800' : 'text-slate-500'} truncate font-bold tracking-tight flex-1 min-w-0">${truncatedMessage}</p>
+                                ${c.unread_count > 0 ? `<span class="bg-primary-800 text-white text-[9px] md:text-[11px] font-black px-2 py-0.5 md:px-2.5 md:py-1 rounded-lg ml-1 shadow-xl min-w-[1.25rem] md:min-w-[1.75rem] text-center flex-shrink-0">${c.unread_count}</span>` : ''}
                             </div>
                         </div>
                     </div>
                 `;
             }).join('');
         } else {
-            container.innerHTML = '<div class="p-8 text-center text-gray-400"><p class="text-sm">Belum ada percakapan aktif.</p><p class="text-xs mt-1">Klik tombol + untuk memulai.</p></div>';
+            container.innerHTML = '<div class="p-16 text-center text-slate-300"><p class="text-xs font-black uppercase tracking-[0.3em]">Belum ada obrolan</p><p class="text-[11px] mt-4 opacity-70 font-bold">Tekan tombol + untuk mulai konsultasi</p></div>';
         }
     } catch (e) { console.error(e); }
 }
@@ -138,11 +165,10 @@ async function loadConversations() {
 async function openNewChatModal() {
     document.getElementById('newChatModal').classList.remove('hidden');
     const container = document.getElementById('contactList');
-    container.innerHTML = '<div class="p-4 text-center text-gray-500">Memuat kontak...</div>';
+    container.innerHTML = '<div class="p-16 text-center text-primary-300 font-black animate-pulse uppercase tracking-widest text-xs">Mencari kontak...</div>';
     
     const user = JSON.parse(localStorage.getItem('user'));
     try {
-        // Fetch contacts based on role
         const endpoints = [];
         if (user.role === 'admin') {
             endpoints.push('/users?role=kader');
@@ -162,27 +188,26 @@ async function openNewChatModal() {
             contacts = [...contacts, ...data];
         });
         
-        // Remove self
         contacts = contacts.filter(c => c.id !== user.id);
         
         if (contacts.length > 0) {
             container.innerHTML = contacts.map(k => `
-                <div onclick="startChatWith(${k.id}, '${k.nama_lengkap}')" class="flex items-center gap-4 p-5 hover:bg-white/10 cursor-pointer rounded-[1.5rem] transition-all group mb-2 border border-white/5">
-                    <div class="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 border-2 border-white/10 shadow-lg">
-                        <span class="text-white font-black text-xl group-hover:scale-110 transition-transform">${k.nama_lengkap.charAt(0)}</span>
+                <div onclick="startChatWith(${k.id}, '${k.nama_lengkap}')" class="flex items-center gap-3 md:gap-5 p-4 md:p-6 hover:bg-primary-50 cursor-pointer rounded-2xl md:rounded-[2rem] transition-all group border-2 md:border-4 border-transparent hover:border-primary-100 bg-slate-50/50">
+                    <div class="w-10 h-10 md:w-14 md:h-14 rounded-full bg-primary-100 text-primary-800 flex items-center justify-center flex-shrink-0 shadow-md border-2 border-white">
+                        <span class="font-black text-sm md:text-xl group-hover:scale-125 transition-transform">${k.nama_lengkap.charAt(0)}</span>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-lg font-black text-white truncate tracking-tight">${k.nama_lengkap}</p>
-                        <p class="text-sm text-primary-100 font-bold uppercase tracking-widest">${k.role || 'User'}</p>
+                        <p class="text-sm md:text-lg font-black text-black truncate tracking-tight leading-none mb-0.5">${k.nama_lengkap}</p>
+                        <p class="text-[8px] md:text-[11px] text-primary-500 font-black uppercase tracking-[0.1em] md:tracking-[0.2em]">${k.role || 'User'}</p>
                     </div>
                 </div>
             `).join('');
         } else {
-            container.innerHTML = '<div class="p-4 text-center text-gray-500">Tidak ada kontak tersedia.</div>';
+            container.innerHTML = '<div class="p-16 text-center text-primary-300 font-black uppercase tracking-widest text-xs">Kontak tidak ditemukan</div>';
         }
     } catch (e) { 
         console.error(e);
-        container.innerHTML = '<div class="p-4 text-center text-red-500">Gagal memuat kontak.</div>';
+        container.innerHTML = '<div class="p-16 text-center text-rose-400 font-black uppercase tracking-widest text-xs">Gagal mengambil data</div>';
     }
 }
 
@@ -198,8 +223,6 @@ async function startChatWith(userId, name) {
             currentConversationId = res.data.id;
             selectConversation(res.data.id, name);
             loadConversations();
-        } else {
-            showAlert(res.message || 'Gagal memulai chat');
         }
     } catch (e) { console.error(e); }
 }
@@ -208,17 +231,21 @@ function selectConversation(id, name) {
     if (chatInterval) clearInterval(chatInterval);
     currentConversationId = id;
     
-    document.getElementById('chatListContainer').classList.add('hidden', 'md:block');
+    // On mobile: go fullscreen
+    if (window.innerWidth < 768) {
+        document.getElementById('chatMainContainer').classList.add('chat-fullscreen');
+        document.getElementById('chatListContainer').classList.add('hidden');
+    }
+    
     document.getElementById('chatWindow').classList.remove('hidden');
     document.getElementById('emptyState').classList.add('hidden');
+    document.getElementById('emptyState').classList.remove('md:flex');
     
-    document.getElementById('kaderAvatar').textContent = name.charAt(0);
-    document.getElementById('kaderName').textContent = name;
+    document.getElementById('partnerAvatar').textContent = name.charAt(0);
+    document.getElementById('partnerName').textContent = name;
     
     loadMessages();
     chatInterval = setInterval(loadMessages, 3000);
-    
-    // Update active state in sidebar
     loadConversations();
 }
 
@@ -227,18 +254,18 @@ function closeChat() {
     currentConversationId = null;
     document.getElementById('chatWindow').classList.add('hidden');
     document.getElementById('chatListContainer').classList.remove('hidden');
-    document.getElementById('emptyState').classList.remove('hidden', 'md:flex');
+    document.getElementById('chatMainContainer').classList.remove('chat-fullscreen');
     document.getElementById('emptyState').classList.add('md:flex');
+    document.getElementById('emptyState').classList.remove('hidden');
 }
 
 async function deleteConversation() {
     if (!currentConversationId) return;
-    if (!confirm('Hapus seluruh percakapan ini?')) return;
+    if (!confirm('Apakah Anda yakin ingin menghapus seluruh riwayat percakapan ini?')) return;
     
     try {
         const res = await apiCall(`/messages/${currentConversationId}`, 'DELETE');
         if (res && res.success) {
-            showAlert('Percakapan dihapus', 'success');
             closeChat();
             loadConversations();
         }
@@ -270,33 +297,32 @@ function renderMessages(messages) {
     const user = JSON.parse(localStorage.getItem('user'));
     
     if (messages.length === 0) {
-        container.innerHTML = '<div class="text-center text-gray-600 py-12 text-lg font-bold italic">Belum ada pesan. Ketik sesuatu untuk memulai!</div>';
+        container.innerHTML = '<div class="text-center text-slate-300 py-32 text-sm font-black italic uppercase tracking-[0.3em] opacity-40">Kirim pesan pertama Anda</div>';
         return;
     }
     
     const html = messages.map(m => {
         const isMe = m.sender_id === user.id;
         return `
-            <div class="flex w-full ${isMe ? 'justify-end' : 'justify-start'} mb-8 group px-2">
+            <div class="flex w-full ${isMe ? 'justify-end' : 'justify-start'} group">
                 <div class="max-w-[85%] md:max-w-[70%] relative">
-                    <div class="${isMe ? 'bg-white text-primary-900 shadow-2xl rounded-t-[2rem] rounded-bl-[2rem]' : 'bg-white/10 text-white border-2 border-white/20 rounded-t-[2rem] rounded-br-[2rem]'} px-5 md:px-8 py-4 md:py-6 shadow-xl">
-                        <p class="text-lg md:text-xl font-black leading-relaxed tracking-tight break-all whitespace-pre-wrap overflow-hidden">${m.message}</p>
-                        <div class="flex items-center justify-end gap-3 mt-4 pt-3 border-t border-current opacity-10">
-                            <span class="text-[10px] md:text-xs font-black uppercase tracking-widest">${new Date(m.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>
-                            ${isMe && m.is_read ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" class="text-primary-600"><path d="M20 6L9 17l-5-5"/></svg>' : ''}
+                    <div class="${isMe ? 'bg-primary-800 text-white shadow-[0_8px_25px_rgba(6,95,70,0.2)] rounded-t-2xl rounded-bl-2xl md:rounded-t-[2rem] md:rounded-bl-[2rem] border-2 border-primary-700' : 'bg-white text-black border-2 border-slate-100 shadow-[0_8px_25px_rgba(0,0,0,0.04)] rounded-t-2xl rounded-br-2xl md:rounded-t-[2rem] md:rounded-br-[2rem]'} px-4 py-3 md:px-8 md:py-5 transition-all">
+                        <p class="text-sm md:text-lg font-bold leading-relaxed break-words whitespace-pre-wrap">${m.message}</p>
+                        <div class="flex items-center justify-end gap-1.5 md:gap-2 mt-2 md:mt-3 pt-1.5 md:pt-2 border-t ${isMe ? 'border-white/20' : 'border-slate-50'}">
+                            <span class="text-[9px] md:text-[11px] font-bold ${isMe ? 'text-white/60' : 'text-slate-400'}">${new Date(m.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>
+                            ${isMe && m.is_read ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" class="text-emerald-400"><path d="M20 6L9 17l-5-5"/></svg>' : ''}
                         </div>
                     </div>
                     <button onclick="deleteMessage(${m.id})" 
-                            class="absolute top-1/2 -translate-y-1/2 ${isMe ? '-left-12' : '-right-12'} p-3 text-white/30 hover:text-white opacity-0 group-hover:opacity-100 transition-all bg-white/10 rounded-xl">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+                            class="absolute top-1/2 -translate-y-1/2 ${isMe ? '-left-10 md:-left-16' : '-right-10 md:-right-16'} p-2 md:p-3 text-slate-300 hover:text-rose-600 opacity-0 group-hover:opacity-100 transition-all bg-white shadow-xl rounded-xl md:rounded-2xl border-2 border-slate-50">
+                        <svg class="w-3.5 h-3.5 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
                     </button>
                 </div>
             </div>
         `;
     }).join('');
     
-    // Only scroll if content changed
-    const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 100;
+    const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 150;
     container.innerHTML = html;
     if (isAtBottom) container.scrollTop = container.scrollHeight;
 }
@@ -308,12 +334,10 @@ document.getElementById('messageForm').addEventListener('submit', async (e) => {
     if (!pesan || !currentConversationId) return;
     
     try {
-        const res = await apiCall(`/messages/${currentConversationId}/send`, 'POST', {
-            message: pesan
-        });
-        
+        const res = await apiCall(`/messages/${currentConversationId}/send`, 'POST', { message: pesan });
         if (res && res.success) {
             input.value = '';
+            input.style.height = '';
             loadMessages();
             loadConversations();
         }
@@ -323,8 +347,6 @@ document.getElementById('messageForm').addEventListener('submit', async (e) => {
 document.addEventListener('DOMContentLoaded', () => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user) return;
-    
-    document.getElementById('emptyState').classList.remove('hidden', 'md:flex');
     loadConversations();
 });
 </script>

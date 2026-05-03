@@ -2,10 +2,12 @@
 
 @section('content')
 <div class="max-w-full mx-auto">
-    <div class="mb-8">
-        <h1 class="text-3xl md:text-4xl font-extrabold text-black tracking-tight mb-2">Kesehatan Reproduksi</h1>
-        <p class="text-primary-800 text-lg font-bold">Pantau siklus menstruasi dan catatan kesehatan Anda dengan mudah</p>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+    <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Kesehatan Reproduksi</h1>
+        <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Pantau Siklus Menstruasi & Catatan Kesehatan Anda</p>
     </div>
+</div>
 
     <!-- Input Card -->
     <div class="bg-gradient-to-br from-primary-600 to-primary-800 rounded-[2.5rem] shadow-xl p-6 md:p-8 mb-8 relative overflow-hidden text-white border border-primary-500/30">
@@ -88,11 +90,11 @@
                 </div>
             `).join('');
 
-            renderPagination(res.data);
+            renderLocalPagination(res.data);
         }
     }
 
-    function renderPagination(data) {
+    function renderLocalPagination(data) {
         const pagination = document.getElementById('pagination');
         if (data.last_page <= 1) {
             pagination.innerHTML = '';

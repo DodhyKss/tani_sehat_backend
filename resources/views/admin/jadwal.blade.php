@@ -1,9 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-10">
-    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Pengaturan Jadwal Pengisian</h1>
-    <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Atur Interval Waktu Pengisian Data Kesehatan</p>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+    <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Pengaturan Jadwal</h1>
+        <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Atur Interval Waktu Pengisian Data Kesehatan</p>
+    </div>
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -83,6 +85,11 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Mobile Cards -->
+    <div id="jadwalCards" class="md:hidden space-y-4">
+        <div class="text-center py-8 text-gray-500">Memuat data...</div>
+    </div>
 </div>
 @endsection
 
@@ -112,8 +119,29 @@ async function loadJadwal() {
                     <td class="px-6 py-6 font-bold text-primary-400 italic">${new Date(j.updated_at).toLocaleString('id-ID', {day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'})}</td>
                 </tr>`;
             }).join('');
+
+            const cards = document.getElementById('jadwalCards');
+            cards.innerHTML = res.data.map(j => {
+                const tipeLabel = { hours: 'Jam', day: 'Hari', week: 'Minggu' };
+                return `
+                    <div class="bg-primary-50/30 p-6 rounded-3xl border border-primary-50">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-black text-black text-lg uppercase tracking-tight">${j.jenis_pengisian === 'td' ? 'Tekanan Darah' : 'GAD-7'}</h3>
+                            <span class="px-3 py-1 bg-white text-primary-600 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-sm">Aktif</span>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center bg-white/50 p-4 rounded-xl">
+                                <span class="text-[10px] font-black text-primary-400 uppercase tracking-widest">Interval</span>
+                                <span class="text-base font-black text-primary-800">${j.jumlah} ${tipeLabel[j.tipe]}</span>
+                            </div>
+                            <div class="text-[9px] text-right text-primary-400 font-bold italic">Update: ${new Date(j.updated_at).toLocaleString('id-ID')}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         } else {
             tbody.innerHTML = '<tr><td colspan="3" class="px-4 py-8 text-center text-gray-500">Belum ada pengaturan jadwal</td></tr>';
+            document.getElementById('jadwalCards').innerHTML = '<div class="text-center py-8 text-gray-500">Belum ada pengaturan</div>';
         }
     } catch (e) { console.error(e); }
 }

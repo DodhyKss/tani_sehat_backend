@@ -1,9 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-800 mb-2">Dashboard API Visualizer</h1>
-    <p class="text-gray-500">Menampilkan data real-time dari endpoint <code class="bg-gray-100 text-primary-600 px-2 py-1 rounded-md text-sm font-mono border border-gray-200">/api/dashboard/*</code></p>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+    <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">API Visualizer</h1>
+        <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Visualisasi Real-Time Endpoint Dashboard</p>
+    </div>
 </div>
 
 <!-- Summary Cards -->

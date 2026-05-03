@@ -7,6 +7,10 @@ use App\Models\StatusKesehatan;
 use App\Models\TekananDarah;
 use App\Models\GAD;
 use App\Models\JadwalPengisian;
+use App\Models\Materi;
+use App\Models\Video;
+use App\Models\Gambar;
+use App\Models\RekomendasiOlahraga;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -160,13 +164,21 @@ class StatusKesehatanController extends Controller
             $updateData
         );
         
+        $rekomendasi = [
+            'materi' => Materi::where('kategori_td', $kategori)->get(),
+            'video' => Video::where('kategori_td', $kategori)->get(),
+            'gambar' => Gambar::where('kategori_td', $kategori)->get(),
+            'olahraga' => RekomendasiOlahraga::where('kategori_td', $kategori)->get(),
+        ];
+        
         return response()->json([
             'success' => true,
             'message' => 'Tekanan darah berhasil disimpan',
             'data' => [
                 'tekanan_darah' => $tekananDarah,
                 'kategori_td' => $kategori,
-                'status' => $status
+                'status' => $status,
+                'rekomendasi' => $rekomendasi
             ]
         ], 201);
     }
@@ -241,14 +253,23 @@ class StatusKesehatanController extends Controller
             $updateData
         );
         
+        $rekomendasi = [
+            'materi' => Materi::where('kategori_gad', $kategori)->get(),
+            'video' => Video::where('kategori_gad', $kategori)->get(),
+            'gambar' => Gambar::where('kategori_gad', $kategori)->get(),
+            'olahraga' => RekomendasiOlahraga::where('kategori_gad', $kategori)->get(),
+        ];
+        
         return response()->json([
             'success' => true,
             'message' => 'GAD7 berhasil disimpan',
             'data' => [
                 'gad' => $gad,
                 'kategori_gad' => $kategori,
-                'status' => $status
+                'status' => $status,
+                'rekomendasi' => $rekomendasi
             ]
         ], 201);
+
     }
 }

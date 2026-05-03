@@ -1,9 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-8">
-    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2">Status Kesehatan Warga Saya</h1>
-    <p class="text-primary-800 text-lg font-bold">Ringkasan kondisi kesehatan seluruh warga binaan TaniSehat</p>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+    <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Status Kesehatan Warga Saya</h1>
+        <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Ringkasan Kondisi Kesehatan Seluruh Warga Binaan</p>
+    </div>
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -131,10 +133,10 @@
             <p class="text-primary-800 text-base font-bold mt-1 uppercase tracking-widest opacity-60">Perbandingan data awal vs terbaru</p>
         </div>
         <div class="flex flex-wrap items-center gap-3">
-            <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl font-black text-sm flex items-center gap-2 transition-all shadow-lg shadow-emerald-900/10 uppercase tracking-widest">
+            {{-- <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl font-black text-sm flex items-center gap-2 transition-all shadow-lg shadow-emerald-900/10 uppercase tracking-widest">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                 EXCEL
-            </button>
+            </button> --}}
             <div class="hidden md:flex items-center gap-3 px-5 py-2 bg-white rounded-2xl border border-primary-100 shadow-sm">
                 <span class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></span>
                 <span class="text-xs font-black text-primary-800 uppercase tracking-widest">Live</span>

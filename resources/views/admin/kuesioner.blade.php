@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
     <div>
-        <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Manajemen Kuesioner GAD-7</h1>
-        <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Kelola Daftar Instrumen Evaluasi Kecemasan Warga</p>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Manajemen GAD-7</h1>
+        <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Kelola Instrumen Evaluasi Kecemasan Warga</p>
     </div>
     <button onclick="openAddModal()" class="flex items-center justify-center gap-4 bg-primary-800 hover:bg-black text-white px-8 py-5 rounded-[2rem] font-black transition-all shadow-xl shadow-primary-900/20 uppercase tracking-widest text-sm active:scale-95">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -49,7 +49,7 @@
             <input type="hidden" id="soalId">
             <div class="space-y-3">
                 <label class="text-xs font-black text-primary-800 uppercase tracking-widest ml-1">Deskripsi Pertanyaan</label>
-                <textarea id="soalText" required class="w-full px-6 py-5 rounded-[1.5rem] bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white transition-all font-bold text-black outline-none min-h-[160px] text-lg" placeholder="Contoh: Merasa gugup, cemas atau gelisah"></textarea>
+                <textarea id="soalText" required class="w-full px-6 py-5 rounded-[1.5rem] bg-primary-50/50 border-2 border-primary-800 focus:border-primary-600 focus:bg-white transition-all font-bold text-black outline-none min-h-[160px] text-lg" placeholder="Contoh: Merasa gugup, cemas atau gelisah"></textarea>
             </div>
             <div class="pt-4 flex gap-4">
                 <button type="button" onclick="closeModal()" class="flex-1 bg-primary-50 hover:bg-primary-100 text-primary-800 py-5 rounded-2xl font-black transition-all uppercase tracking-widest text-xs">BATAL</button>

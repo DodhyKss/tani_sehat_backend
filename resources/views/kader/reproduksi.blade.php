@@ -1,16 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-10">
-    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Monitoring Reproduksi</h1>
-    <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Pantau Siklus & Kesehatan Reproduksi Warga Binaan</p>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+    <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Monitoring Reproduksi</h1>
+        <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Pantau Siklus & Kesehatan Reproduksi Warga Binaan</p>
+    </div>
 </div>
 
 <div class="bg-white rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100 p-8 md:p-10 mb-10 overflow-hidden">
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
         <div class="relative flex-1 max-w-xl">
-            <input type="text" id="searchWarga" placeholder="Cari Nama Warga Binaan..." 
-                class="w-full pl-14 pr-6 py-4 bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white rounded-2xl transition-all font-black text-black appearance-none outline-none">
+            <input type="text" id="searchWarga" placeholder="Cari Nama Warga..." 
+                class="w-full pl-14 pr-6 py-4 bg-primary-50/50 border-2 border-primary-800 focus:border-primary-600 focus:bg-white rounded-2xl transition-all font-black text-black appearance-none outline-none">
             <svg class="w-6 h-6 text-primary-400 absolute left-5 top-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         </div>
         <div class="flex items-center gap-4">
@@ -43,7 +45,7 @@
         if (res && res.success) {
             allData = res.data.data;
             renderList(allData);
-            renderPagination(res.data);
+            renderLocalPagination(res.data);
         }
     }
 
@@ -96,7 +98,7 @@
                 </div>
  
                 <div class="mt-8 pt-6 border-t-2 border-primary-50 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <span class="text-[10px] font-black text-primary-200 uppercase tracking-[0.2em]">Input: ${new Date(item.created_at).toLocaleDateString('id-ID', {day:'numeric', month:'short'})}</span>
+                    <span class="text-[10px] font-black text-primary-800 uppercase tracking-[0.2em]">Input: ${new Date(item.created_at).toLocaleDateString('id-ID', {day:'numeric', month:'short'})}</span>
                     <button onclick="window.location.href='/chat?warga_id=${item.user.id}'" class="w-full sm:w-auto text-xs font-black text-white bg-primary-800 hover:bg-black uppercase tracking-widest flex items-center justify-center gap-3 px-6 py-4 rounded-2xl transition-all shadow-xl shadow-primary-900/10">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                         Hubungi Warga
@@ -106,7 +108,7 @@
         `).join('');
     }
 
-    function renderPagination(data) {
+    function renderLocalPagination(data) {
         const pagination = document.getElementById('pagination');
         if (data.last_page <= 1) {
             pagination.innerHTML = '';

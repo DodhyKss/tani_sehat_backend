@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="mb-6">
-    <a href="/warga" class="inline-flex items-center gap-2 text-white-500 hover:text-primary-600 transition mb-4">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        Kembali
-    </a>
-    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2">Kuesioner GAD7</h1>
-    <p class="text-primary-800 text-lg">Ukur tingkat kecemasan Anda dengan mudah</p>
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+        <div>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Kuesioner GAD-7</h1>
+            <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Ukur Tingkat Kecemasan Anda Secara Mandiri</p>
+        </div>
+    </div>
 </div>
 
 <div class="max-w-full mx-auto">
@@ -36,7 +36,7 @@
 
         <button type="button" id="submitBtn" onclick="submitGad()" class="w-full bg-white hover:bg-primary-50 text-primary-800 text-2xl font-black py-6 rounded-[1.5rem] transition-all shadow-2xl flex justify-center items-center gap-3 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-30 disabled:cursor-not-allowed" disabled>
             <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-            Kirim Jawaban
+            Kirim
         </button>
     </div>
 
@@ -46,7 +46,7 @@
             <div class="flex items-center gap-4 p-4 bg-white/10 rounded-2xl border border-white/10">
                 <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">0-4</div>
                 <div>
-                    <p class="font-bold text-white text-lg">Minimal</p>
+                    <p class="font-bold text-white text-lg">Normal</p>
                     <p class="text-sm text-primary-100 font-medium">Tidak ada gangguan</p>
                 </div>
             </div>
@@ -68,23 +68,48 @@
     </div>
 </div>
 
-<div id="resultModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md">
-    <div class="absolute inset-0 bg-black/70" onclick="closeResultModal()"></div>
-    <div class="relative bg-gradient-to-br from-primary-700 to-primary-900 rounded-[2.5rem] shadow-2xl w-full max-w-md p-10 text-center text-white border border-white/20">
-        <div id="resultIcon" class="w-24 h-24 mx-auto rounded-full flex items-center justify-center mb-6 shadow-2xl ring-4 ring-white/10"></div>
-        <h3 class="text-3xl font-black mb-4 tracking-tight">Hasil Kuesioner GAD7</h3>
-        <div class="bg-white/10 rounded-2xl p-6 mb-8">
-            <p class="text-primary-100 uppercase font-black tracking-widest text-sm mb-2">Skor Total</p>
-            <div id="resultValue" class="text-7xl font-black tracking-tighter mb-2">0</div>
-            <p id="resultStatus" class="text-2xl font-black px-4 py-2 rounded-xl inline-block">-</p>
+<div id="resultModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-xl">
+    <div class="absolute inset-0 bg-primary-950/60" onclick="closeResultModal()"></div>
+    <div class="relative bg-white rounded-[2.5rem] md:rounded-[3.5rem] shadow-2xl w-full max-w-5xl max-h-[95vh] overflow-hidden border-4 border-white flex flex-col">
+        <div class="bg-white p-6 md:p-8 border-b-4 border-slate-50 flex justify-between items-center z-10 shadow-sm">
+            <div class="min-w-0">
+                <h3 class="text-xl md:text-3xl font-black text-black tracking-tighter uppercase truncate leading-tight">Analisa Hasil & Rekomendasi</h3>
+                <p class="text-primary-400 text-[10px] md:text-xs font-black uppercase tracking-[0.3em] mt-1">Status Kesehatan Psikologis</p>
+            </div>
+            <button onclick="closeResultModal()" class="p-3 bg-slate-50 hover:bg-primary-50 text-primary-800 rounded-2xl transition-all border-2 border-transparent hover:border-primary-100 shadow-sm active:scale-90">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
         </div>
-        <p id="resultDesc" class="text-primary-100 text-lg font-medium leading-relaxed mb-8" id="resultDesc">-</p>
-        <div id="resultRekomendasi" class="mt-6 p-6 bg-white/10 rounded-2xl text-left border border-white/10 mb-8"></div>
-        <a href="/warga" class="w-full inline-block bg-white text-primary-800 font-black py-5 rounded-2xl shadow-xl hover:bg-primary-50 transition-all text-xl">
-            Tutup & Kembali
-        </a>
+
+        <div class="p-6 md:p-10 overflow-y-auto custom-scrollbar flex-1 bg-slate-50/30">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Hasil Stats -->
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="bg-primary-800 rounded-[2.5rem] p-8 text-center text-white shadow-2xl border-4 border-white">
+                        <div id="resultIcon" class="w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 shadow-xl ring-4 ring-white/10"></div>
+                        <div class="text-primary-200 uppercase font-black tracking-widest text-[10px] mb-2">Skor Total</div>
+                        <div class="text-5xl md:text-7xl font-black tracking-tighter mb-4" id="resultValue">0</div>
+                        <div class="inline-block mb-4">
+                            <span id="resultStatus" class="px-6 py-2 text-lg font-black rounded-xl shadow-lg ring-2 ring-white/20">-</span>
+                        </div>
+                        <p class="text-primary-100 text-sm font-bold leading-relaxed" id="resultDesc">-</p>
+                    </div>
+                    
+                    <a href="/warga" class="w-full inline-flex items-center justify-center gap-3 bg-primary-800 hover:bg-black text-white font-black py-5 rounded-2xl shadow-xl transition-all text-sm uppercase tracking-widest border-4 border-white">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        SELESAI
+                    </a>
+                </div>
+
+                <!-- Rekomendasi Display -->
+                <div id="resultRekomendasi" class="lg:col-span-8 space-y-8">
+                    <!-- Media will be injected here -->
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
 @endsection
 
 @section('scripts')
@@ -237,13 +262,90 @@ async function submitGad() {
             
             // Rekomendasi from response
             const recs = res.data.rekomendasi;
-            let recHtml = '<p class="font-black text-white text-base mb-3 uppercase tracking-wider">Rekomendasi Kami:</p><ul class="text-base text-primary-100 space-y-2">';
-            if (recs.video?.length) recHtml += `<li class="flex items-center gap-3 bg-white/5 p-3 rounded-xl"><span class="text-blue-400 text-xl">▶</span> <span class="font-bold">${recs.video[0].judul}</span></li>`;
-            if (recs.olahraga?.length) recHtml += `<li class="flex items-center gap-3 bg-white/5 p-3 rounded-xl"><span class="text-orange-400 text-xl">●</span> <span class="font-bold">${recs.olahraga[0].nama_olahraga}</span></li>`;
-            if (recs.materi?.length) recHtml += `<li class="flex items-center gap-3 bg-white/5 p-3 rounded-xl"><span class="text-purple-400 text-xl">■</span> <span class="font-bold">${recs.materi[0].judul}</span></li>`;
-            recHtml += '</ul>';
+            let recHtml = '';
+            
+            // 1. VIDEO
+            if (recs.video?.length) {
+                const vid = recs.video[0];
+                recHtml += `
+                    <div class="space-y-4">
+                        <h4 class="text-xl font-black text-black uppercase tracking-widest flex items-center gap-3">
+                            <span class="w-10 h-10 bg-red-100 text-red-600 rounded-xl flex items-center justify-center">▶</span>
+                            Video Edukasi: ${vid.judul}
+                        </h4>
+                        <div class="aspect-video w-full rounded-[2rem] overflow-hidden border-8 border-white shadow-2xl bg-black">
+                            <iframe src="${vid.link_embed}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                `;
+            }
+
+
+            // 2. MATERI (PDF)
+            if (recs.materi?.length) {
+                const mat = recs.materi[0];
+                recHtml += `
+                    <div class="space-y-4">
+                        <h4 class="text-xl font-black text-black uppercase tracking-widest flex items-center gap-3">
+                            <span class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center">■</span>
+                            Materi Bacaan: ${mat.judul}
+                        </h4>
+                        <div class="h-[500px] w-full rounded-[2rem] overflow-hidden border-8 border-white shadow-2xl bg-slate-100 relative">
+                            <iframe src="/public/${mat.file_path}#toolbar=0" class="w-full h-full" frameborder="0"></iframe>
+                        </div>
+                        <a href="/public/${mat.file_path}" target="_blank" class="inline-flex items-center gap-2 text-xs font-black text-primary-700 uppercase tracking-widest hover:underline px-4">
+                            Buka di Jendela Baru
+                        </a>
+                    </div>
+                `;
+            }
+
+            // 3. GAMBAR
+            if (recs.gambar?.length) {
+                const gam = recs.gambar[0];
+                recHtml += `
+                    <div class="space-y-4">
+                        <h4 class="text-xl font-black text-black uppercase tracking-widest flex items-center gap-3">
+                            <span class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center">🖼</span>
+                            Infografis: ${gam.judul}
+                        </h4>
+                        <div class="w-full rounded-[2rem] overflow-hidden border-8 border-white shadow-2xl bg-white">
+                            <img src="/public/${gam.file_path}" class="w-full h-auto" alt="${gam.judul}">
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 4. OLAHRAGA
+            if (recs.olahraga?.length) {
+                const olh = recs.olahraga[0];
+                recHtml += `
+                    <div class="space-y-4">
+                        <h4 class="text-xl font-black text-black uppercase tracking-widest flex items-center gap-3">
+                            <span class="w-10 h-10 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center">●</span>
+                            Program Olahraga
+                        </h4>
+                        <div class="bg-orange-600 rounded-[2.5rem] p-8 text-white shadow-2xl border-4 border-white relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 p-10 opacity-10 transform translate-x-4 -translate-y-4 group-hover:scale-110 transition-transform">
+                                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v8H2z"/><line x1="6" y1="12" x2="6" y2="12"/><line x1="10" y1="12" x2="10" y2="12"/><line x1="14" y1="12" x2="14" y2="12"/></svg>
+                            </div>
+                            <h5 class="text-3xl font-black mb-2 uppercase tracking-tight">${olh.nama_olahraga}</h5>
+                            <p class="text-orange-100 text-lg font-medium opacity-90">${olh.deskripsi}</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (recHtml === '') {
+                recHtml = `
+                    <div class="text-center py-20 bg-white rounded-[2.5rem] border-4 border-dashed border-slate-200">
+                        <p class="text-slate-400 font-black uppercase tracking-widest text-sm">Tidak ada rekomendasi khusus saat ini.<br>Tetap jaga kesehatan!</p>
+                    </div>
+                `;
+            }
             
             document.getElementById('resultRekomendasi').innerHTML = recHtml;
+
             document.getElementById('resultModal').classList.remove('hidden');
         } else {
             showAlert(res?.message || 'Gagal menyimpan data', 'error');

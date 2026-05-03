@@ -38,7 +38,15 @@
     <style>
         .loader { display: none; width: 24px; height: 24px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s ease-in-out infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .sidebar-transition { transition: transform 0.3s ease-in-out; }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #bbf7d0; border-radius: 10px; }
+        
+        table { border-collapse: collapse; border: 1px solid #d1fae5; width: 100%; border-radius: 1rem; overflow: hidden; }
+        th { background: #f0fdf4; border: 1px solid #d1fae5; padding: 1rem; color: #065f46; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; }
+        td { border: 1px solid #d1fae5; padding: 1rem; transition: background 0.2s; }
+        tr:hover td { background: #f8faf9; }
+        
         @media (max-width: 768px) {
             .sidebar-open { transform: translateX(0); }
             .sidebar-closed { transform: translateX(-100%); }

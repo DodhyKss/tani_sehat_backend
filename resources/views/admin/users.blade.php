@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
     <div>
-        <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2">Manajemen User</h1>
-        <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Kelola Data Warga, Kader, & Admin</p>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Manajemen User</h1>
+        <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Kelola Data Warga, Kader, & Admin Sistem</p>
     </div>
     <button onclick="openUserModal()" class="bg-primary-800 hover:bg-black text-white font-black py-4 px-8 rounded-2xl shadow-xl shadow-primary-900/20 transition-all flex items-center gap-3 group uppercase tracking-widest text-sm">
         <svg class="w-6 h-6 transform group-hover:rotate-90 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
@@ -13,18 +13,18 @@
 </div>
 
 <div class="bg-white rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100 overflow-hidden mb-10">
-    <div class="hidden md:block overflow-x-auto">
-        <table class="w-full text-left">
-            <thead class="text-primary-400 uppercase text-xs font-black tracking-[0.2em] border-b-2 border-primary-50">
+    <div class="hidden md:block overflow-x-auto p-8">
+        <table class="border-collapse">
+            <thead>
                 <tr>
-                    <th class="px-8 py-6">Identitas User</th>
-                    <th class="px-6 py-6">Peran (Role)</th>
-                    <th class="px-6 py-6">Kontak</th>
-                    <th class="px-6 py-6 hidden md:table-cell">Lahir</th>
-                    <th class="px-6 py-6 text-center">Tindakan</th>
+                    <th>Identitas User</th>
+                    <th>Peran (Role)</th>
+                    <th>Kontak</th>
+                    <th class="hidden md:table-cell">Lahir</th>
+                    <th class="text-center">Tindakan</th>
                 </tr>
             </thead>
-            <tbody id="usersTableBody" class="divide-y-2 divide-primary-50">
+            <tbody id="usersTableBody">
                 <tr><td colspan="5" class="px-6 py-20 text-center text-primary-300 font-bold italic animate-pulse text-xl uppercase tracking-widest">Memuat data user...</td></tr>
             </tbody>
         </table>
@@ -135,7 +135,7 @@ async function loadUsers(page = 1) {
             const data = res.data;
             const users = data.data || [];
             renderUsers(users);
-            if (data.last_page) renderPagination(data);
+            if (data.last_page) window.renderTablePagination(data, 'pagination', 'loadUsers');
         }
     } catch (e) { console.error(e); showAlert('Gagal memuat data user', 'error'); }
 }
@@ -214,14 +214,6 @@ function renderUsers(users) {
     if (cards) cards.innerHTML = cardsHtml;
 }
 
-function renderPagination(data) {
-    const pag = document.getElementById('pagination');
-    let html = '';
-    if (data.prev_page_url) html += `<button onclick="loadUsers(${data.current_page - 1})" class="px-6 py-3 border-2 border-primary-100 bg-white rounded-2xl text-xs font-black text-primary-800 hover:bg-primary-50 uppercase tracking-widest transition-all shadow-sm">SEBELUMNYA</button>`;
-    html += `<span class="px-6 py-3 bg-primary-800 text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-lg">${data.current_page} / ${data.last_page}</span>`;
-    if (data.next_page_url) html += `<button onclick="loadUsers(${data.current_page + 1})" class="px-6 py-3 border-2 border-primary-100 bg-white rounded-2xl text-xs font-black text-primary-800 hover:bg-primary-50 uppercase tracking-widest transition-all shadow-sm">SELANJUTNYA</button>`;
-    pag.innerHTML = html;
-}
 
 document.getElementById('userForm').addEventListener('submit', async (e) => {
     e.preventDefault();

@@ -1,9 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-8">
-    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2">Dashboard Admin</h1>
-    <p class="text-primary-800 text-lg font-bold">Monitoring real-time kesehatan warga TaniSehat</p>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+    <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Dashboard Admin</h1>
+        <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Monitoring Real-Time Kesehatan Warga TaniSehat</p>
+    </div>
 </div>
 
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-10">
@@ -128,24 +130,26 @@
         </div>
     </div>
     
-    <div class="hidden md:block overflow-x-auto -mx-10 px-10">
-        <table class="w-full text-left">
-            <thead class="text-primary-400 uppercase text-xs font-black tracking-[0.2em] border-b-2 border-primary-50">
+    <div class="hidden md:block overflow-x-auto p-8">
+        <table class="border-collapse">
+            <thead>
                 <tr>
-                    <th class="px-6 py-6">Warga (NIK)</th>
-                    <th class="px-6 py-6 text-center">Profil</th>
-                    <th class="px-6 py-6 text-center">TD Awal</th>
-                    <th class="px-6 py-6 text-center">TD Akhir</th>
-                    <th class="px-6 py-6 text-center">GAD7 Awal</th>
-                    <th class="px-6 py-6 text-center">GAD7 Akhir</th>
-                    <th class="px-6 py-6 text-center">Status</th>
+                    <th>Warga (NIK)</th>
+                    <th class="text-center">Profil</th>
+                    <th class="text-center">TD Awal</th>
+                    <th class="text-center">TD Akhir</th>
+                    <th class="text-center">GAD7 Awal</th>
+                    <th class="text-center">GAD7 Akhir</th>
+                    <th class="text-center">Status</th>
                 </tr>
             </thead>
-            <tbody id="progresTable" class="divide-y-2 divide-primary-50">
-                <tr><td colspan="5" class="px-6 py-20 text-center text-primary-300 font-bold italic animate-pulse text-xl">Memuat data progres...</td></tr>
+            <tbody id="progresTable">
+                <tr><td colspan="7" class="px-6 py-20 text-center text-primary-300 font-bold italic animate-pulse text-xl">Memuat data progres...</td></tr>
             </tbody>
         </table>
     </div>
+
+    <div id="progresPagination" class="mt-4 flex justify-center gap-2"></div>
 
     <div id="progresCards" class="md:hidden space-y-6">
         <div class="text-center py-12 text-primary-300 font-bold italic">Memuat data progres...</div>
@@ -350,9 +354,9 @@ async function loadGadCharts() {
     } catch (e) { console.error("Error loading GAD charts", e); }
 }
 
-async function loadProgresWarga() {
+async function loadProgresWarga(page = 1) {
     try {
-        const res = await apiCall('/dashboard/progres-warga');
+        const res = await apiCall(`/dashboard/progres-warga?page=${page}`);
         const tbody = document.getElementById('progresTable');
         const cards = document.getElementById('progresCards');
         
@@ -372,40 +376,41 @@ async function loadProgresWarga() {
             };
 
             if (tbody) {
-                tbody.innerHTML = res.data.map(item => `
+                tbody.innerHTML = (res.data.data || res.data).map(item => `
                     <tr class="hover:bg-primary-50/50 transition-colors group">
-                        <td class="px-6 py-6">
-                            <div class="font-black text-black text-lg leading-tight">${item.nama}</div>
-                            <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">NIK: ${item.nik || '-'}</div>
+                        <td class="px-6 py-4 border border-primary-50">
+                            <div class="font-bold text-black">${item.nama}</div>
+                            <div class="text-[10px] text-primary-400 font-medium">NIK: ${item.nik || '-'}</div>
                         </td>
-                        <td class="px-6 py-6 text-center">
-                            <div class="font-black text-primary-800 text-sm">${item.umur} Thn</div>
-                            <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">${item.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan'}</div>
+                        <td class="px-6 py-4 text-center border border-primary-50">
+                            <div class="font-bold text-primary-800 text-sm">${item.umur} Thn</div>
+                            <div class="text-[10px] text-primary-400 font-medium uppercase">${item.jenis_kelamin === 'L' ? 'L' : 'P'}</div>
                         </td>
-                        <td class="px-6 py-6 text-center border-x border-primary-50">
-                            <div class="font-black text-base text-primary-800 mb-1">${item.td.awal}</div>
-                            <span class="px-3 py-1 text-[10px] rounded-lg uppercase font-black tracking-widest ${getBadge(item.td.status_awal)}">${item.td.status_awal.replace('_', ' ')}</span>
+                        <td class="px-6 py-4 text-center border border-primary-50">
+                            <div class="font-bold text-sm text-gray-600">${item.td.awal}</div>
+                            <div class="text-[9px] font-black uppercase tracking-tighter ${getBadge(item.td.status_awal)} px-2 rounded">${item.td.status_awal.replace('pre_hipertensi', 'Pra-Hiper').replace('_', ' ')}</div>
                         </td>
-                        <td class="px-6 py-6 text-center border-r border-primary-50">
-                            <div class="font-black text-xl text-primary-600 mb-1">${item.td.akhir}</div>
-                            <span class="px-3 py-1 text-[10px] rounded-lg uppercase font-black tracking-widest ${getBadge(item.td.status_akhir)}">${item.td.status_akhir.replace('_', ' ')}</span>
+                        <td class="px-6 py-4 text-center border border-primary-50 bg-primary-50/20">
+                            <div class="font-black text-base text-primary-600">${item.td.akhir}</div>
+                            <div class="text-[9px] font-black uppercase tracking-tighter ${getBadge(item.td.status_akhir)} px-2 rounded">${item.td.status_akhir.replace('pre_hipertensi', 'Pra-Hiper').replace('_', ' ')}</div>
                         </td>
-                        <td class="px-6 py-6 text-center border-r border-primary-50">
-                            <div class="font-black text-base text-primary-800 mb-1">SKOR: ${item.gad.awal}</div>
-                            <span class="px-3 py-1 text-[10px] rounded-lg uppercase font-black tracking-widest ${getBadge(item.gad.status_awal)}">${item.gad.status_awal.replace('_', ' ')}</span>
+                        <td class="px-6 py-4 text-center border border-primary-50">
+                            <div class="font-bold text-sm text-gray-600">${item.gad.awal}</div>
+                            <div class="text-[9px] font-black uppercase tracking-tighter ${getBadge(item.gad.status_awal)} px-2 rounded">${item.gad.status_awal.replace('_', ' ')}</div>
                         </td>
-                        <td class="px-6 py-6 text-center border-r border-primary-50">
-                            <div class="font-black text-xl text-primary-600 mb-1">SKOR: ${item.gad.akhir}</div>
-                            <span class="px-3 py-1 text-[10px] rounded-lg uppercase font-black tracking-widest ${getBadge(item.gad.status_akhir)}">${item.gad.status_akhir.replace('_', ' ')}</span>
+                        <td class="px-6 py-4 text-center border border-primary-50 bg-primary-50/20">
+                            <div class="font-black text-base text-primary-600">${item.gad.akhir}</div>
+                            <div class="text-[9px] font-black uppercase tracking-tighter ${getBadge(item.gad.status_akhir)} px-2 rounded">${item.gad.status_akhir.replace('_', ' ')}</div>
                         </td>
-                        <td class="px-6 py-6 text-center">
-                            <span class="px-4 py-2 rounded-2xl text-xs font-black uppercase tracking-widest ${item.status_perubahan === 'Ada Perubahan' ? 'bg-amber-100 text-amber-800 border-2 border-amber-200' : (item.status_perubahan === 'Tetap' ? 'bg-emerald-100 text-emerald-800' : 'bg-primary-50 text-primary-300')}">
+                        <td class="px-6 py-4 text-center border border-primary-50">
+                            <span class="px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-tighter ${item.status_perubahan === 'Ada Perubahan' ? 'bg-amber-100 text-amber-800' : (item.status_perubahan === 'Tetap' ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-400')}">
                                 ${item.status_perubahan}
                             </span>
                         </td>
                     </tr>
                 `).join('');
             }
+            window.renderTablePagination(res.data, 'progresPagination', 'loadProgresWarga');
 
             if (cards) {
                 cards.innerHTML = res.data.map(item => `

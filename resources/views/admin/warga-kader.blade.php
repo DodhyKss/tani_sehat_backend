@@ -1,21 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-10">
-    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Manajemen Kader & Warga</h1>
-    <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Atur Relasi & Penugasan Kader Terhadap Warga</p>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+    <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Manajemen Kader & Warga</h1>
+        <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Atur Relasi & Penugasan Kader Terhadap Warga</p>
+    </div>
 </div>
 
 <div class="bg-white rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100 p-8 md:p-10 mb-10 overflow-hidden">
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
         <div class="relative flex-1 max-w-xl">
             <input type="text" id="searchWarga" placeholder="Cari Nama Warga atau NIK..." 
-                class="w-full pl-14 pr-6 py-4 bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white rounded-2xl transition-all font-black text-black appearance-none outline-none">
+                class="w-full pl-14 pr-6 py-4 bg-primary-50/50 border-2 border-primary-800 focus:border-primary-600 focus:bg-white rounded-2xl transition-all font-black text-black appearance-none outline-none">
             <svg class="w-6 h-6 text-primary-400 absolute left-5 top-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         </div>
         <button onclick="openAssignModal()" class="bg-primary-800 hover:bg-black text-white px-8 py-4 rounded-2xl font-black text-sm transition-all shadow-lg shadow-primary-900/20 uppercase tracking-widest flex items-center justify-center gap-3">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M12 4v16m8-8H4"/></svg>
-            Tugaskan Warga
+            Tugaskan Kader
         </button>
     </div>
 
@@ -34,6 +36,11 @@
                 <tr><td colspan="5" class="px-6 py-12 text-center text-primary-300 font-bold italic">Memuat data warga...</td></tr>
             </tbody>
         </table>
+    </div>
+
+    <!-- Mobile Cards -->
+    <div id="wargaCards" class="md:hidden divide-y-2 divide-primary-50">
+        <div class="p-8 text-center text-primary-300 font-bold italic uppercase tracking-widest">Memuat data warga...</div>
     </div>
 </div>
 
@@ -88,12 +95,14 @@ async function loadData() {
 
 function renderTable(filter = '') {
     const tbody = document.getElementById('wargaTable');
+    const cards = document.getElementById('wargaCards');
     const filtered = wargaList.filter(w => 
         !filter || w.nama_lengkap?.toLowerCase().includes(filter.toLowerCase()) || w.nik?.includes(filter)
     );
     
     if (!filtered.length) {
-        tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-gray-500">Tidak ada data</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-gray-500">Tidak ada data</td></tr>';
+        if (cards) cards.innerHTML = '<div class="p-8 text-center text-gray-500 font-bold uppercase tracking-widest">Tidak ada data</div>';
         return;
     }
     
@@ -113,6 +122,35 @@ function renderTable(filter = '') {
                     : `<button onclick="selectWarga(${w.id})" class="px-4 py-2 bg-primary-800 text-white hover:bg-black rounded-xl font-black text-xs transition-all uppercase tracking-widest shadow-lg shadow-primary-900/20">Tugaskan</button>`}
             </td>
         </tr>
+    `).join('');
+
+    cards.innerHTML = filtered.map(w => `
+        <div class="p-6 bg-white hover:bg-primary-50/20 transition-all group">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <p class="font-black text-black text-xl tracking-tight">${w.nama_lengkap || '-'}</p>
+                    <p class="text-[10px] font-black text-primary-400 uppercase tracking-widest mt-0.5">NIK: ${w.nik || '-'}</p>
+                </div>
+                ${w.kader_nama 
+                    ? `<span class="px-3 py-1.5 bg-emerald-100 text-emerald-800 rounded-lg text-[9px] font-black uppercase tracking-widest shadow-sm">${w.kader_nama}</span>` 
+                    : `<span class="px-3 py-1.5 bg-primary-50 text-primary-300 rounded-lg text-[9px] font-black uppercase tracking-widest">Belum Ditugaskan</span>`}
+            </div>
+            <div class="flex justify-between items-center bg-primary-50/50 p-4 rounded-2xl border border-primary-100">
+                <div class="flex flex-col">
+                    <span class="text-[9px] font-black text-primary-400 uppercase tracking-widest">No. Telepon</span>
+                    <span class="text-base font-bold text-primary-800">${w.no_hp || '-'}</span>
+                </div>
+                <div class="flex gap-2">
+                    ${w.kader_id 
+                        ? `<button onclick="removeKader(${w.id})" class="p-3 bg-white border border-orange-100 text-orange-600 rounded-xl shadow-sm">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                           </button>`
+                        : `<button onclick="selectWarga(${w.id})" class="p-3 bg-primary-800 text-white rounded-xl shadow-lg">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
+                           </button>`}
+                </div>
+            </div>
+        </div>
     `).join('');
 }
 

@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
     <div>
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">Manajemen User</h1>
-        <p class="text-gray-500">Data dari endpoint <code class="bg-gray-100 text-primary-600 px-2 py-1 rounded-md text-sm font-mono border border-gray-200">GET /api/users</code></p>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Manajemen User</h1>
+        <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Kelola Data Seluruh Pengguna Sistem</p>
     </div>
-    <button onclick="showAlert('Demo: Fitur tambah form belum diimplementasi (API Ready)', 'success')" class="bg-primary-600 hover:bg-primary-700 text-white font-medium py-2.5 px-5 rounded-lg shadow-sm transition-colors flex items-center gap-2">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+    <button onclick="showAlert('Demo: Fitur tambah form belum diimplementasi (API Ready)', 'success')" class="bg-primary-800 hover:bg-black text-white px-8 py-4 rounded-2xl font-black text-sm transition-all shadow-lg shadow-primary-900/20 uppercase tracking-widest flex items-center justify-center gap-3">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M12 4v16m8-8H4"/></svg>
         Tambah User
     </button>
 </div>
@@ -76,7 +76,7 @@
                     tbody.appendChild(tr);
                 });
                 
-                renderPagination(res.data);
+                renderLocalPagination(res.data);
             }
         } catch (e) {
             console.error(e);
@@ -84,7 +84,7 @@
         }
     }
     
-    function renderPagination(data) {
+    function renderLocalPagination(data) {
         const pag = document.getElementById('pagination');
         pag.innerHTML = '';
         

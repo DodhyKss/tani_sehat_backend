@@ -1,31 +1,33 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-8">
-    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Riwayat Data Kesehatan Warga</h1>
-    <p class="text-primary-800 text-lg font-bold uppercase tracking-[0.2em] opacity-60">Monitoring Tekanan Darah & GAD-7 Keseluruhan</p>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+    <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Riwayat Kesehatan Global</h1>
+        <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Monitoring Tekanan Darah & GAD-7 Seluruh Warga</p>
+    </div>
 </div>
 
 <div class="flex flex-col lg:flex-row gap-6 mb-10 bg-white p-8 rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100">
     <div class="flex-1 space-y-2">
-        <label class="text-xs font-black text-primary-800 uppercase tracking-widest ml-1">Pilih Nama Warga</label>
-        <select id="filterWarga" class="w-full px-6 py-4 rounded-2xl bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white transition-all font-black text-black appearance-none">
-            <option value="">Semua Warga TaniSehat</option>
+        <label class="text-xs font-black text-primary-800 uppercase tracking-widest ml-1">Pilih Warga</label>
+        <select id="filterWarga" class="w-full px-6 py-4 rounded-2xl bg-primary-50/50 border-2 border-primary-800 cursor-pointer focus:border-primary-600 focus:bg-white transition-all font-black text-black appearance-none">
+            <option value="">Semua Warga</option>
         </select>
     </div>
     <div class="flex flex-col md:flex-row gap-6">
         <div class="space-y-2">
             <label class="text-xs font-black text-primary-800 uppercase tracking-widest ml-1">Dari Tanggal</label>
-            <input type="date" id="startDate" class="w-full px-6 py-4 rounded-2xl bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white transition-all font-bold text-black">
+            <input type="date" id="startDate" class="w-full px-6 py-4 rounded-2xl bg-primary-50/50 border-2 border-primary-800 cursor-pointer focus:border-primary-600 focus:bg-white transition-all font-bold text-black">
         </div>
         <div class="space-y-2">
             <label class="text-xs font-black text-primary-800 uppercase tracking-widest ml-1">Sampai Tanggal</label>
-            <input type="date" id="endDate" class="w-full px-6 py-4 rounded-2xl bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white transition-all font-bold text-black">
+            <input type="date" id="endDate" class="w-full px-6 py-4 rounded-2xl bg-primary-50/50 border-2 border-primary-800 cursor-pointertransparent focus:border-primary-600 focus:bg-white transition-all font-bold text-black">
         </div>
     </div>
     <div class="flex items-end gap-3">
-        <button onclick="loadData()" class="bg-primary-800 hover:bg-black text-white px-8 py-4 rounded-2xl font-black text-sm transition-all shadow-lg uppercase tracking-widest">CARI DATA</button>
-        <button onclick="resetFilter()" class="bg-primary-50 hover:bg-primary-100 text-primary-800 px-6 py-4 rounded-2xl font-black text-sm transition-all uppercase tracking-widest">RESET</button>
+        <button onclick="loadData()" class="bg-primary-800 hover:bg-black text-white px-8 py-4 rounded-2xl font-black text-sm transition-all shadow-lg uppercase tracking-widest">CARI</button>
+        {{-- <button onclick="resetFilter()" class="bg-primary-50 hover:bg-primary-100 text-primary-800 px-6 py-4 rounded-2xl font-black text-sm transition-all uppercase tracking-widest">RESET</button> --}}
     </div>
 </div>
 
@@ -72,18 +74,18 @@
     </div>
     
     <div class="hidden md:block overflow-x-auto -mx-10 px-10">
-        <table class="w-full text-left">
-            <thead class="text-primary-400 uppercase text-xs font-black tracking-[0.2em] border-b-2 border-primary-50">
+        <table class="border-collapse">
+            <thead>
                 <tr>
-                    <th class="px-6 py-6">Nama Warga (NIK)</th>
-                    <th class="px-6 py-6 text-center">Profil</th>
-                    <th class="px-6 py-6">Tanggal Cek</th>
-                    <th class="px-6 py-6 text-center">Hasil (mmHg)</th>
-                    <th class="px-6 py-6 text-center">Status</th>
+                    <th>Nama Warga (NIK)</th>
+                    <th class="text-center">Profil</th>
+                    <th>Tanggal Cek</th>
+                    <th class="text-center">Hasil (mmHg)</th>
+                    <th class="text-center">Status</th>
                 </tr>
             </thead>
-            <tbody id="tdTable" class="divide-y-2 divide-primary-50">
-                <tr><td colspan="4" class="px-6 py-12 text-center text-primary-300 font-bold italic">Memuat data...</td></tr>
+            <tbody id="tdTable">
+                <tr><td colspan="5" class="px-6 py-12 text-center text-primary-300 font-bold italic">Memuat data...</td></tr>
             </tbody>
         </table>
     </div>
@@ -106,18 +108,18 @@
     </div>
     
     <div class="hidden md:block overflow-x-auto -mx-10 px-10">
-        <table class="w-full text-left">
-            <thead class="text-primary-400 uppercase text-xs font-black tracking-[0.2em] border-b-2 border-primary-50">
+        <table class="border-collapse">
+            <thead>
                 <tr>
-                    <th class="px-6 py-6">Nama Warga (NIK)</th>
-                    <th class="px-6 py-6 text-center">Profil</th>
-                    <th class="px-6 py-6">Tanggal Cek</th>
-                    <th class="px-6 py-6 text-center">Skor GAD-7</th>
-                    <th class="px-6 py-6 text-center">Status</th>
+                    <th>Nama Warga (NIK)</th>
+                    <th class="text-center">Profil</th>
+                    <th>Tanggal Cek</th>
+                    <th class="text-center">Skor GAD-7</th>
+                    <th class="text-center">Status</th>
                 </tr>
             </thead>
-            <tbody id="gadTable" class="divide-y-2 divide-primary-50">
-                <tr><td colspan="4" class="px-6 py-12 text-center text-primary-300 font-bold italic">Memuat data...</td></tr>
+            <tbody id="gadTable">
+                <tr><td colspan="5" class="px-6 py-12 text-center text-primary-300 font-bold italic">Memuat data...</td></tr>
             </tbody>
         </table>
     </div>
@@ -216,12 +218,12 @@ async function loadData() {
         if (tdRes && tdRes.success) {
             tdFullData = tdRes.data.data || [];
             renderTdTable(tdRes.data.data || []);
-            renderPagination(tdRes.data, 'tdPagination', 'loadTdData');
+            window.renderTablePagination(tdRes.data, 'tdPagination', 'loadTdData');
         }
         if (gadRes && gadRes.success) {
             gadFullData = gadRes.data.data || [];
             renderGadTable(gadRes.data.data || []);
-            renderPagination(gadRes.data, 'gadPagination', 'loadGadData');
+            window.renderTablePagination(gadRes.data, 'gadPagination', 'loadGadData');
         }
     } catch (e) { console.error(e); }
 }
@@ -244,17 +246,17 @@ function renderTdTable(data) {
         else risiko++;
         
         return `<tr class="hover:bg-primary-50/50 transition-colors">
-            <td class="px-6 py-6">
-                <div class="font-black text-black text-lg leading-tight">${td.warga?.nama_lengkap || '-'}</div>
-                <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">NIK: ${td.warga?.nik || '-'}</div>
+            <td class="px-6 py-4 border border-primary-50">
+                <div class="font-bold text-black">${td.warga?.nama_lengkap || '-'}</div>
+                <div class="text-[10px] text-primary-400 font-medium">NIK: ${td.warga?.nik || '-'}</div>
             </td>
-            <td class="px-6 py-6 text-center">
-                <div class="font-black text-primary-800 text-sm">${td.warga?.tanggal_lahir ? calculateAge(td.warga.tanggal_lahir) : '-'} Thn</div>
-                <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">${td.warga?.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan'}</div>
+            <td class="px-6 py-4 text-center border border-primary-50">
+                <div class="font-bold text-primary-800 text-sm">${td.warga?.tanggal_lahir ? calculateAge(td.warga.tanggal_lahir) : '-'} Thn</div>
+                <div class="text-[10px] text-primary-400 font-medium uppercase">${td.warga?.jenis_kelamin === 'L' ? 'L' : 'P'}</div>
             </td>
-            <td class="px-6 py-6 font-bold text-primary-400">${new Date(td.tgl_cek).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'})}</td>
-            <td class="px-6 py-6 text-center font-black text-xl text-primary-800">${td.systolic}/${td.diastolic}</td>
-            <td class="px-6 py-6 text-center"><span class="px-4 py-1.5 text-[10px] font-black rounded-lg uppercase tracking-widest shadow-sm ${status.color}">${status.label}</span></td>
+            <td class="px-6 py-4 font-medium text-gray-500 border border-primary-50">${new Date(td.tgl_cek).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'})}</td>
+            <td class="px-6 py-4 text-center font-black text-xl text-primary-800 border border-primary-50 bg-primary-50/20">${td.systolic}/${td.diastolic}</td>
+            <td class="px-6 py-4 text-center border border-primary-50"><span class="px-3 py-1 text-[10px] font-black rounded-lg uppercase tracking-widest ${status.color}">${status.label}</span></td>
         </tr>`;
     }).join('');
 
@@ -298,17 +300,17 @@ function renderGadTable(data) {
     const rowsHtml = data.map(gad => {
         const status = getStatusGad(gad.skor);
         return `<tr class="hover:bg-primary-50/50 transition-colors">
-            <td class="px-6 py-6">
-                <div class="font-black text-black text-lg leading-tight">${gad.warga?.nama_lengkap || '-'}</div>
-                <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">NIK: ${gad.warga?.nik || '-'}</div>
+            <td class="px-6 py-4 border border-primary-50">
+                <div class="font-bold text-black">${gad.warga?.nama_lengkap || '-'}</div>
+                <div class="text-[10px] text-primary-400 font-medium">NIK: ${gad.warga?.nik || '-'}</div>
             </td>
-            <td class="px-6 py-6 text-center">
-                <div class="font-black text-primary-800 text-sm">${gad.warga?.tanggal_lahir ? calculateAge(gad.warga.tanggal_lahir) : '-'} Thn</div>
-                <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">${gad.warga?.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan'}</div>
+            <td class="px-6 py-4 text-center border border-primary-50">
+                <div class="font-bold text-primary-800 text-sm">${gad.warga?.tanggal_lahir ? calculateAge(gad.warga.tanggal_lahir) : '-'} Thn</div>
+                <div class="text-[10px] text-primary-400 font-medium uppercase">${gad.warga?.jenis_kelamin === 'L' ? 'L' : 'P'}</div>
             </td>
-            <td class="px-6 py-6 font-bold text-primary-400">${new Date(gad.tgl_gad).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'})}</td>
-            <td class="px-6 py-6 text-center font-black text-2xl text-primary-800">${gad.skor}</td>
-            <td class="px-6 py-6 text-center"><span class="px-4 py-1.5 text-[10px] font-black rounded-lg uppercase tracking-widest shadow-sm ${status.color}">${status.label}</span></td>
+            <td class="px-6 py-4 font-medium text-gray-500 border border-primary-50">${new Date(gad.tgl_gad).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'})}</td>
+            <td class="px-6 py-4 text-center font-black text-2xl text-primary-800 border border-primary-50 bg-primary-50/20">${gad.skor}</td>
+            <td class="px-6 py-4 text-center border border-primary-50"><span class="px-3 py-1 text-[10px] font-black rounded-lg uppercase tracking-widest ${status.color}">${status.label}</span></td>
         </tr>`;
     }).join('');
 
@@ -359,20 +361,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     document.getElementById('filterWarga').addEventListener('change', loadData);
 });
-function renderPagination(data, containerId, loadFn) {
-    const container = document.getElementById(containerId);
-    if (!data.last_page || data.last_page <= 1) {
-        container.innerHTML = '';
-        return;
-    }
-    
-    let html = '';
-    for (let i = 1; i <= data.last_page; i++) {
-        const isActive = i === data.current_page;
-        html += `<button onclick="${loadFn}(${i})" class="px-5 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${isActive ? 'bg-primary-800 text-white shadow-lg' : 'bg-primary-50 text-primary-800 hover:bg-primary-100'}">${i}</button>`;
-    }
-    container.innerHTML = html;
-}
 
 async function loadTdData(page = 1) {
     const wargaId = document.getElementById('filterWarga').value;
@@ -381,7 +369,7 @@ async function loadTdData(page = 1) {
     const res = await apiCall(`/tekanan-darah?page=${page}&warga_id=${wargaId}&start_date=${start}&end_date=${end}`);
     if (res && res.success) {
         renderTdTable(res.data.data || []);
-        renderPagination(res.data, 'tdPagination', 'loadTdData');
+        window.renderTablePagination(res.data, 'tdPagination', 'loadTdData');
     }
 }
 
@@ -392,7 +380,7 @@ async function loadGadData(page = 1) {
     const res = await apiCall(`/gad?page=${page}&warga_id=${wargaId}&start_date=${start}&end_date=${end}`);
     if (res && res.success) {
         renderGadTable(res.data.data || []);
-        renderPagination(res.data, 'gadPagination', 'loadGadData');
+        window.renderTablePagination(res.data, 'gadPagination', 'loadGadData');
     }
 }
 

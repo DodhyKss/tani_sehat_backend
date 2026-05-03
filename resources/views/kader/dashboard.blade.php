@@ -1,9 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-8">
-    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2">Dashboard Kader</h1>
-    <p class="text-primary-800 text-lg font-bold">Monitoring kesehatan warga dampingan Anda</p>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+    <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Dashboard Kader</h1>
+        <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Monitoring Kesehatan Warga Dampingan Anda</p>
+    </div>
 </div>
 
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-10">
@@ -117,10 +119,10 @@
             <p class="text-primary-800 text-base font-bold mt-1 uppercase tracking-widest opacity-60">Data Warga Dampingan Anda</p>
         </div>
         <div class="flex flex-wrap items-center gap-3">
-            <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl font-black text-sm flex items-center gap-2 transition-all shadow-lg shadow-emerald-900/10 uppercase tracking-widest">
+            {{-- <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl font-black text-sm flex items-center gap-2 transition-all shadow-lg shadow-emerald-900/10 uppercase tracking-widest">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                 EXCEL
-            </button>
+            </button> --}}
             <a href="/kader/kesehatan" class="bg-primary-50 text-primary-800 hover:bg-primary-100 px-6 py-3 rounded-2xl font-black text-sm flex items-center gap-2 transition-all group uppercase tracking-widest">
                 LIHAT RIWAYAT
                 <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -129,23 +131,25 @@
     </div>
     
     <div class="hidden md:block overflow-x-auto -mx-10 px-10">
-        <table class="w-full text-left">
-            <thead class="text-primary-400 uppercase text-xs font-black tracking-[0.2em] border-b-2 border-primary-50">
+        <table class="w-full text-left border-collapse border border-primary-100 rounded-xl overflow-hidden">
+            <thead class="text-primary-800 uppercase text-xs font-black tracking-widest bg-primary-50">
                 <tr>
-                    <th class="px-6 py-6">Warga (NIK)</th>
-                    <th class="px-6 py-6 text-center">Profil</th>
-                    <th class="px-6 py-6 text-center">TD Awal</th>
-                    <th class="px-6 py-6 text-center">TD Akhir</th>
-                    <th class="px-6 py-6 text-center">GAD7 Awal</th>
-                    <th class="px-6 py-6 text-center">GAD7 Akhir</th>
-                    <th class="px-6 py-6 text-center">Status</th>
+                    <th class="px-6 py-4 border border-primary-100">Warga (NIK)</th>
+                    <th class="px-6 py-4 text-center border border-primary-100">Profil</th>
+                    <th class="px-6 py-4 text-center border border-primary-100">TD Awal</th>
+                    <th class="px-6 py-4 text-center border border-primary-100">TD Akhir</th>
+                    <th class="px-6 py-4 text-center border border-primary-100">GAD7 Awal</th>
+                    <th class="px-6 py-4 text-center border border-primary-100">GAD7 Akhir</th>
+                    <th class="px-6 py-4 text-center border border-primary-100">Status</th>
                 </tr>
             </thead>
-            <tbody id="progresTable" class="divide-y-2 divide-primary-50">
-                <tr><td colspan="5" class="px-6 py-20 text-center text-primary-300 font-bold italic animate-pulse text-xl">Memuat data progres...</td></tr>
+            <tbody id="progresTable" class="divide-y divide-primary-100">
+                <tr><td colspan="7" class="px-6 py-20 text-center text-primary-300 font-bold italic animate-pulse text-xl">Memuat data progres...</td></tr>
             </tbody>
         </table>
     </div>
+
+    <div id="progresPagination" class="mt-8 flex justify-center gap-2"></div>
 
     <div id="progresCards" class="md:hidden space-y-6">
         <div class="text-center py-12 text-primary-300 font-bold italic">Memuat data progres...</div>
@@ -228,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadGadCharts();
     loadProgresWarga();
 });
+
 
 async function loadSummary() {
     try {
@@ -341,9 +346,9 @@ async function loadGadCharts() {
     } catch (e) { console.error("Error loading GAD charts", e); }
 }
 
-async function loadProgresWarga() {
+async function loadProgresWarga(page = 1) {
     try {
-        const res = await apiCall('/dashboard/progres-warga');
+        const res = await apiCall(`/dashboard/progres-warga?page=${page}`);
         const tbody = document.getElementById('progresTable');
         const cards = document.getElementById('progresCards');
         
@@ -363,40 +368,41 @@ async function loadProgresWarga() {
             };
 
             if (tbody) {
-                tbody.innerHTML = res.data.map(item => `
+                tbody.innerHTML = (res.data.data || res.data).map(item => `
                     <tr class="hover:bg-primary-50/50 transition-colors group">
-                        <td class="px-6 py-6">
-                            <div class="font-black text-black text-lg leading-tight">${item.nama}</div>
-                            <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">NIK: ${item.nik || '-'}</div>
+                        <td class="px-6 py-4 border border-primary-50">
+                            <div class="font-bold text-black">${item.nama}</div>
+                            <div class="text-[10px] text-primary-400 font-medium">NIK: ${item.nik || '-'}</div>
                         </td>
-                        <td class="px-6 py-6 text-center">
-                            <div class="font-black text-primary-800 text-sm">${item.umur} Thn</div>
-                            <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">${item.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan'}</div>
+                        <td class="px-6 py-4 text-center border border-primary-50">
+                            <div class="font-bold text-primary-800 text-sm">${item.umur} Thn</div>
+                            <div class="text-[10px] text-primary-400 font-medium uppercase">${item.jenis_kelamin === 'L' ? 'L' : 'P'}</div>
                         </td>
-                        <td class="px-6 py-6 text-center border-x border-primary-50">
-                            <div class="font-black text-base text-primary-800 mb-1">${item.td.awal}</div>
-                            <span class="px-3 py-1 text-[10px] rounded-lg uppercase font-black tracking-widest ${getBadge(item.td.status_awal)}">${item.td.status_awal.replace('pre_hipertensi', 'Pra-Hipertensi').replace('_', ' ')}</span>
+                        <td class="px-6 py-4 text-center border border-primary-50">
+                            <div class="font-bold text-sm text-gray-600">${item.td.awal}</div>
+                            <div class="text-[9px] font-black uppercase tracking-tighter ${getBadge(item.td.status_awal)} px-2 rounded">${item.td.status_awal.replace('pre_hipertensi', 'Pra-Hiper').replace('_', ' ')}</div>
                         </td>
-                        <td class="px-6 py-6 text-center border-r border-primary-50">
-                            <div class="font-black text-xl text-primary-600 mb-1">${item.td.akhir}</div>
-                            <span class="px-3 py-1 text-[10px] rounded-lg uppercase font-black tracking-widest ${getBadge(item.td.status_akhir)}">${item.td.status_akhir.replace('pre_hipertensi', 'Pra-Hipertensi').replace('_', ' ')}</span>
+                        <td class="px-6 py-4 text-center border border-primary-50 bg-primary-50/20">
+                            <div class="font-black text-base text-primary-600">${item.td.akhir}</div>
+                            <div class="text-[9px] font-black uppercase tracking-tighter ${getBadge(item.td.status_akhir)} px-2 rounded">${item.td.status_akhir.replace('pre_hipertensi', 'Pra-Hiper').replace('_', ' ')}</div>
                         </td>
-                        <td class="px-6 py-6 text-center border-r border-primary-50">
-                            <div class="font-black text-base text-primary-800 mb-1">SKOR: ${item.gad.awal}</div>
-                            <span class="px-3 py-1 text-[10px] rounded-lg uppercase font-black tracking-widest ${getBadge(item.gad.status_awal)}">${item.gad.status_awal.replace('_', ' ')}</span>
+                        <td class="px-6 py-4 text-center border border-primary-50">
+                            <div class="font-bold text-sm text-gray-600">${item.gad.awal}</div>
+                            <div class="text-[9px] font-black uppercase tracking-tighter ${getBadge(item.gad.status_awal)} px-2 rounded">${item.gad.status_awal.replace('_', ' ')}</div>
                         </td>
-                        <td class="px-6 py-6 text-center border-r border-primary-50">
-                            <div class="font-black text-xl text-primary-600 mb-1">SKOR: ${item.gad.akhir}</div>
-                            <span class="px-3 py-1 text-[10px] rounded-lg uppercase font-black tracking-widest ${getBadge(item.gad.status_akhir)}">${item.gad.status_akhir.replace('_', ' ')}</span>
+                        <td class="px-6 py-4 text-center border border-primary-50 bg-primary-50/20">
+                            <div class="font-black text-base text-primary-600">${item.gad.akhir}</div>
+                            <div class="text-[9px] font-black uppercase tracking-tighter ${getBadge(item.gad.status_akhir)} px-2 rounded">${item.gad.status_akhir.replace('_', ' ')}</div>
                         </td>
-                        <td class="px-6 py-6 text-center">
-                            <span class="px-4 py-2 rounded-2xl text-xs font-black uppercase tracking-widest ${item.status_perubahan === 'Ada Perubahan' ? 'bg-amber-100 text-amber-800 border-2 border-amber-200' : (item.status_perubahan === 'Tetap' ? 'bg-emerald-100 text-emerald-800' : 'bg-primary-50 text-primary-300')}">
+                        <td class="px-6 py-4 text-center border border-primary-50">
+                            <span class="px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-tighter ${item.status_perubahan === 'Ada Perubahan' ? 'bg-amber-100 text-amber-800' : (item.status_perubahan === 'Tetap' ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-400')}">
                                 ${item.status_perubahan}
                             </span>
                         </td>
                     </tr>
                 `).join('');
             }
+            window.renderTablePagination(res.data, 'progresPagination', 'loadProgresWarga');
 
             if (cards) {
                 cards.innerHTML = res.data.map(item => `

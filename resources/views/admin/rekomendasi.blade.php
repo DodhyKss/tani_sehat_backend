@@ -1,45 +1,75 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-10">
-    <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Manajemen Rekomendasi</h1>
-    <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Kelola Video, PDF, Gambar, & Program Olahraga</p>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+    <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-black mb-2 tracking-tight">Manajemen Rekomendasi</h1>
+        <p class="text-primary-800 text-lg font-bold uppercase tracking-widest opacity-60">Kelola Video, PDF, Gambar, & Program Olahraga</p>
+    </div>
 </div>
 
-<!-- Tabs -->
-<div class="flex gap-3 mb-10 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar">
-    <button onclick="switchTab('video')" class="tab-btn px-8 py-4 rounded-2xl font-black text-sm whitespace-nowrap active bg-primary-800 text-white shadow-xl shadow-primary-900/20 uppercase tracking-widest transition-all" id="tab-video">VIDEO EDUKASI</button>
-    <button onclick="switchTab('materi')" class="tab-btn px-8 py-4 rounded-2xl font-black text-sm whitespace-nowrap bg-white text-primary-400 border-2 border-primary-50 shadow-sm uppercase tracking-widest transition-all" id="tab-materi">MATERI PDF</button>
-    <button onclick="switchTab('gambar')" class="tab-btn px-8 py-4 rounded-2xl font-black text-sm whitespace-nowrap bg-white text-primary-400 border-2 border-primary-50 shadow-sm uppercase tracking-widest transition-all" id="tab-gambar">GAMBAR EDUKASI</button>
-    <button onclick="switchTab('olahraga')" class="tab-btn px-8 py-4 rounded-2xl font-black text-sm whitespace-nowrap bg-white text-primary-400 border-2 border-primary-50 shadow-sm uppercase tracking-widest transition-all" id="tab-olahraga">PROGRAM OLAHRAGA</button>
+<!-- Category Selector (Responsive Select) -->
+<div class="mb-10">
+    <div class="relative group">
+        <label class="block text-[10px] font-black text-primary-800/40 uppercase tracking-[0.2em] mb-3 ml-2">Pilih Tipe Konten</label>
+        <div class="relative">
+            <select onchange="switchTab(this.value)" class="w-full appearance-none bg-white border-2 border-primary-800 text-primary-800 font-black text-sm px-8 py-5 rounded-[1.5rem] shadow-xl shadow-primary-900/5 focus:border-primary-800 focus:ring-4 focus:ring-primary-800/5 transition-all outline-none uppercase tracking-widest cursor-pointer">
+                <option value="video">Video Edukasi</option>
+                <option value="materi">Materi PDF</option>
+                <option value="gambar">Gambar Edukasi</option>
+                <option value="olahraga">Program Olahraga</option>
+            </select>
+            <div class="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-primary-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M19 9l-7 7-7-7"/></svg>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Header -->
-<div class="flex items-center justify-between mb-6">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
     <div class="flex items-center gap-4">
         <div class="w-2 h-10 bg-primary-800 rounded-full"></div>
         <h2 id="sectionTitle" class="text-2xl font-black text-black tracking-tight uppercase">Daftar Video</h2>
     </div>
-    <button onclick="openAddModal()" class="bg-primary-800 hover:bg-black text-white px-6 py-4 rounded-2xl font-black text-xs flex items-center gap-3 transition-all shadow-lg uppercase tracking-widest">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-        Tambah Baru
+    <button onclick="openAddModal()" class="w-full sm:w-auto bg-primary-800 hover:bg-black text-white px-8 py-5 rounded-[1.5rem] font-black text-xs flex items-center justify-center gap-3 transition-all shadow-xl shadow-primary-900/20 uppercase tracking-widest">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
+        Tambah Konten
     </button>
 </div>
 
-<!-- Card List (All Screens) -->
-<div id="contentList" class="space-y-2">
-    <!-- Loaded via JS -->
+<div class="bg-white rounded-[2.5rem] shadow-xl shadow-primary-900/5 border border-primary-100 overflow-hidden mb-10">
+    <!-- Desktop Table -->
+    <div class="hidden md:block overflow-x-auto p-8">
+        <table class="w-full text-left">
+            <thead class="text-primary-400 uppercase text-xs font-black tracking-[0.2em] border-b-2 border-primary-50">
+                <tr>
+                    <th class="px-6 py-6">Informasi Konten</th>
+                    <th class="px-6 py-6 text-center">Target TD</th>
+                    <th class="px-6 py-6 text-center">Target GAD</th>
+                    <th class="px-6 py-6 text-right">Tindakan</th>
+                </tr>
+            </thead>
+            <tbody id="contentTable" class="divide-y-2 divide-primary-50">
+                <tr><td colspan="4" class="px-6 py-12 text-center text-primary-300 font-bold italic">Memuat data...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Mobile Cards -->
+    <div id="contentCards" class="md:hidden divide-y-2 divide-primary-50">
+        <div class="p-8 text-center text-primary-300 font-bold italic uppercase tracking-widest">Memuat data...</div>
+    </div>
 </div>
 
 <!-- Empty -->
 <div id="emptyState" class="hidden text-center py-8">
-    <p class="text-gray-400 text-sm">Belum ada data</p>
+    {{-- <p class="text-gray-400 text-sm">Belum ada data</p> --}}
 </div>
 
 <!-- Loading -->
 <div id="loadingState" class="hidden text-center py-8">
     <div class="animate-spin w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full mx-auto"></div>
-</div>
 </div>
 
 <!-- Modal -->
@@ -103,10 +133,6 @@ let editMode = false;
 
 function switchTab(tab) {
     currentTab = tab;
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.className = 'tab-btn px-8 py-4 rounded-2xl font-black text-sm whitespace-nowrap bg-white text-primary-400 border-2 border-primary-50 shadow-sm uppercase tracking-widest transition-all';
-    });
-    document.getElementById('tab-' + tab).className = 'tab-btn px-8 py-4 rounded-2xl font-black text-sm whitespace-nowrap active bg-primary-800 text-white shadow-xl shadow-primary-900/20 uppercase tracking-widest transition-all';
     loadData();
 }
 
@@ -116,12 +142,14 @@ function getTitle() {
 }
 
 async function loadData() {
-    const list = document.getElementById('contentList');
+    const tbody = document.getElementById('contentTable');
+    const cards = document.getElementById('contentCards');
     const empty = document.getElementById('emptyState');
     const loading = document.getElementById('loadingState');
     
     document.getElementById('sectionTitle').textContent = getTitle();
-    list.innerHTML = '';
+    if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-12 text-center text-primary-300 font-bold italic">Memuat data...</td></tr>';
+    if (cards) cards.innerHTML = '<div class="p-8 text-center text-primary-300 font-bold italic">Memuat data...</div>';
     empty.classList.add('hidden');
     loading.classList.remove('hidden');
     
@@ -133,31 +161,88 @@ async function loadData() {
     if (res && res.success) {
         if (res.data.length === 0) {
             empty.classList.remove('hidden');
+            if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-12 text-center text-gray-400">Tidak ada data</td></tr>';
+            if (cards) cards.innerHTML = '<div class="p-8 text-center text-gray-400">Tidak ada data</div>';
             return;
         }
         
-        list.innerHTML = res.data.map(item => `
-            <div class="bg-white rounded-[2rem] border-2 border-primary-50 p-6 shadow-xl shadow-primary-900/5 hover:border-primary-200 transition-all group">
-                <div class="flex items-start justify-between gap-6">
-                    <div class="flex-1 min-w-0">
-                        <p class="font-black text-black text-xl md:text-2xl tracking-tight leading-tight group-hover:text-primary-800 transition-colors">${item.judul || item.nama_olahraga}</p>
-                        ${item.link_embed ? `<p class="text-xs text-primary-400 font-bold truncate mt-2 bg-primary-50/50 px-4 py-1.5 rounded-xl inline-block max-w-full italic border border-primary-100">${item.link_embed}</p>` : ''}
-                        <div class="flex flex-wrap gap-3 mt-5">
-                            <span class="px-4 py-2 bg-emerald-50 text-emerald-800 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] border-2 border-emerald-100 shadow-sm">TD: ${item.kategori_td.toUpperCase()}</span>
-                            <span class="px-4 py-2 bg-amber-50 text-amber-800 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] border-2 border-amber-100 shadow-sm">GAD: ${item.kategori_gad.toUpperCase()}</span>
+        const rowsHtml = res.data.map(item => {
+            let icon = '';
+            if (currentTab === 'video') icon = '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>';
+            else if (currentTab === 'materi') icon = '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>';
+            else if (currentTab === 'gambar') icon = '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
+            else icon = '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v8H2z"/><line x1="10" y1="8" x2="10" y2="16"/></svg>';
+
+            return `
+            <tr class="hover:bg-primary-50/50 transition-colors group">
+                <td class="px-6 py-6">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-primary-50 rounded-xl text-primary-800 flex-shrink-0 group-hover:scale-110 transition-transform">
+                            ${icon}
+                        </div>
+                        <div class="min-w-0">
+                            <p class="font-black text-black text-lg tracking-tight leading-tight group-hover:text-primary-800 transition-colors break-words">${item.judul || item.nama_olahraga}</p>
+                            ${item.link_embed ? `<p class="text-[10px] text-primary-400 font-bold truncate mt-1 italic">${item.link_embed}</p>` : ''}
                         </div>
                     </div>
-                    <div class="flex gap-3 shrink-0">
-                        <button onclick='openEditModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="p-4 text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-2xl transition-all transform hover:scale-110 shadow-sm">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                </td>
+                <td class="px-6 py-6 text-center">
+                    <span class="px-3 py-1 bg-emerald-50 text-emerald-800 rounded-lg text-[10px] font-black uppercase tracking-widest border border-emerald-100">${item.kategori_td.replace('_', ' ')}</span>
+                </td>
+                <td class="px-6 py-6 text-center">
+                    <span class="px-3 py-1 bg-amber-50 text-amber-800 rounded-lg text-[10px] font-black uppercase tracking-widest border border-amber-100">${item.kategori_gad}</span>
+                </td>
+                <td class="px-6 py-6 text-right">
+                    <div class="flex justify-end gap-2">
+                        <button onclick='openEditModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="p-3 bg-primary-50 hover:bg-primary-800 hover:text-white rounded-xl transition-all shadow-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                         </button>
-                        <button onclick="deleteItem(${item.id})" class="p-4 text-orange-600 bg-orange-50 hover:bg-orange-100 rounded-2xl transition-all transform hover:scale-110 shadow-sm">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        <button onclick="deleteItem(${item.id})" class="p-3 bg-orange-50 hover:bg-orange-600 hover:text-white rounded-xl transition-all shadow-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                         </button>
                     </div>
+                </td>
+            </tr>`;
+        }).join('');
+
+        const cardsHtml = res.data.map(item => {
+            let icon = '';
+            if (currentTab === 'video') icon = '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>';
+            else if (currentTab === 'materi') icon = '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>';
+            else if (currentTab === 'gambar') icon = '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
+            else icon = '<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v8H2z"/><line x1="10" y1="8" x2="10" y2="16"/></svg>';
+
+            return `
+            <div class="p-6 bg-white hover:bg-primary-50/20 transition-all group">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="p-4 bg-primary-50 rounded-2xl text-primary-800 flex-shrink-0">
+                        ${icon}
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="flex justify-between items-start">
+                            <p class="font-black text-black text-xl tracking-tight leading-tight group-hover:text-primary-800 transition-colors break-words">${item.judul || item.nama_olahraga}</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-3">
+                            <span class="px-3 py-1 bg-emerald-50 text-emerald-800 rounded-lg text-[9px] font-black uppercase tracking-widest border border-emerald-100">TD: ${item.kategori_td.replace('_', ' ')}</span>
+                            <span class="px-3 py-1 bg-amber-50 text-amber-800 rounded-lg text-[9px] font-black uppercase tracking-widest border border-amber-100">GAD: ${item.kategori_gad}</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        `).join('');
+                <div class="flex gap-2 pt-4 border-t border-primary-50">
+                    <button onclick='openEditModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="flex-1 flex items-center justify-center gap-2 py-3 bg-primary-50 text-primary-800 rounded-xl text-xs font-black uppercase tracking-widest">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        Edit
+                    </button>
+                    <button onclick="deleteItem(${item.id})" class="flex-1 flex items-center justify-center gap-2 py-3 bg-orange-50 text-orange-600 rounded-xl text-xs font-black uppercase tracking-widest">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        Hapus
+                    </button>
+                </div>
+            </div>`;
+        }).join('');
+
+        if (tbody) tbody.innerHTML = rowsHtml;
+        if (cards) cards.innerHTML = cardsHtml;
     }
 }
 
