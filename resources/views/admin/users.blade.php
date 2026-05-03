@@ -234,6 +234,8 @@ document.getElementById('userForm').addEventListener('submit', async (e) => {
         showAlert(id ? 'User berhasil diupdate' : 'User berhasil ditambahkan', 'success');
         closeUserModal();
         loadUsers(currentPage);
+    } else {
+        showAlert(res?.message || 'Gagal menyimpan data user');
     }
 });
 
@@ -243,6 +245,8 @@ async function deleteUser(id) {
     if (res && res.success) {
         showAlert('User berhasil dihapus', 'success');
         loadUsers(currentPage);
+    } else {
+        showAlert(res?.message || 'Gagal menghapus user');
     }
 }
 

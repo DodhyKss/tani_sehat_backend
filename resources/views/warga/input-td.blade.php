@@ -23,11 +23,11 @@
         <form id="tdForm" class="space-y-6">
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-lg font-bold text-white/90 mb-2">Sistole (mmHg)</label>
+                    <label class="block text-lg font-bold text-white/90 mb-2">Sistole</label>
                     <input type="number" id="systolic" min="60" max="250" required placeholder="120" class="w-full px-4 py-5 rounded-2xl bg-white/10 border-2 border-white/20 text-center text-3xl font-extrabold text-white focus:ring-4 focus:ring-primary-500/30 focus:border-white/50 transition-all placeholder:text-white/30 outline-none">
                 </div>
                 <div>
-                    <label class="block text-lg font-bold text-white/90 mb-2">Diastole (mmHg)</label>
+                    <label class="block text-lg font-bold text-white/90 mb-2">Diastole</label>
                     <input type="number" id="diastolic" min="40" max="150" required placeholder="80" class="w-full px-4 py-5 rounded-2xl bg-white/10 border-2 border-white/20 text-center text-3xl font-extrabold text-white focus:ring-4 focus:ring-primary-500/30 focus:border-white/50 transition-all placeholder:text-white/30 outline-none">
                 </div>
             </div>

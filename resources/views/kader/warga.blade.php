@@ -418,7 +418,7 @@ function renderLatestTable(data) {
         const tdAkhir = s?.tekanan_darah || '--/--';
         
         const gadAwal = fGad ? fGad.skor : '--';
-        const gadAkhir = s?.skor_gad !== null ? s.skor_gad : '--';
+        const gadAkhir = s?.skor_gad ?? '--';
 
         let trend = { label: 'Tidak Ada Perubahan', color: 'bg-gray-100 text-gray-600' };
         if (s && fTd) {
@@ -481,7 +481,7 @@ function renderLatestTable(data) {
         const tdAwal = fTd ? `${fTd.systolic}/${fTd.diastolic}` : '--/--';
         const tdAkhir = s?.tekanan_darah || '--/--';
         const gadAwal = fGad ? fGad.skor : '--';
-        const gadAkhir = s?.skor_gad !== null ? s.skor_gad : '--';
+        const gadAkhir = s?.skor_gad ?? '--';
 
         let trend = { label: 'Stabil', color: 'bg-gray-100 text-gray-600' };
         if (s && fTd) {

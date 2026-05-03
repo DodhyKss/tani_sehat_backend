@@ -138,8 +138,13 @@ let tdFullData = [];
 let gadFullData = [];
 
 async function exportTdToExcel() {
-    if (tdFullData.length === 0) { showAlert('Tidak ada data untuk diekspor'); return; }
-    const excelData = tdFullData.map(td => ({
+    const wargaId = document.getElementById('filterWarga').value;
+    const start = document.getElementById('startDate').value;
+    const end = document.getElementById('endDate').value;
+    const res = await apiCall(`/tekanan-darah?warga_id=${wargaId}&start_date=${start}&end_date=${end}&per_page=10000`);
+    const allData = res?.data?.data || [];
+    if (allData.length === 0) { showAlert('Tidak ada data untuk diekspor'); return; }
+    const excelData = allData.map(td => ({
         'Nama Warga': td.warga?.nama_lengkap || '-',
         'NIK': td.warga?.nik || '-',
         'Umur': td.warga?.tanggal_lahir ? calculateAge(td.warga.tanggal_lahir) : '-',
@@ -156,8 +161,13 @@ async function exportTdToExcel() {
 }
 
 async function exportGadToExcel() {
-    if (gadFullData.length === 0) { showAlert('Tidak ada data untuk diekspor'); return; }
-    const excelData = gadFullData.map(gad => ({
+    const wargaId = document.getElementById('filterWarga').value;
+    const start = document.getElementById('startDate').value;
+    const end = document.getElementById('endDate').value;
+    const res = await apiCall(`/gad?warga_id=${wargaId}&start_date=${start}&end_date=${end}&per_page=10000`);
+    const allData = res?.data?.data || [];
+    if (allData.length === 0) { showAlert('Tidak ada data untuk diekspor'); return; }
+    const excelData = allData.map(gad => ({
         'Nama Warga': gad.warga?.nama_lengkap || '-',
         'NIK': gad.warga?.nik || '-',
         'Umur': gad.warga?.tanggal_lahir ? calculateAge(gad.warga.tanggal_lahir) : '-',
@@ -195,27 +205,8 @@ function getStatusGad(skor) {
 }
 
 async function loadData() {
-    const wargaId = document.getElementById('filterWarga').value;
-    const start = document.getElementById('startDate').value;
-    const end = document.getElementById('endDate').value;
-    
-    try {
-        const [tdRes, gadRes] = await Promise.all([
-            apiCall(`/tekanan-darah?warga_id=${wargaId}&start_date=${start}&end_date=${end}&per_page=1000`),
-            apiCall(`/gad?warga_id=${wargaId}&start_date=${start}&end_date=${end}&per_page=1000`)
-        ]);
-        
-        if (tdRes && tdRes.success) {
-            tdFullData = tdRes.data.data || [];
-            renderTdTable(tdRes.data.data || []);
-            window.renderTablePagination(tdRes.data, 'tdPagination', 'loadTdData');
-        }
-        if (gadRes && gadRes.success) {
-            gadFullData = gadRes.data.data || [];
-            renderGadTable(gadRes.data.data || []);
-            window.renderTablePagination(gadRes.data, 'gadPagination', 'loadGadData');
-        }
-    } catch (e) { console.error(e); }
+    loadTdData(1);
+    loadGadData(1);
 }
 
 function renderTdTable(data) {
@@ -357,8 +348,9 @@ async function loadTdData(page = 1) {
     const wargaId = document.getElementById('filterWarga').value;
     const start = document.getElementById('startDate').value;
     const end = document.getElementById('endDate').value;
-    const res = await apiCall(`/tekanan-darah?page=${page}&warga_id=${wargaId}&start_date=${start}&end_date=${end}`);
+    const res = await apiCall(`/tekanan-darah?page=${page}&per_page=10&warga_id=${wargaId}&start_date=${start}&end_date=${end}`);
     if (res && res.success) {
+        tdFullData = res.data.data || [];
         renderTdTable(res.data.data || []);
         window.renderTablePagination(res.data, 'tdPagination', 'loadTdData');
     }
@@ -368,8 +360,9 @@ async function loadGadData(page = 1) {
     const wargaId = document.getElementById('filterWarga').value;
     const start = document.getElementById('startDate').value;
     const end = document.getElementById('endDate').value;
-    const res = await apiCall(`/gad?page=${page}&warga_id=${wargaId}&start_date=${start}&end_date=${end}`);
+    const res = await apiCall(`/gad?page=${page}&per_page=10&warga_id=${wargaId}&start_date=${start}&end_date=${end}`);
     if (res && res.success) {
+        gadFullData = res.data.data || [];
         renderGadTable(res.data.data || []);
         window.renderTablePagination(res.data, 'gadPagination', 'loadGadData');
     }

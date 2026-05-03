@@ -183,8 +183,10 @@
         if (!confirm('Hapus data ini secara permanen?')) return;
         const res = await apiCall(`/reproduksi/${id}`, 'DELETE');
         if (res && res.success) {
-            showAlert('Data berhasil dihapus', 'success');
+            showAlert('Data reproduksi berhasil dihapus', 'success');
             loadData(currentPage);
+        } else {
+            showAlert(res?.message || 'Gagal menghapus data reproduksi');
         }
     }
 

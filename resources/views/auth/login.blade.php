@@ -181,41 +181,48 @@
         }
     });
 
-    // High-end Alert System
+    // Use same toast notification as the rest of the app
     window.showAlert = function(message, type = 'error') {
-        const alertEl = document.getElementById('alertMessage');
-        if (!alertEl) return;
-        
-        alertEl.classList.remove('hidden', 'bg-red-50', 'text-red-900', 'border-red-500', 'bg-emerald-50', 'text-emerald-900', 'border-emerald-500', 'animate-in', 'fade-in', 'slide-in-from-top-8');
-        
-        const isError = type === 'error';
-        alertEl.classList.add(
-            isError ? 'bg-red-50' : 'bg-emerald-50',
-            isError ? 'text-red-900' : 'text-emerald-900',
-            isError ? 'border-red-500' : 'border-emerald-500',
-            'block', 'animate-in', 'fade-in', 'slide-in-from-top-8'
-        );
-        
-        alertEl.innerHTML = `
-            <div class="flex items-center gap-3 p-1">
-                <div class="p-2 rounded-full ${isError ? 'bg-red-100' : 'bg-emerald-100'}">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                        ${isError 
-                            ? '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>' 
-                            : '<polyline points="20 6 9 17 4 12"/>'}
-                    </svg>
+        const existing = document.getElementById('toastNotif');
+        if (existing) existing.remove();
+
+        const isSuccess = type === 'success';
+        const toast = document.createElement('div');
+        toast.id = 'toastNotif';
+        toast.style.cssText = 'position:fixed;top:24px;right:24px;z-index:99999;min-width:320px;max-width:420px;transform:translateX(120%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);';
+        toast.innerHTML = `
+            <div style="background:${isSuccess ? '#065f46' : '#7c2d12'};border-radius:1.25rem;padding:1.25rem 1.5rem;box-shadow:0 20px 50px rgba(0,0,0,0.25);border:2px solid ${isSuccess ? '#10b981' : '#ea580c'};display:flex;align-items:flex-start;gap:0.875rem;position:relative;overflow:hidden;">
+                <div style="flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;background:${isSuccess ? 'rgba(16,185,129,0.25)' : 'rgba(234,88,12,0.25)'};display:flex;align-items:center;justify-content:center;">
+                    ${isSuccess 
+                        ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>'
+                        : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+                    }
                 </div>
-                <div>
-                    <p class="text-[10px] font-black uppercase tracking-[0.2em] mb-0.5 opacity-60">${isError ? 'Terjadi Kesalahan' : 'Sukses'}</p>
-                    <p class="font-bold text-sm leading-tight">${message}</p>
+                <div style="flex:1;min-width:0;">
+                    <p style="font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.15em;color:${isSuccess ? '#6ee7b7' : '#fdba74'};margin-bottom:0.25rem;">${isSuccess ? 'Berhasil' : 'Terjadi Kesalahan'}</p>
+                    <p style="font-size:0.9rem;font-weight:700;color:white;line-height:1.4;">${message}</p>
                 </div>
+                <button onclick="this.closest('#toastNotif').remove()" style="flex-shrink:0;padding:0.25rem;color:rgba(255,255,255,0.5);background:none;border:none;cursor:pointer;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+                <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:${isSuccess ? '#10b981' : '#ea580c'};animation:toastProgress 4s linear forwards;"></div>
             </div>
         `;
-        
+
+        if (!document.getElementById('toastStyles')) {
+            const style = document.createElement('style');
+            style.id = 'toastStyles';
+            style.textContent = '@keyframes toastProgress{from{width:100%}to{width:0%}}';
+            document.head.appendChild(style);
+        }
+
+        document.body.appendChild(toast);
+        requestAnimationFrame(() => { toast.style.transform = 'translateX(0)'; });
+
         setTimeout(() => {
-            alertEl.classList.add('hidden');
-            alertEl.classList.remove('block');
-        }, 5000);
+            toast.style.transform = 'translateX(120%)';
+            setTimeout(() => toast.remove(), 400);
+        }, 4000);
     }
 </script>
 @endsection

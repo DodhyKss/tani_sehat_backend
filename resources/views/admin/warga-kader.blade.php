@@ -184,9 +184,14 @@ function selectWarga(wargaId) {
 async function removeKader(wargaId) {
     if (!confirm('Hapus warga dari kader?')) return;
     try {
-        await apiCall(`/users/remove-kader/${wargaId}`, 'DELETE');
+        const res = await apiCall(`/users/remove-kader/${wargaId}`, 'DELETE');
+        if (res && res.success) {
+            showAlert('Penugasan kader berhasil dihapus', 'success');
+        } else {
+            showAlert(res?.message || 'Gagal menghapus penugasan kader');
+        }
         loadData();
-    } catch (e) { console.error(e); alert('Gagal menghapus'); }
+    } catch (e) { console.error(e); showAlert('Gagal menghapus penugasan kader'); }
 }
 
 document.getElementById('assignForm').addEventListener('submit', async (e) => {
@@ -194,16 +199,21 @@ document.getElementById('assignForm').addEventListener('submit', async (e) => {
     const wargaId = document.getElementById('wargaSelect').value;
     const kaderId = document.getElementById('kaderSelect').value;
     
-    if (!wargaId || !kaderId) return alert('Pilih warga dan kader');
+    if (!wargaId || !kaderId) return showAlert('Pilih warga dan kader terlebih dahulu');
     
     try {
-        await apiCall('/users/assign-kader', 'POST', {
+        const res = await apiCall('/users/assign-kader', 'POST', {
             warga_id: parseInt(wargaId),
             kader_id: parseInt(kaderId)
         });
+        if (res && res.success) {
+            showAlert('Warga berhasil ditugaskan ke kader', 'success');
+        } else {
+            showAlert(res?.message || 'Gagal menugaskan warga ke kader');
+        }
         closeAssignModal();
         loadData();
-    } catch (e) { console.error(e); alert('Gagal assign'); }
+    } catch (e) { console.error(e); showAlert('Gagal menugaskan warga ke kader'); }
 });
 
 document.getElementById('searchWarga').addEventListener('input', (e) => {

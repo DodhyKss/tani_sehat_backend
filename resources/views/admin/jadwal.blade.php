@@ -151,6 +151,7 @@ document.getElementById('tdForm').addEventListener('submit', async (e) => {
     const data = { jenis_pengisian: 'td', jumlah: parseInt(document.getElementById('tdJumlah').value), tipe: document.getElementById('tdTipe').value };
     const res = await apiCall('/admin/jadwal', 'POST', data);
     if (res && res.success) showAlert('Pengaturan TD berhasil disimpan', 'success');
+    else showAlert(res?.message || 'Gagal menyimpan pengaturan TD');
     loadJadwal();
 });
 
@@ -159,6 +160,7 @@ document.getElementById('gadForm').addEventListener('submit', async (e) => {
     const data = { jenis_pengisian: 'gad7', jumlah: parseInt(document.getElementById('gadJumlah').value), tipe: document.getElementById('gadTipe').value };
     const res = await apiCall('/admin/jadwal', 'POST', data);
     if (res && res.success) showAlert('Pengaturan GAD7 berhasil disimpan', 'success');
+    else showAlert(res?.message || 'Gagal menyimpan pengaturan GAD7');
     loadJadwal();
 });
 

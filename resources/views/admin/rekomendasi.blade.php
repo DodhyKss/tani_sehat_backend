@@ -311,6 +311,11 @@ async function saveData(e) {
     const endpoint = currentTab === 'olahraga' ? '/admin/olahraga' : '/admin/' + currentTab;
     const url = editMode ? endpoint + '/' + id : endpoint;
     
+    // video & olahraga update routes use PUT; use _method spoofing for FormData
+    if (editMode && (currentTab === 'video' || currentTab === 'olahraga')) {
+        formData.append('_method', 'PUT');
+    }
+
     try {
         const currentToken = localStorage.getItem('token');
         const res = await fetch(API_URL + url, {
@@ -321,14 +326,14 @@ async function saveData(e) {
         
         const result = await res.json();
         if (result.success) {
-            showAlert('Data disimpan', 'success');
+            showAlert('Konten berhasil disimpan', 'success');
             closeFormModal();
             loadData();
         } else {
-            showAlert(result.message || 'Gagal');
+            showAlert(result.message || 'Gagal menyimpan konten');
         }
     } catch (err) {
-        showAlert('Error');
+        showAlert('Gagal terhubung ke server');
     }
 }
 
@@ -339,8 +344,10 @@ async function deleteItem(id) {
     const res = await apiCall(endpoint + '/' + id, 'DELETE');
     
     if (res && res.success) {
-        showAlert('Dihapus', 'success');
+        showAlert('Konten berhasil dihapus', 'success');
         loadData();
+    } else {
+        showAlert(res?.message || 'Gagal menghapus konten');
     }
 }
 

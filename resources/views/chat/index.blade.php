@@ -331,10 +331,10 @@ function renderMessages(messages) {
                             ${isMe && m.is_read ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" class="text-emerald-400"><path d="M20 6L9 17l-5-5"/></svg>' : ''}
                         </div>
                     </div>
-                    <button onclick="deleteMessage(${m.id})" 
-                            class="absolute top-1/2 -translate-y-1/2 ${isMe ? '-left-10 md:-left-16' : '-right-10 md:-right-16'} p-2 md:p-3 text-slate-300 hover:text-rose-600 opacity-0 group-hover:opacity-100 transition-all bg-white shadow-xl rounded-xl md:rounded-2xl border-2 border-slate-50">
+                    ${isMe ? `<button onclick="deleteMessage(${m.id})" 
+                            class="absolute top-1/2 -translate-y-1/2 -left-10 md:-left-16 p-2 md:p-3 text-slate-300 hover:text-rose-600 opacity-0 group-hover:opacity-100 transition-all bg-white shadow-xl rounded-xl md:rounded-2xl border-2 border-slate-50">
                         <svg class="w-3.5 h-3.5 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
-                    </button>
+                    </button>` : ''}
                 </div>
             </div>
         `;
