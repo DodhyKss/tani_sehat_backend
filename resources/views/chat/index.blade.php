@@ -20,6 +20,11 @@
         border: none !important;
         margin: 0 !important;
     }
+    /* Ensure chat window fills properly in fullscreen */
+    .chat-fullscreen .chat-window-inner {
+        height: 100dvh;
+        max-height: 100dvh;
+    }
     @media (min-width: 768px) {
         .chat-fullscreen {
             position: static !important;
@@ -27,6 +32,12 @@
             border-radius: inherit !important;
             border: inherit !important;
         }
+    }
+    /* Messages scroll from bottom up */
+    .messages-scroll {
+        display: flex;
+        flex-direction: column-reverse;
+        overflow-y: auto;
     }
 </style>
 
@@ -46,7 +57,7 @@
         </div>
         
         <!-- Chat Window -->
-        <div class="flex-1 flex flex-col hidden bg-slate-50" id="chatWindow">
+        <div class="flex-1 flex-col hidden bg-slate-50 chat-window-inner" id="chatWindow" style="display:none;">
             <!-- Chat Header -->
             <div class="p-3 md:p-6 border-b-2 md:border-b-4 border-primary-50 flex items-center justify-between gap-2 md:gap-4 bg-primary-800 md:bg-white z-10 shadow-md flex-shrink-0">
                 <div class="flex items-center gap-3 md:gap-5 min-w-0">
@@ -69,12 +80,12 @@
                 </button>
             </div>
             
-            <!-- Messages Area - this is the only scrollable part -->
-            <div class="flex-1 overflow-y-auto p-3 md:p-8 space-y-3 md:space-y-8 custom-scrollbar bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:20px_20px] md:[background-size:32px_32px]" id="messagesContainer">
+            <!-- Messages Area - scrollable, newest at bottom -->
+            <div class="flex-1 overflow-y-auto p-3 md:p-8 custom-scrollbar bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:20px_20px] md:[background-size:32px_32px]" id="messagesContainer" style="min-height:0;">
                 <div class="text-center text-primary-300 py-12 text-[10px] md:text-sm font-black italic uppercase tracking-widest opacity-50">Memuat pesan...</div>
             </div>
             
-            <!-- Input Area - always at bottom -->
+            <!-- Input Area - always pinned at bottom -->
             <div class="p-2 md:p-6 bg-white border-t-2 md:border-t-4 border-primary-50 shadow-[0_-5px_20px_rgba(0,0,0,0.02)] flex-shrink-0">
                 <form id="messageForm" class="flex items-end gap-2 md:gap-4 max-w-6xl mx-auto">
                     <div class="flex-1 relative">
@@ -237,7 +248,9 @@ function selectConversation(id, name) {
         document.getElementById('chatListContainer').classList.add('hidden');
     }
     
-    document.getElementById('chatWindow').classList.remove('hidden');
+    const chatWindow = document.getElementById('chatWindow');
+    chatWindow.style.display = 'flex';
+    chatWindow.classList.remove('hidden');
     document.getElementById('emptyState').classList.add('hidden');
     document.getElementById('emptyState').classList.remove('md:flex');
     
@@ -245,6 +258,9 @@ function selectConversation(id, name) {
     document.getElementById('partnerName').textContent = name;
     
     loadMessages();
+    // Reset loaded flag so messages auto-scroll to bottom for new conversation
+    const msgContainer = document.getElementById('messagesContainer');
+    delete msgContainer.dataset.loaded;
     chatInterval = setInterval(loadMessages, 3000);
     loadConversations();
 }
@@ -252,7 +268,9 @@ function selectConversation(id, name) {
 function closeChat() {
     if (chatInterval) clearInterval(chatInterval);
     currentConversationId = null;
-    document.getElementById('chatWindow').classList.add('hidden');
+    const chatWindow = document.getElementById('chatWindow');
+    chatWindow.style.display = 'none';
+    chatWindow.classList.add('hidden');
     document.getElementById('chatListContainer').classList.remove('hidden');
     document.getElementById('chatMainContainer').classList.remove('chat-fullscreen');
     document.getElementById('emptyState').classList.add('md:flex');
@@ -301,7 +319,7 @@ function renderMessages(messages) {
         return;
     }
     
-    const html = messages.map(m => {
+    const html = '<div class="space-y-3 md:space-y-8">' + messages.map(m => {
         const isMe = m.sender_id === user.id;
         return `
             <div class="flex w-full ${isMe ? 'justify-end' : 'justify-start'} group">
@@ -320,11 +338,15 @@ function renderMessages(messages) {
                 </div>
             </div>
         `;
-    }).join('');
+    }).join('') + '</div>';
     
-    const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 150;
+    const wasAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 150;
     container.innerHTML = html;
-    if (isAtBottom) container.scrollTop = container.scrollHeight;
+    // Auto-scroll to bottom on first load or when already at bottom
+    if (wasAtBottom || !container.dataset.loaded) {
+        container.scrollTop = container.scrollHeight;
+        container.dataset.loaded = 'true';
+    }
 }
 
 document.getElementById('messageForm').addEventListener('submit', async (e) => {

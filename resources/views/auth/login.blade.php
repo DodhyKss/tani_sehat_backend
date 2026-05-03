@@ -96,7 +96,14 @@
 @section('scripts')
 <script>
     if (localStorage.getItem('token')) {
-        window.location.href = '/';
+        const savedUser = JSON.parse(localStorage.getItem('user'));
+        if (savedUser && savedUser.role === 'warga') {
+            window.location.href = '/warga';
+        } else if (savedUser && savedUser.role === 'kader') {
+            window.location.href = '/kader';
+        } else {
+            window.location.href = '/dashboard';
+        }
     }
 
     // Modern Password Toggle
