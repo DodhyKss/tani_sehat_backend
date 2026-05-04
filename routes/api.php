@@ -17,10 +17,13 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/file', function (\Illuminate\Http\Request $request) {
     $path = $request->query('path');
     if (!$path) return response()->json(['error' => 'Path required'], 400);
-    $fullPath = base_path('public/' . $path);
+    $fullPath = public_path($path);
     if (file_exists($fullPath)) {
         return response()->file($fullPath, [
-            'Access-Control-Allow-Origin' => '*'
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS',
+            'Access-Control-Allow-Headers' => '*',
+            'Access-Control-Expose-Headers' => '*',
         ]);
     }
     return response()->json(['error' => 'File not found'], 404);
