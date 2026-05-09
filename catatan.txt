@@ -40,3 +40,14 @@ INFO LEBIH LANJUT
 berupa 1. Grafik Tekanan Darah berapa yang tergolong Normal, P-H, H yang terbagi perminggu
 5. Grafik GAD7 berapa yang tergolong Normal, R, ST yang terbagi perminggu
 grafik gunakan yang bar dan bundar(pie) 
+
+
+NOTE:
+Backend Laravel :
+1. Perbaiki Validasi Jenis Kelamin saat ditampilkan karena ada user warga jenis kelamin Laki-Laki tetapi ditampilkan perempuan
+2. Berikan Validasi di Menu Reproduksi Hanya dapat di tampilkan ke Warga jenis kelamin perempuan saja
+
+Backend Flutter :
+1. Simpan Token Meskipun User menutup Aplikasi sehingga User
+2. Validasi Menu reproduksi agar menampilkan menu reproduksi jika user berjenis kelamin perempuan
+3. Buat Auto Reload ambil pesan terbaru di menu Chat

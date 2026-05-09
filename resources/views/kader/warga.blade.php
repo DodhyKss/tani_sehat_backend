@@ -445,7 +445,7 @@ function renderLatestTable(data) {
                 </td>
                 <td class="px-6 py-6 text-center">
                     <div class="font-black text-primary-800 text-sm">${w.tanggal_lahir ? calculateAge(w.tanggal_lahir) : '-'} Thn</div>
-                    <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">${w.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan'}</div>
+                    <div class="text-[10px] text-primary-400 font-black uppercase tracking-widest mt-1">${(w.jenis_kelamin?.toLowerCase() === 'l' || w.jenis_kelamin?.toLowerCase() === 'laki-laki') ? 'Laki-laki' : 'Perempuan'}</div>
                 </td>
                 <td class="px-6 py-6 text-center border-x border-primary-50">
                     <div class="flex flex-col items-center">

@@ -384,7 +384,7 @@ async function loadProgresWarga(page = 1) {
                         </td>
                         <td class="px-6 py-4 text-center border border-primary-50">
                             <div class="font-bold text-primary-800 text-sm">${item.umur} Thn</div>
-                            <div class="text-[10px] text-primary-400 font-medium uppercase">${item.jenis_kelamin === 'L' ? 'L' : 'P'}</div>
+                            <div class="text-[10px] text-primary-400 font-medium uppercase">${(item.jenis_kelamin?.toLowerCase() === 'l' || item.jenis_kelamin?.toLowerCase() === 'laki-laki') ? 'L' : 'P'}</div>
                         </td>
                         <td class="px-6 py-4 text-center border border-primary-50">
                             <div class="font-bold text-sm text-gray-600">${item.td.awal}</div>

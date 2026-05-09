@@ -155,6 +155,11 @@
     });
 
     // Initialize
-    loadHistory();
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (currentUser && currentUser.role === 'warga' && currentUser.jenis_kelamin?.toLowerCase() !== 'perempuan' && currentUser.jenis_kelamin?.toLowerCase() !== 'p') {
+        window.location.href = '/warga';
+    } else {
+        loadHistory();
+    }
 </script>
 @endsection

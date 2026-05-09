@@ -233,7 +233,7 @@ function renderTdTable(data) {
             </td>
             <td class="px-6 py-4 text-center border border-primary-50">
                 <div class="font-bold text-primary-800 text-sm">${td.warga?.tanggal_lahir ? calculateAge(td.warga.tanggal_lahir) : '-'} Thn</div>
-                <div class="text-[10px] text-primary-400 font-medium uppercase">${td.warga?.jenis_kelamin === 'L' ? 'L' : 'P'}</div>
+                <div class="text-[10px] text-primary-400 font-medium uppercase">${(td.warga?.jenis_kelamin?.toLowerCase() === 'l' || td.warga?.jenis_kelamin?.toLowerCase() === 'laki-laki') ? 'L' : 'P'}</div>
             </td>
             <td class="px-6 py-4 font-medium text-gray-500 border border-primary-50">${new Date(td.tgl_cek).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'})}</td>
             <td class="px-6 py-4 text-center font-black text-xl text-primary-800 border border-primary-50 bg-primary-50/20">${td.systolic}/${td.diastolic}</td>
@@ -287,7 +287,7 @@ function renderGadTable(data) {
             </td>
             <td class="px-6 py-4 text-center border border-primary-50">
                 <div class="font-bold text-primary-800 text-sm">${gad.warga?.tanggal_lahir ? calculateAge(gad.warga.tanggal_lahir) : '-'} Thn</div>
-                <div class="text-[10px] text-primary-400 font-medium uppercase">${gad.warga?.jenis_kelamin === 'L' ? 'L' : 'P'}</div>
+                <div class="text-[10px] text-primary-400 font-medium uppercase">${(gad.warga?.jenis_kelamin?.toLowerCase() === 'l' || gad.warga?.jenis_kelamin?.toLowerCase() === 'laki-laki') ? 'L' : 'P'}</div>
             </td>
             <td class="px-6 py-4 font-medium text-gray-500 border border-primary-50">${new Date(gad.tgl_gad).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'})}</td>
             <td class="px-6 py-4 text-center font-black text-2xl text-primary-800 border border-primary-50 bg-primary-50/20">${gad.skor}</td>
