@@ -16,9 +16,13 @@
             <svg class="w-6 h-6 text-primary-400 absolute left-5 top-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         </div>
         <div class="flex items-center gap-4">
-            <button onclick="exportData()" class="flex-1 lg:flex-none justify-center px-8 py-4 bg-primary-800 text-white rounded-2xl font-black text-xs transition-all shadow-lg shadow-primary-900/20 uppercase tracking-widest flex items-center gap-3">
+            <button onclick="exportToExcel()" class="flex-1 lg:flex-none justify-center px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs transition-all shadow-lg shadow-emerald-900/20 uppercase tracking-widest flex items-center gap-3">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Excel
+            </button>
+            <button onclick="exportData()" class="flex-1 lg:flex-none justify-center px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs transition-all shadow-lg shadow-emerald-900/20 uppercase tracking-widest flex items-center gap-3">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4-4 4-4-4m4 4V4"/></svg>
-                Export PDF
+                PDF
             </button>
         </div>
     </div>
@@ -55,6 +59,7 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 <script>
     let currentPage = 1;
     let allData = [];
@@ -192,6 +197,39 @@
 
     function exportData() {
         window.print();
+    }
+
+    async function exportToExcel() {
+        const res = await apiCall(`/reproduksi?per_page=10000`);
+        const allData = res?.data?.data || [];
+        
+        if (allData.length === 0) {
+            showAlert('Tidak ada data untuk diekspor');
+            return;
+        }
+
+        const search = document.getElementById('searchWarga').value.toLowerCase();
+        const filtered = allData.filter(item => 
+            !search || item.user.nama_lengkap.toLowerCase().includes(search) || item.user.nik.includes(search)
+        );
+
+        if (filtered.length === 0) {
+            showAlert('Tidak ada data yang sesuai dengan pencarian');
+            return;
+        }
+
+        const excelData = filtered.map(item => ({
+            'Nama Warga': item.user.nama_lengkap,
+            'NIK': item.user.nik,
+            'Tanggal Menstruasi': new Date(item.tgl_menstruasi).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
+            'Keterangan Kesehatan': item.keterangan,
+            'Tanggal Input': new Date(item.tgl_input).toLocaleDateString('id-ID')
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(excelData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Data Reproduksi");
+        XLSX.writeFile(workbook, `Data_Reproduksi_TaniSehat_${new Date().toISOString().split('T')[0]}.xlsx`);
     }
 
     document.getElementById('searchWarga').addEventListener('input', () => {
