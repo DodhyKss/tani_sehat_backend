@@ -23,7 +23,7 @@ class GADController extends Controller
         $startDate = $request->get('start_date');
         $endDate = $request->get('end_date');
 
-        $query = GAD::with('warga')->orderBy('tgl_gad', 'desc');
+        $query = GAD::with('warga')->orderBy('id', 'desc');
 
         if ($user->role === 'warga') {
             $query->where('warga_id', $user->id);

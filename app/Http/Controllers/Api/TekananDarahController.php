@@ -26,7 +26,7 @@ class TekananDarahController extends Controller
         $startDate = $request->get('start_date');
         $endDate = $request->get('end_date');
 
-        $query = TekananDarah::with('warga')->orderBy('tgl_cek', 'desc');
+        $query = TekananDarah::with('warga')->orderBy('id', 'desc');
 
         if ($user->role === 'warga') {
             $query->where('warga_id', $user->id);
