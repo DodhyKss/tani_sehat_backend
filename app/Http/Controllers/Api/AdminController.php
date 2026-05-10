@@ -67,7 +67,7 @@ class AdminController extends Controller
     {
         $request->validate([
             'judul' => 'required|string|max:255',
-            'file' => 'required|file|max:10240',
+            'file' => 'required|file|mimes:pdf|max:10240',
             'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
             'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
         ]);
@@ -92,6 +92,7 @@ class AdminController extends Controller
         $m = Materi::findOrFail($id);
         $request->validate([
             'judul' => 'required|string|max:255',
+            'file' => 'nullable|file|mimes:pdf|max:10240',
             'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
             'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
         ]);
@@ -170,6 +171,7 @@ class AdminController extends Controller
         $g = Gambar::findOrFail($id);
         $request->validate([
             'judul' => 'required|string|max:255',
+            'file' => 'nullable|image|max:5120',
             'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
             'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
         ]);

@@ -98,6 +98,7 @@
             <div id="fileField" class="hidden">
                 <label class="block text-xs font-bold text-gray-500 mb-1">File</label>
                 <input type="file" id="fileInput" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm">
+                <p id="fileHelp" class="text-[10px] text-gray-400 mt-1"></p>
             </div>
 
             <div class="grid grid-cols-2 gap-2">
@@ -120,7 +121,10 @@
                 </div>
             </div>
 
-            <button type="submit" class="w-full bg-primary-600 text-white py-2 rounded-lg font-bold text-sm">Simpan</button>
+            <button type="submit" id="btnSave" class="w-full bg-primary-800 text-white py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all hover:bg-black disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                <span id="btnSaveText">Simpan Konten</span>
+                <div id="btnSaveLoading" class="hidden animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+            </button>
         </form>
     </div>
 </div>
@@ -278,18 +282,40 @@ function closeFormModal() {
 }
 
 function toggleFields() {
-    document.getElementById('linkField').classList.add('hidden');
-    document.getElementById('fileField').classList.add('hidden');
+    const linkField = document.getElementById('linkField');
+    const fileField = document.getElementById('fileField');
+    const fileInput = document.getElementById('fileInput');
+    const fileHelp = document.getElementById('fileHelp');
+    
+    linkField.classList.add('hidden');
+    fileField.classList.add('hidden');
+    fileInput.removeAttribute('accept');
+    fileHelp.textContent = '';
     
     if (currentTab === 'video') {
-        document.getElementById('linkField').classList.remove('hidden');
-    } else if (currentTab === 'materi' || currentTab === 'gambar') {
-        document.getElementById('fileField').classList.remove('hidden');
+        linkField.classList.remove('hidden');
+    } else if (currentTab === 'materi') {
+        fileField.classList.remove('hidden');
+        fileInput.setAttribute('accept', 'application/pdf');
+        fileHelp.textContent = 'Hanya file PDF (Maks. 10MB)';
+    } else if (currentTab === 'gambar') {
+        fileField.classList.remove('hidden');
+        fileInput.setAttribute('accept', 'image/*');
+        fileHelp.textContent = 'Format gambar: JPG, PNG, GIF (Maks. 5MB)';
     }
 }
 
 async function saveData(e) {
     e.preventDefault();
+    const btnSave = document.getElementById('btnSave');
+    const btnSaveText = document.getElementById('btnSaveText');
+    const btnSaveLoading = document.getElementById('btnSaveLoading');
+
+    // Start Loading
+    btnSave.disabled = true;
+    btnSaveText.textContent = 'Menyimpan...';
+    btnSaveLoading.classList.remove('hidden');
+
     const id = document.getElementById('itemId').value;
     const formData = new FormData();
     
@@ -330,10 +356,16 @@ async function saveData(e) {
             closeFormModal();
             loadData();
         } else {
-            showAlert(result.message || 'Gagal menyimpan konten');
+            showAlert(result.message || 'Gagal menyimpan data', 'error');
         }
     } catch (err) {
-        showAlert('Gagal terhubung ke server');
+        console.error(err);
+        showAlert('Terjadi kesalahan koneksi', 'error');
+    } finally {
+        // End Loading
+        btnSave.disabled = false;
+        btnSaveText.textContent = 'Simpan Konten';
+        btnSaveLoading.classList.add('hidden');
     }
 }
 
