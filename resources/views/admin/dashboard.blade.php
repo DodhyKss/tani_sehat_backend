@@ -141,12 +141,13 @@
                     <th class="text-center">GAD7 Awal</th>
                     <th class="text-center">GAD7 Akhir</th>
                     <th class="text-center">Status</th>
-                    <th class="text-center">Tindak Lanjut Terbaru</th>
+                    <th class="text-center">Tindak Lanjut TD</th>
+                    <th class="text-center">Tindak Lanjut GAD7</th>
                     <th class="text-center">Tindak Lanjut</th>
                 </tr>
             </thead>
             <tbody id="progresTable">
-                <tr><td colspan="9" class="px-6 py-20 text-center text-primary-300 font-bold italic animate-pulse text-xl">Memuat data progres...</td></tr>
+                <tr><td colspan="9" class="px-6 py-20 text-center text-primary-300 font-bold italic animate-pulse text-xl uppercase tracking-widest">Memuat data progres...</td></tr>
             </tbody>
         </table>
     </div>
@@ -218,7 +219,8 @@ async function exportToExcel() {
         'GAD7 Akhir (Skor)': item.gad.akhir,
         'Status GAD7 Akhir': item.gad.status_akhir.toUpperCase().replace('_', ' '),
         'Status Perubahan': item.status_perubahan,
-        'Tindak Lanjut Terbaru': item.tindak_lanjut
+        'Tindak Lanjut TD': item.tindak_lanjut_td,
+        'Tindak Lanjut GAD7': item.tindak_lanjut_gad
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(excelData);
@@ -493,7 +495,10 @@ async function loadProgresWarga(page = 1) {
                             </span>
                         </td>
                         <td class="px-6 py-4 text-center border border-primary-50">
-                            <span class="text-xs font-bold text-gray-600">${item.tindak_lanjut}</span>
+                            <span class="text-xs font-bold text-gray-600">${item.tindak_lanjut_td}</span>
+                        </td>
+                        <td class="px-6 py-4 text-center border border-primary-50">
+                            <span class="text-xs font-bold text-gray-600">${item.tindak_lanjut_gad}</span>
                         </td>
                         <td class="px-6 py-4 text-center border border-primary-50">
                             <button onclick='openTindakLanjutModal(${JSON.stringify(item)})' class="p-2 bg-blue-50 hover:bg-blue-100 rounded-lg text-blue-600 transition-all transform hover:scale-110 shadow-sm" title="Tindak Lanjut">
@@ -540,9 +545,15 @@ async function loadProgresWarga(page = 1) {
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-4 pt-4 border-t border-primary-50 text-center">
-                            <p class="text-[10px] font-black text-primary-400 uppercase tracking-widest mb-1">Tindak Lanjut Terbaru</p>
-                            <p class="text-sm font-bold text-gray-800">${item.tindak_lanjut}</p>
+                        <div class="mt-4 pt-4 border-t border-primary-50 text-center grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-[10px] font-black text-primary-400 uppercase tracking-widest mb-1">Tindak Lanjut TD</p>
+                                <p class="text-xs font-bold text-gray-800">${item.tindak_lanjut_td}</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black text-primary-400 uppercase tracking-widest mb-1">Tindak Lanjut GAD7</p>
+                                <p class="text-xs font-bold text-gray-800">${item.tindak_lanjut_gad}</p>
+                            </div>
                         </div>
                         <div class="mt-4 pt-4 border-t border-primary-50">
                             <button onclick='openTindakLanjutModal(${JSON.stringify(item)})' class="w-full py-2 bg-blue-50 hover:bg-blue-100 rounded-xl text-blue-600 transition-all font-black text-xs shadow-sm flex items-center justify-center gap-2 uppercase tracking-widest">

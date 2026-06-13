@@ -154,11 +154,12 @@
                     <th class="px-6 py-6 text-center border-x border-primary-50">TD (Awal vs Terbaru)</th>
                     <th class="px-6 py-6 text-center border-r border-primary-50">GAD-7 (Awal vs Terbaru)</th>
                     <th class="px-6 py-6 text-center border-r border-primary-50">Analisis Progres</th>
-                    <th class="px-6 py-6 text-center border-r border-primary-50">Tindak Lanjut</th>
+                    <th class="px-6 py-6 text-center border-r border-primary-50">Tindak Lanjut TD</th>
+                    <th class="px-6 py-6 text-center border-r border-primary-50">Tindak Lanjut GAD7</th>
                 </tr>
             </thead>
             <tbody id="latestTable" class="divide-y-2 divide-primary-50">
-                <tr><td colspan="6" class="px-8 py-20 text-center text-primary-300 font-bold italic animate-pulse text-xl uppercase tracking-widest">Memuat data warga...</td></tr>
+                <tr><td colspan="7" class="px-8 py-20 text-center text-primary-300 font-bold italic animate-pulse text-xl uppercase tracking-widest">Memuat data warga...</td></tr>
             </tbody>
         </table>
     </div>
@@ -473,7 +474,10 @@ function renderLatestTable(data) {
                     <span class="px-5 py-2 text-[10px] font-black uppercase tracking-[0.15em] rounded-xl shadow-sm ${trend.color.replace('emerald', 'emerald').replace('rose', 'orange')}">${trend.label}</span>
                 </td>
                 <td class="px-6 py-6 text-center border-r border-primary-50">
-                    <span class="text-xs font-bold text-gray-600">${w.tindak_lanjut_terakhir || '-'}</span>
+                    <span class="text-xs font-bold text-gray-600">${w.tindak_lanjut_td || '-'}</span>
+                </td>
+                <td class="px-6 py-6 text-center border-r border-primary-50">
+                    <span class="text-xs font-bold text-gray-600">${w.tindak_lanjut_gad || '-'}</span>
                 </td>
             </tr>
         `;
@@ -530,9 +534,15 @@ function renderLatestTable(data) {
                         </div>
                     </div>
                 </div>
-                <div class="mt-4 pt-4 border-t border-primary-50 text-center">
-                    <p class="text-[10px] font-black text-primary-400 uppercase tracking-widest mb-1">Tindak Lanjut Terbaru</p>
-                    <p class="text-sm font-bold text-gray-800">${w.tindak_lanjut_terakhir || '-'}</p>
+                <div class="mt-4 pt-4 border-t border-primary-50 text-center grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-[10px] font-black text-primary-400 uppercase tracking-widest mb-1">Tindak Lanjut TD</p>
+                        <p class="text-xs font-bold text-gray-800">${w.tindak_lanjut_td || '-'}</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black text-primary-400 uppercase tracking-widest mb-1">Tindak Lanjut GAD7</p>
+                        <p class="text-xs font-bold text-gray-800">${w.tindak_lanjut_gad || '-'}</p>
+                    </div>
                 </div>
             </div>
         `;

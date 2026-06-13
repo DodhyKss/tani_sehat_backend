@@ -201,8 +201,15 @@ class UserController extends Controller
             })->get(['id', 'nama_lengkap', 'nik', 'no_hp', 'foto', 'tanggal_lahir', 'jenis_kelamin']);
 
         $wargas->transform(function ($w) {
-            $tl = $w->tindakLanjuts->first();
-            $w->tindak_lanjut_terakhir = $tl && $tl->masterTindakLanjut ? $tl->masterTindakLanjut->nama_tindakan : '-';
+            $tlTd = $w->tindakLanjuts->first(function($tl) {
+                return $tl->masterTindakLanjut && $tl->masterTindakLanjut->jenis_tindakan === 'td';
+            });
+            $tlGad = $w->tindakLanjuts->first(function($tl) {
+                return $tl->masterTindakLanjut && $tl->masterTindakLanjut->jenis_tindakan === 'gad7';
+            });
+
+            $w->tindak_lanjut_td = $tlTd ? $tlTd->masterTindakLanjut->nama_tindakan : '-';
+            $w->tindak_lanjut_gad = $tlGad ? $tlGad->masterTindakLanjut->nama_tindakan : '-';
             unset($w->tindakLanjuts); // Optional: cleanup to save bandwidth
             return $w;
         });

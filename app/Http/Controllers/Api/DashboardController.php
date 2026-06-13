@@ -215,10 +215,15 @@ class DashboardController extends Controller
                 $statusPerubahan = 'Belum Ada Data';
             }
 
-            $tindakLanjutTerbaru = $w->tindakLanjuts->first();
-            $tindakLanjutText = $tindakLanjutTerbaru && $tindakLanjutTerbaru->masterTindakLanjut 
-                ? $tindakLanjutTerbaru->masterTindakLanjut->nama_tindakan 
-                : '-';
+            $tlTd = $w->tindakLanjuts->first(function($tl) {
+                return $tl->masterTindakLanjut && $tl->masterTindakLanjut->jenis_tindakan === 'td';
+            });
+            $tlGad = $w->tindakLanjuts->first(function($tl) {
+                return $tl->masterTindakLanjut && $tl->masterTindakLanjut->jenis_tindakan === 'gad7';
+            });
+
+            $tindakLanjutTdText = $tlTd ? $tlTd->masterTindakLanjut->nama_tindakan : '-';
+            $tindakLanjutGadText = $tlGad ? $tlGad->masterTindakLanjut->nama_tindakan : '-';
 
             return [
                 'id' => $w->id,
@@ -228,7 +233,8 @@ class DashboardController extends Controller
                 'umur' => $w->tanggal_lahir ? \Carbon\Carbon::parse($w->tanggal_lahir)->age : '-',
                 'jenis_kelamin' => $w->jenis_kelamin ?? '-',
                 'status_perubahan' => $statusPerubahan,
-                'tindak_lanjut' => $tindakLanjutText,
+                'tindak_lanjut_td' => $tindakLanjutTdText,
+                'tindak_lanjut_gad' => $tindakLanjutGadText,
                 'td' => [
                     'awal' => $firstTd ? "{$firstTd->systolic}/{$firstTd->diastolic}" : '-',
                     'akhir' => $lastTd ? "{$lastTd->systolic}/{$lastTd->diastolic}" : '-',
