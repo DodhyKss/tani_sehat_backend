@@ -194,7 +194,9 @@ class DashboardController extends Controller
 
         $wargas = $query->with([
             'tekananDarah' => fn($q) => $q->orderBy('tgl_cek', 'asc'),
-            'gad' => fn($q) => $q->orderBy('tgl_gad', 'asc')
+            'gad' => fn($q) => $q->orderBy('tgl_gad', 'asc'),
+            'tindakLanjuts' => fn($q) => $q->orderBy('created_at', 'desc'),
+            'tindakLanjuts.masterTindakLanjut'
         ])->get();
 
         $result = $wargas->map(function($w) {
@@ -213,12 +215,20 @@ class DashboardController extends Controller
                 $statusPerubahan = 'Belum Ada Data';
             }
 
+            $tindakLanjutTerbaru = $w->tindakLanjuts->first();
+            $tindakLanjutText = $tindakLanjutTerbaru && $tindakLanjutTerbaru->masterTindakLanjut 
+                ? $tindakLanjutTerbaru->masterTindakLanjut->nama_tindakan 
+                : '-';
+
             return [
+                'id' => $w->id,
                 'nama' => $w->nama_lengkap,
+                'nama_lengkap' => $w->nama_lengkap,
                 'nik' => $w->nik,
                 'umur' => $w->tanggal_lahir ? \Carbon\Carbon::parse($w->tanggal_lahir)->age : '-',
                 'jenis_kelamin' => $w->jenis_kelamin ?? '-',
                 'status_perubahan' => $statusPerubahan,
+                'tindak_lanjut' => $tindakLanjutText,
                 'td' => [
                     'awal' => $firstTd ? "{$firstTd->systolic}/{$firstTd->diastolic}" : '-',
                     'akhir' => $lastTd ? "{$lastTd->systolic}/{$lastTd->diastolic}" : '-',

@@ -1,0 +1,65 @@
+# REVISI 
+1. Tambahkan fitur statistik mengunjungi rekomendasi/edukasi
+2. Ubah saran setiap mengisi tekanan darah dan gad7
+3. Di dashboard kader atau admin tambahkan 1 kolom baru yaitu Tindak Lanjut 
+4. Di menu Rekomendasi warga bisa tampil semua rekomendasi tanpa perlu validasi tingkat tekanan darah dan gad7
+
+
+# INI UNTUK REVISI NO 1 
+- Setiap kali user mengunjungi halaman rekomendasi video, materi dan gambar, catat di tabel frekuensi_rekomendasi
+- Data frekuensi di tampilkan di menu baru yang bernama Frekuensi Rekomendasi di admin akan tampil list semua warga dan berapa jumlah kunjungan nya di setiap jenis rekomendasi sedangkan di kader hanya menampilkan list warganya dengan jumlah kunjungannya. Di menu ini user dapat memfilter berdasarkan nama warga
+1. Tambahkan tabel frekuensi_rekomendasi
+- id
+- user_id
+- jenis_rekomendasi (enum: materi, video, gambar)
+- tanggal_lihat (date)
+- created_at
+- updated_at
+
+# INI UNTUK REVISI NO 2
+1. ini pesan setiap kali warga sudah mengisi tekanan darah
+- Normal : Tekanan darah Anda berada pada kategori normal. Pertahankan pola makan sehat, aktivitas fisik rutin, dan lakukan pemeriksaan tekanan darah secara berkala.
+- Pra Hipertensi : Tekanan darah Anda mulai meningkat. Kurangi konsumsi garam, perbanyak sayur dan buah, serta lakukan aktivitas fisik minimal 30 menit per hari
+- Hipertensi : Tekanan darah Anda termasuk tinggi. Disarankan melakukan monitoring rutin, menerapkan Diet DASH, mengelola stres, dan berkonsultasi dengan tenaga kesehatan.
+2. ini pesan setiap kali warga sudah mengisi gad7
+- Normal : ✅ Pertahankan aktivitas sehari-hari
+✅ Lakukan relaksasi 5–10 menit/hari
+✅ Tidur 7–8 jam/hari
+✅ Tetap mengikuti edukasi kesehatan di aplikasi
+
+- Ringan : ✅ Latihan napas dalam 5–10 menit
+✅ Kurangi pikiran berlebihan terhadap masalah yang belum tentu terjadi
+✅ Luangkan waktu untuk aktivitas yang menyenangkan
+✅ Diskusi dengan keluarga atau teman terpercaya
+
+- Sedang : ✅ Relaksasi minimal 10–15 menit setiap hari
+✅ Aktivitas fisik ringan (jalan kaki, peregangan)
+✅ Membatasi paparan informasi yang memicu kekhawatiran berlebihan
+✅ Berdiskusi dengan kader kesehatan atau petugas kesehatan
+
+- Tinggi : ✅ Segera berkonsultasi dengan tenaga kesehatan
+✅ Libatkan keluarga dalam dukungan sehari-hari
+✅ Lakukan relaksasi setiap hari
+✅ Hindari menghadapi masalah seorang diri
+
+
+# ini untuk revisi no 3
+1. Tambahkan tabel master_tindak_lanjut
+- id
+- nama_tindakan
+- jenis_tindakan (enum: td, gad7)
+- kategori (enum: normal, pra_hipertensi, hipertensi, ringan, sedang, tinggi)
+2. Tambahkan tabel tindak_lanjut
+- id
+- user_id
+- tindak_lanjut_id
+- tanggal_tindak_lanjut
+- created_at
+- updated_at
+3. di dashboard kader dan warga dapat mengklik tombol action tambahkan/edit tindak lanjut dengan memilih tindak lanjut berdasarkan kondisi warganya
+
+# ini untuk revisi NO 4
+1. jadi warga dapat tetap melihat rekomendasi lain di menu Rekomendasi tanpa harus validasi berdasarkan kondis tekanan darah dan gad7 nya
+
+
+

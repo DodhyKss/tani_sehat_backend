@@ -126,10 +126,10 @@ let answers = [];
 let totalScore = 0;
 
 function getStatus(skor) {
-    if (skor <= 4) return { label: 'Normal', color: 'bg-green-100 text-green-700', icon: 'bg-green-100', desc: 'Tidak ada gangguan signifikan. Pertahankan kondisi mental yang baik.' };
-    if (skor <= 9) return { label: 'Ringan', color: 'bg-yellow-100 text-yellow-700', icon: 'bg-yellow-100', desc: 'Pertimbangkan intervensi awal seperti relaksasi dan manajemen stres.' };
-    if (skor <= 14) return { label: 'Sedang', color: 'bg-orange-100 text-orange-700', icon: 'bg-orange-100', desc: 'Anjurkan konseling atau terapi.' };
-    return { label: 'Berat', color: 'bg-red-100 text-red-700', icon: 'bg-red-100', desc: 'Butuh evaluasi profesional segera.' };
+    if (skor <= 4) return { label: 'Normal', color: 'bg-green-100 text-green-700', icon: 'bg-green-100', desc: '✅ Pertahankan aktivitas sehari-hari ✅ Lakukan relaksasi 5–10 menit/hari ✅ Tidur 7–8 jam/hari ✅ Tetap mengikuti edukasi kesehatan di aplikasi' };
+    if (skor <= 9) return { label: 'Ringan', color: 'bg-yellow-100 text-yellow-700', icon: 'bg-yellow-100', desc: '✅ Latihan napas dalam 5–10 menit ✅ Kurangi pikiran berlebihan terhadap masalah yang belum tentu terjadi ✅ Luangkan waktu untuk aktivitas yang menyenangkan ✅ Diskusi dengan keluarga atau teman terpercaya' };
+    if (skor <= 14) return { label: 'Sedang', color: 'bg-orange-100 text-orange-700', icon: 'bg-orange-100', desc: '✅ Relaksasi minimal 10–15 menit setiap hari ✅ Aktivitas fisik ringan (jalan kaki, peregangan) ✅ Membatasi paparan informasi yang memicu kekhawatiran berlebihan ✅ Berdiskusi dengan kader kesehatan atau petugas kesehatan' };
+    return { label: 'Berat', color: 'bg-red-100 text-red-700', icon: 'bg-red-100', desc: '✅ Segera berkonsultasi dengan tenaga kesehatan ✅ Libatkan keluarga dalam dukungan sehari-hari ✅ Lakukan relaksasi setiap hari ✅ Hindari menghadapi masalah seorang diri' };
 }
 
 async function checkJadwalGad() {
@@ -263,6 +263,18 @@ async function submitGad() {
             // Rekomendasi from response
             const recs = res.data.rekomendasi;
             let recHtml = '';
+            
+            if (res.pesan_saran) {
+                recHtml += `
+                    <div class="bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-2xl mb-6 shadow-sm">
+                        <h4 class="text-xl font-black text-indigo-800 uppercase tracking-widest flex items-center gap-3 mb-2">
+                            <span class="w-8 h-8 bg-indigo-200 text-indigo-700 rounded-full flex items-center justify-center">ℹ</span>
+                            Saran Khusus Untuk Anda
+                        </h4>
+                        <p class="text-indigo-900 font-medium text-lg leading-relaxed">${res.pesan_saran}</p>
+                    </div>
+                `;
+            }
             
             // 1. VIDEO
             if (recs.video?.length) {

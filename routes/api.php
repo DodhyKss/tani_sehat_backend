@@ -34,6 +34,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
     Route::get('users/my-kader', [UserController::class, 'myKader']);
+    
+    // Frekuensi Rekomendasi (Warga)
+    Route::post('frekuensi', [\App\Http\Controllers\Api\FrekuensiRekomendasiController::class, 'store']);
 
 // --- Admin Routes ---
     Route::middleware('role:admin')->group(function () {
@@ -73,11 +76,25 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('admin/olahraga', [AdminController::class, 'storeOlahraga']);
         Route::put('admin/olahraga/{id}', [AdminController::class, 'updateOlahraga']);
         Route::delete('admin/olahraga/{id}', [AdminController::class, 'destroyOlahraga']);
+
+        // Master Tindak Lanjut (Create, Update, Delete for Admin)
+        Route::apiResource('master-tindak-lanjut', \App\Http\Controllers\Api\MasterTindakLanjutController::class)->except(['index', 'show']);
     });
 
     // Access for Admin & Kader
     Route::middleware('role:admin,kader')->group(function () {
         Route::get('users/kader/{kaderId}/warga', [UserController::class, 'wargaByKader']);
+        
+        // Tindak Lanjut
+        Route::get('tindak-lanjut', [\App\Http\Controllers\Api\TindakLanjutController::class, 'index']);
+        Route::post('tindak-lanjut', [\App\Http\Controllers\Api\TindakLanjutController::class, 'store']);
+        
+        // Master Tindak Lanjut (Read for Admin & Kader)
+        Route::get('master-tindak-lanjut', [\App\Http\Controllers\Api\MasterTindakLanjutController::class, 'index']);
+        Route::get('master-tindak-lanjut/{id}', [\App\Http\Controllers\Api\MasterTindakLanjutController::class, 'show']);
+        
+        // Frekuensi Rekomendasi GET
+        Route::get('frekuensi', [\App\Http\Controllers\Api\FrekuensiRekomendasiController::class, 'index']);
     });
 
     Route::get('kaders', [UserController::class, 'kadersList']);

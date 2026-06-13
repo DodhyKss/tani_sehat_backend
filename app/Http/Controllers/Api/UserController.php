@@ -195,10 +195,17 @@ class UserController extends Controller
             ], 403);
         }
 
-        $wargas = User::with(['statusKesehatan', 'firstTd', 'firstGad'])
+        $wargas = User::with(['statusKesehatan', 'firstTd', 'firstGad', 'tindakLanjuts' => fn($q) => $q->orderBy('created_at', 'desc'), 'tindakLanjuts.masterTindakLanjut'])
             ->whereHas('wargaRelasi', function($q) use ($kaderId) {
                 $q->where('kader_id', $kaderId);
             })->get(['id', 'nama_lengkap', 'nik', 'no_hp', 'foto', 'tanggal_lahir', 'jenis_kelamin']);
+
+        $wargas->transform(function ($w) {
+            $tl = $w->tindakLanjuts->first();
+            $w->tindak_lanjut_terakhir = $tl && $tl->masterTindakLanjut ? $tl->masterTindakLanjut->nama_tindakan : '-';
+            unset($w->tindakLanjuts); // Optional: cleanup to save bandwidth
+            return $w;
+        });
 
         return response()->json([
             'success' => true,

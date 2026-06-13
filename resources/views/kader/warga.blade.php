@@ -153,11 +153,12 @@
                     <th class="px-6 py-6 text-center">Profil</th>
                     <th class="px-6 py-6 text-center border-x border-primary-50">TD (Awal vs Terbaru)</th>
                     <th class="px-6 py-6 text-center border-r border-primary-50">GAD-7 (Awal vs Terbaru)</th>
-                    <th class="px-6 py-6 text-center">Analisis Progres</th>
+                    <th class="px-6 py-6 text-center border-r border-primary-50">Analisis Progres</th>
+                    <th class="px-6 py-6 text-center border-r border-primary-50">Tindak Lanjut</th>
                 </tr>
             </thead>
             <tbody id="latestTable" class="divide-y-2 divide-primary-50">
-                <tr><td colspan="4" class="px-8 py-20 text-center text-primary-300 font-bold italic animate-pulse text-xl uppercase tracking-widest">Memuat data warga...</td></tr>
+                <tr><td colspan="6" class="px-8 py-20 text-center text-primary-300 font-bold italic animate-pulse text-xl uppercase tracking-widest">Memuat data warga...</td></tr>
             </tbody>
         </table>
     </div>
@@ -166,6 +167,7 @@
     <div id="latestCards" class="md:hidden divide-y divide-gray-100">
         <div class="p-8 text-center text-gray-500">Memuat data warga...</div>
     </div>
+</div>
 </div>
 @endsection
 
@@ -467,8 +469,11 @@ function renderLatestTable(data) {
                         </div>
                     </div>
                 </td>
-                <td class="px-6 py-6 text-center">
+                <td class="px-6 py-6 text-center border-r border-primary-50">
                     <span class="px-5 py-2 text-[10px] font-black uppercase tracking-[0.15em] rounded-xl shadow-sm ${trend.color.replace('emerald', 'emerald').replace('rose', 'orange')}">${trend.label}</span>
+                </td>
+                <td class="px-6 py-6 text-center border-r border-primary-50">
+                    <span class="text-xs font-bold text-gray-600">${w.tindak_lanjut_terakhir || '-'}</span>
                 </td>
             </tr>
         `;
@@ -525,6 +530,10 @@ function renderLatestTable(data) {
                         </div>
                     </div>
                 </div>
+                <div class="mt-4 pt-4 border-t border-primary-50 text-center">
+                    <p class="text-[10px] font-black text-primary-400 uppercase tracking-widest mb-1">Tindak Lanjut Terbaru</p>
+                    <p class="text-sm font-bold text-gray-800">${w.tindak_lanjut_terakhir || '-'}</p>
+                </div>
             </div>
         `;
     }).join('');
@@ -539,6 +548,8 @@ function getStatusTd(systolic, diastolic) {
     return { category: 'pra_hipertensi' };
 }
 
-document.addEventListener('DOMContentLoaded', loadLatestData);
+document.addEventListener('DOMContentLoaded', () => {
+    loadLatestData();
+});
 </script>
 @endsection

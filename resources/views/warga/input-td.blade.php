@@ -133,9 +133,9 @@ document.getElementById('tgl_cek').value = today;
 document.getElementById('tgl_cek').max = today;
 
 function getStatus(systolic, diastolic) {
-    if (systolic >= 140 && diastolic >= 90) return { label: 'Hipertensi', color: 'bg-orange-100 text-orange-800', icon: 'bg-orange-100', desc: 'Risiko tinggi. Segera konsultasikan dengan kader kesehatan.' };
-    if (systolic < 120 && diastolic < 80) return { label: 'Normal', color: 'bg-emerald-100 text-emerald-700', icon: 'bg-emerald-100', desc: 'Kondisi sehat. Pertahankan pola hidup baik!' };
-    return { label: 'Pra-Hipertensi', color: 'bg-amber-100 text-amber-700', icon: 'bg-amber-100', desc: 'Perlu waspada. Jaga pola makan dan olahraga teratur.' };
+    if (systolic >= 140 && diastolic >= 90) return { label: 'Hipertensi', color: 'bg-orange-100 text-orange-800', icon: 'bg-orange-100', desc: 'Tekanan darah Anda termasuk tinggi. Disarankan melakukan monitoring rutin, menerapkan Diet DASH, mengelola stres, dan berkonsultasi dengan tenaga kesehatan.' };
+    if (systolic < 120 && diastolic < 80) return { label: 'Normal', color: 'bg-emerald-100 text-emerald-700', icon: 'bg-emerald-100', desc: 'Tekanan darah Anda berada pada kategori normal. Pertahankan pola makan sehat, aktivitas fisik rutin, dan lakukan pemeriksaan tekanan darah secara berkala.' };
+    return { label: 'Pra-Hipertensi', color: 'bg-amber-100 text-amber-700', icon: 'bg-amber-100', desc: 'Tekanan darah Anda mulai meningkat. Kurangi konsumsi garam, perbanyak sayur dan buah, serta lakukan aktivitas fisik minimal 30 menit per hari.' };
 }
 
 async function checkJadwal() {
@@ -232,9 +232,21 @@ document.getElementById('tdForm')?.addEventListener('submit', async (e) => {
             document.getElementById('resultStatus').className = `px-4 py-2 text-sm font-semibold rounded-full ${status.color}`;
             document.getElementById('resultDesc').textContent = status.desc;
 
-            // Render Rekomendasi
+            // Render Pesan Saran and Rekomendasi
             const recs = res.data.rekomendasi;
             let recHtml = '';
+            
+            if (res.pesan_saran) {
+                recHtml += `
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-2xl mb-6 shadow-sm">
+                        <h4 class="text-xl font-black text-blue-800 uppercase tracking-widest flex items-center gap-3 mb-2">
+                            <span class="w-8 h-8 bg-blue-200 text-blue-700 rounded-full flex items-center justify-center">ℹ</span>
+                            Saran Khusus Untuk Anda
+                        </h4>
+                        <p class="text-blue-900 font-medium text-lg leading-relaxed">${res.pesan_saran}</p>
+                    </div>
+                `;
+            }
             
             // 1. VIDEO
             if (recs.video?.length) {

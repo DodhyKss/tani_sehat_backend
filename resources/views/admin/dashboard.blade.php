@@ -141,10 +141,12 @@
                     <th class="text-center">GAD7 Awal</th>
                     <th class="text-center">GAD7 Akhir</th>
                     <th class="text-center">Status</th>
+                    <th class="text-center">Tindak Lanjut Terbaru</th>
+                    <th class="text-center">Tindak Lanjut</th>
                 </tr>
             </thead>
             <tbody id="progresTable">
-                <tr><td colspan="7" class="px-6 py-20 text-center text-primary-300 font-bold italic animate-pulse text-xl">Memuat data progres...</td></tr>
+                <tr><td colspan="9" class="px-6 py-20 text-center text-primary-300 font-bold italic animate-pulse text-xl">Memuat data progres...</td></tr>
             </tbody>
         </table>
     </div>
@@ -153,6 +155,39 @@
 
     <div id="progresCards" class="md:hidden space-y-6">
         <div class="text-center py-12 text-primary-300 font-bold italic">Memuat data progres...</div>
+    </div>
+</div>
+
+<!-- Modal Tindak Lanjut -->
+<div id="tindakLanjutModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-primary-900/80 backdrop-blur-sm" onclick="closeTindakLanjutModal()"></div>
+    <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg">
+        <div class="p-8 border-b-2 border-primary-50 flex justify-between items-center">
+            <div>
+                <h3 class="text-2xl font-black text-black">Tindak Lanjut</h3>
+                <p id="tlUserName" class="text-primary-800 text-sm font-bold uppercase"></p>
+            </div>
+            <button onclick="closeTindakLanjutModal()" class="p-3 hover:bg-primary-50 rounded-2xl text-primary-300 transition-all">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <form id="tindakLanjutForm" class="p-8 space-y-6">
+            <input type="hidden" id="tlUserId">
+            <div class="space-y-2">
+                <label class="text-xs font-black text-primary-800 uppercase">Jenis Evaluasi</label>
+                <select id="tlJenis" onchange="updateTindakLanjutOptions()" class="w-full px-6 py-4 rounded-2xl bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white transition-all font-black" required>
+                    <option value="td">Tekanan Darah (TD)</option>
+                    <option value="gad7">Kuesioner GAD-7</option>
+                </select>
+            </div>
+            <div class="space-y-2">
+                <label class="text-xs font-black text-primary-800 uppercase">Pilih Tindakan</label>
+                <select id="tlMasterId" class="w-full px-6 py-4 rounded-2xl bg-primary-50/50 border-2 border-transparent focus:border-primary-600 focus:bg-white transition-all font-black" required>
+                    <option value="">Pilih Tindakan...</option>
+                </select>
+            </div>
+            <button type="submit" class="w-full bg-primary-800 hover:bg-black text-white font-black py-4 rounded-2xl transition-all shadow-xl uppercase">SIMPAN TINDAKAN</button>
+        </form>
     </div>
 </div>
 @endsection
@@ -182,7 +217,8 @@ async function exportToExcel() {
         'Status GAD7 Awal': item.gad.status_awal.toUpperCase().replace('_', ' '),
         'GAD7 Akhir (Skor)': item.gad.akhir,
         'Status GAD7 Akhir': item.gad.status_akhir.toUpperCase().replace('_', ' '),
-        'Status Perubahan': item.status_perubahan
+        'Status Perubahan': item.status_perubahan,
+        'Tindak Lanjut Terbaru': item.tindak_lanjut
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(excelData);
@@ -231,6 +267,55 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTdCharts();
     loadGadCharts();
     loadProgresWarga();
+    loadMasterTindakLanjut();
+});
+
+let masterTindakLanjut = [];
+async function loadMasterTindakLanjut() {
+    try {
+        const res = await apiCall('/master-tindak-lanjut');
+        if (res && res.data) {
+            masterTindakLanjut = res.data;
+        }
+    } catch (e) { console.error(e); }
+}
+
+function openTindakLanjutModal(user) {
+    document.getElementById('tlUserId').value = user.id;
+    document.getElementById('tlUserName').textContent = user.nama_lengkap;
+    updateTindakLanjutOptions();
+    document.getElementById('tindakLanjutModal').classList.remove('hidden');
+}
+
+function closeTindakLanjutModal() {
+    document.getElementById('tindakLanjutModal').classList.add('hidden');
+}
+
+function updateTindakLanjutOptions() {
+    const jenis = document.getElementById('tlJenis').value;
+    const select = document.getElementById('tlMasterId');
+    select.innerHTML = '<option value="">Pilih Tindakan...</option>';
+    
+    const filtered = masterTindakLanjut.filter(item => item.jenis_tindakan === jenis);
+    filtered.forEach(item => {
+        select.innerHTML += `<option value="${item.id}">[${item.kategori.replace('_',' ')}] ${item.nama_tindakan}</option>`;
+    });
+}
+
+document.getElementById('tindakLanjutForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+        user_id: document.getElementById('tlUserId').value,
+        tindak_lanjut_id: document.getElementById('tlMasterId').value
+    };
+    
+    const res = await apiCall('/tindak-lanjut', 'POST', data);
+    if (res && res.success) {
+        showAlert('Tindak Lanjut berhasil ditambahkan', 'success');
+        closeTindakLanjutModal();
+    } else {
+        showAlert(res?.message || 'Gagal menyimpan tindak lanjut');
+    }
 });
 
 async function loadSummary() {
@@ -407,6 +492,14 @@ async function loadProgresWarga(page = 1) {
                                 ${item.status_perubahan}
                             </span>
                         </td>
+                        <td class="px-6 py-4 text-center border border-primary-50">
+                            <span class="text-xs font-bold text-gray-600">${item.tindak_lanjut}</span>
+                        </td>
+                        <td class="px-6 py-4 text-center border border-primary-50">
+                            <button onclick='openTindakLanjutModal(${JSON.stringify(item)})' class="p-2 bg-blue-50 hover:bg-blue-100 rounded-lg text-blue-600 transition-all transform hover:scale-110 shadow-sm" title="Tindak Lanjut">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            </button>
+                        </td>
                     </tr>
                 `).join('');
             }
@@ -446,6 +539,16 @@ async function loadProgresWarga(page = 1) {
                                     <span class="text-[9px] font-black ${getBadge(item.gad.status_akhir)} px-2 py-1 rounded-lg uppercase tracking-wider shadow-sm">${item.gad.status_akhir.replace('_', ' ')}</span>
                                 </div>
                             </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-primary-50 text-center">
+                            <p class="text-[10px] font-black text-primary-400 uppercase tracking-widest mb-1">Tindak Lanjut Terbaru</p>
+                            <p class="text-sm font-bold text-gray-800">${item.tindak_lanjut}</p>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-primary-50">
+                            <button onclick='openTindakLanjutModal(${JSON.stringify(item)})' class="w-full py-2 bg-blue-50 hover:bg-blue-100 rounded-xl text-blue-600 transition-all font-black text-xs shadow-sm flex items-center justify-center gap-2 uppercase tracking-widest">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                TINDAK LANJUT
+                            </button>
                         </div>
                     </div>
                 `).join('');

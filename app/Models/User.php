@@ -66,6 +66,11 @@ class User extends Authenticatable
         return $this->hasOne(StatusKesehatan::class, 'warga_id');
     }
 
+    public function tindakLanjuts()
+    {
+        return $this->hasMany(TindakLanjut::class, 'user_id');
+    }
+
     public function reproduksi()
     {
         return $this->hasMany(Reproduksi::class, 'warga_id');

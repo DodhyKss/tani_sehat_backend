@@ -138,6 +138,7 @@ function renderOlahragas(olahragas) {
 }
 
 function showVideoDetail(video) {
+    apiCall('/frekuensi', 'POST', { jenis_rekomendasi: 'video' }).catch(console.error);
     document.getElementById('modalTitle').textContent = video.judul;
     document.getElementById('modalContent').innerHTML = `
         <div class="aspect-video bg-black rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl mb-10 border-8 border-white">
@@ -154,6 +155,7 @@ function showVideoDetail(video) {
 }
 
 function showMateriDetail(materi) {
+    apiCall('/frekuensi', 'POST', { jenis_rekomendasi: 'materi' }).catch(console.error);
     document.getElementById('modalTitle').textContent = materi.judul;
     document.getElementById('modalContent').innerHTML = `
         <div class="mb-10 rounded-[2rem] md:rounded-[3rem] overflow-hidden border-8 border-white shadow-2xl bg-slate-200 flex flex-col h-[65vh] md:h-[75vh]">
@@ -176,6 +178,7 @@ function showMateriDetail(materi) {
 }
 
 function showGambarDetail(gambar) {
+    apiCall('/frekuensi', 'POST', { jenis_rekomendasi: 'gambar' }).catch(console.error);
     document.getElementById('modalTitle').textContent = gambar.judul;
     document.getElementById('modalContent').innerHTML = `
         <div class="bg-white rounded-[2rem] md:rounded-[3rem] overflow-hidden mb-10 border-8 border-white shadow-2xl p-4">
