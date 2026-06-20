@@ -92,10 +92,10 @@ class TekananDarahController extends Controller
         );
 
         $rekomendasi = [
-            'materi' => Materi::where('kategori_td', $mapKategori)->get(),
-            'video' => Video::where('kategori_td', $mapKategori)->get(),
-            'gambar' => Gambar::where('kategori_td', $mapKategori)->get(),
-            'olahraga' => RekomendasiOlahraga::where('kategori_td', $mapKategori)->get(),
+            'materi' => Materi::whereIn('kategori_td', [$mapKategori, 'semua'])->latest()->get(),
+            'video' => Video::whereIn('kategori_td', [$mapKategori, 'semua'])->latest()->get(),
+            'gambar' => Gambar::whereIn('kategori_td', [$mapKategori, 'semua'])->latest()->get(),
+            'olahraga' => RekomendasiOlahraga::whereIn('kategori_td', [$mapKategori, 'semua'])->latest()->get(),
         ];
 
         return response()->json([

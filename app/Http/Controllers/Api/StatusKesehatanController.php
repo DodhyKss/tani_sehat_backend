@@ -165,10 +165,10 @@ class StatusKesehatanController extends Controller
         );
         
         $rekomendasi = [
-            'materi' => Materi::whereIn('kategori_td', [$kategori, 'semua'])->get(),
-            'video' => Video::whereIn('kategori_td', [$kategori, 'semua'])->get(),
-            'gambar' => Gambar::whereIn('kategori_td', [$kategori, 'semua'])->get(),
-            'olahraga' => RekomendasiOlahraga::whereIn('kategori_td', [$kategori, 'semua'])->get(),
+            'materi' => Materi::whereIn('kategori_td', [$kategori, 'semua'])->latest()->get(),
+            'video' => Video::whereIn('kategori_td', [$kategori, 'semua'])->latest()->get(),
+            'gambar' => Gambar::whereIn('kategori_td', [$kategori, 'semua'])->latest()->get(),
+            'olahraga' => RekomendasiOlahraga::whereIn('kategori_td', [$kategori, 'semua'])->latest()->get(),
         ];
         
         $pesan_saran = match($kategori) {
@@ -261,10 +261,10 @@ class StatusKesehatanController extends Controller
         );
         
         $rekomendasi = [
-            'materi' => Materi::whereIn('kategori_gad', [$kategori, 'semua'])->get(),
-            'video' => Video::whereIn('kategori_gad', [$kategori, 'semua'])->get(),
-            'gambar' => Gambar::whereIn('kategori_gad', [$kategori, 'semua'])->get(),
-            'olahraga' => RekomendasiOlahraga::whereIn('kategori_gad', [$kategori, 'semua'])->get(),
+            'materi' => Materi::whereIn('kategori_gad', [$kategori, 'semua'])->latest()->get(),
+            'video' => Video::whereIn('kategori_gad', [$kategori, 'semua'])->latest()->get(),
+            'gambar' => Gambar::whereIn('kategori_gad', [$kategori, 'semua'])->latest()->get(),
+            'olahraga' => RekomendasiOlahraga::whereIn('kategori_gad', [$kategori, 'semua'])->latest()->get(),
         ];
         
         $pesan_saran = match($kategori) {
