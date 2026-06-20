@@ -101,10 +101,10 @@ class GADController extends Controller
         };
 
         $rekomendasi = [
-            'materi' => Materi::where('kategori_gad', $mapKategori)->get(),
-            'video' => Video::where('kategori_gad', $mapKategori)->get(),
-            'gambar' => Gambar::where('kategori_gad', $mapKategori)->get(),
-            'olahraga' => RekomendasiOlahraga::where('kategori_gad', $mapKategori)->get(),
+            'materi' => Materi::whereIn('kategori_gad', [$mapKategori, 'semua'])->get(),
+            'video' => Video::whereIn('kategori_gad', [$mapKategori, 'semua'])->get(),
+            'gambar' => Gambar::whereIn('kategori_gad', [$mapKategori, 'semua'])->get(),
+            'olahraga' => RekomendasiOlahraga::whereIn('kategori_gad', [$mapKategori, 'semua'])->get(),
         ];
 
         return response()->json([

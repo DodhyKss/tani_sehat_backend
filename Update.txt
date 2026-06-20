@@ -1,0 +1,25 @@
+Log Perubahan - Penambahan Opsi 'Semua' dan 'Tidak Salah Satunya' pada Kategori Rekomendasi
+Tanggal: 20 Juni 2026
+
+Berikut adalah daftar keseluruhan perubahan yang dilakukan pada sistem TaniSehatBackend untuk mendukung opsi baru ('Semua' dan 'Tidak Salah Satunya') pada sistem Rekomendasi:
+
+1. Database Migrations
+- Membuat dan menjalankan migration `database/migrations/2026_06_20_064725_add_semua_to_kategori_enum.php`
+- Migration ini mengubah tipe data kolom `kategori_td` dan `kategori_gad` (menggunakan ALTER TABLE MODIFY COLUMN) pada tabel `materi`, `video`, `gambar`, dan `rekomendasi_olahragas` untuk mendaftarkan 2 nilai enum baru yaitu 'semua' dan 'tidak_salah_satunya'.
+
+2. Frontend Admin (Blade View)
+- Mengubah file `resources/views/admin/rekomendasi.blade.php`.
+- Menambahkan elemen `<option value="semua">Semua</option>` dan `<option value="tidak_salah_satunya">Tidak Salah Satunya</option>` ke dalam dropdown form "Kategori Tekanan Darah" dan "Kategori GAD-7" untuk proses Tambah dan Edit pada setiap jenis rekomendasi (Materi, Video, Gambar, dan Olahraga).
+
+3. Backend - AdminController
+- Mengubah file `app/Http\Controllers\Api\AdminController.php`.
+- Memperbarui parameter validasi `$request->validate([...])` pada method Create (storeMateri, storeVideo, storeGambar, storeOlahraga) dan Update (updateMateri, updateVideo, updateGambar, updateOlahraga) agar membolehkan input enum 'semua' dan 'tidak_salah_satunya'.
+- Memperbarui logika query pada method `getRekomendasi` dari yang semula menggunakan exact match `where()` menjadi `whereIn()` (misal: `whereIn('kategori_td', [$kategoriTd, 'semua'])`), sehingga materi dengan kategori 'Semua' akan terambil terlepas dari apa kategori si Warga.
+
+4. Backend - StatusKesehatanController (Untuk Warga Form TD)
+- Mengubah file `app/Http\Controllers\Api\StatusKesehatanController.php`.
+- Mengubah query eloquent pengambilan array `$rekomendasi` pada method `updateTd` dan `updateGad` (dipanggil saat warga mensubmit form tekanan darah atau GAD-7 lewat rute /status-kesehatan/td dan /status-kesehatan/gad) untuk menggunakan `whereIn` yang menyertakan array `[$kategori, 'semua']`. Hal ini agar materi opsi "Semua" otomatis muncul di pop-up rekomendasi warga sesaat setelah mereka submit form.
+
+5. Backend - GADController (Untuk Warga Form GAD-7)
+- Mengubah file `app/Http\Controllers\Api\GADController.php`.
+- Mengubah query eloquent pengambilan array `$rekomendasi` pada method `store` (dipanggil saat warga mensubmit form kuesioner lewat rute /gad) untuk menggunakan `whereIn` yang menyertakan array `[$mapKategori, 'semua']`. Memperbaiki bug di mana materi "Semua" tidak muncul jika warga mensubmit GAD-7 dari dashboard khusus GAD-7.

@@ -68,8 +68,8 @@ class AdminController extends Controller
         $request->validate([
             'judul' => 'required|string|max:255',
             'file' => 'required|file|mimes:pdf|max:10240',
-            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
-            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi,semua,tidak_salah_satunya',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal,semua,tidak_salah_satunya',
         ]);
         
         $file = $request->file('file');
@@ -93,8 +93,8 @@ class AdminController extends Controller
         $request->validate([
             'judul' => 'required|string|max:255',
             'file' => 'nullable|file|mimes:pdf|max:10240',
-            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
-            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi,semua,tidak_salah_satunya',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal,semua,tidak_salah_satunya',
         ]);
         
         $data = $request->only('judul', 'kategori_gad', 'kategori_td');
@@ -117,8 +117,8 @@ class AdminController extends Controller
         $request->validate([
             'judul' => 'required|string|max:255',
             'link_embed' => 'required|string',
-            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
-            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi,semua,tidak_salah_satunya',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal,semua,tidak_salah_satunya',
         ]);
         $v = Video::create($request->only('judul', 'link_embed', 'kategori_gad', 'kategori_td'));
         return response()->json(['success' => true, 'data' => $v], 201);
@@ -132,8 +132,8 @@ class AdminController extends Controller
         $request->validate([
             'judul' => 'required|string|max:255',
             'link_embed' => 'required|string',
-            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
-            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi,semua,tidak_salah_satunya',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal,semua,tidak_salah_satunya',
         ]);
         $v->update($request->only('judul', 'link_embed', 'kategori_gad', 'kategori_td'));
         return response()->json(['success' => true, 'data' => $v]);
@@ -147,8 +147,8 @@ class AdminController extends Controller
         $request->validate([
             'judul' => 'required|string|max:255',
             'file' => 'required|image|max:5120',
-            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
-            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi,semua,tidak_salah_satunya',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal,semua,tidak_salah_satunya',
         ]);
         
         $file = $request->file('file');
@@ -172,8 +172,8 @@ class AdminController extends Controller
         $request->validate([
             'judul' => 'required|string|max:255',
             'file' => 'nullable|image|max:5120',
-            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
-            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi,semua,tidak_salah_satunya',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal,semua,tidak_salah_satunya',
         ]);
         
         $data = $request->only('judul', 'kategori_gad', 'kategori_td');
@@ -195,8 +195,8 @@ class AdminController extends Controller
     {
         $request->validate([
             'nama_olahraga' => 'required|string|max:255',
-            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
-            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi,semua,tidak_salah_satunya',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal,semua,tidak_salah_satunya',
         ]);
         $o = RekomendasiOlahraga::create($request->only('nama_olahraga', 'kategori_gad', 'kategori_td'));
         return response()->json(['success' => true, 'data' => $o], 201);
@@ -209,8 +209,8 @@ class AdminController extends Controller
         $o = RekomendasiOlahraga::findOrFail($id);
         $request->validate([
             'nama_olahraga' => 'required|string|max:255',
-            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi',
-            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal',
+            'kategori_gad' => 'required|in:normal,ringan,sedang,tinggi,semua,tidak_salah_satunya',
+            'kategori_td' => 'required|in:hipertensi,pre_hipertensi,normal,semua,tidak_salah_satunya',
         ]);
         $o->update($request->only('nama_olahraga', 'kategori_gad', 'kategori_td'));
         return response()->json(['success' => true, 'data' => $o]);
@@ -227,10 +227,10 @@ class AdminController extends Controller
         return response()->json([
             'success' => true,
             'data' => [
-                'videos' => Video::where('kategori_gad', $kategoriGad)->orWhere('kategori_td', $kategoriTd)->get(),
-                'materis' => Materi::where('kategori_gad', $kategoriGad)->orWhere('kategori_td', $kategoriTd)->get(),
-                'gambars' => Gambar::where('kategori_gad', $kategoriGad)->orWhere('kategori_td', $kategoriTd)->get(),
-                'olahragas' => RekomendasiOlahraga::where('kategori_gad', $kategoriGad)->orWhere('kategori_td', $kategoriTd)->get(),
+                'videos' => Video::whereIn('kategori_gad', [$kategoriGad, 'semua'])->orWhereIn('kategori_td', [$kategoriTd, 'semua'])->get(),
+                'materis' => Materi::whereIn('kategori_gad', [$kategoriGad, 'semua'])->orWhereIn('kategori_td', [$kategoriTd, 'semua'])->get(),
+                'gambars' => Gambar::whereIn('kategori_gad', [$kategoriGad, 'semua'])->orWhereIn('kategori_td', [$kategoriTd, 'semua'])->get(),
+                'olahragas' => RekomendasiOlahraga::whereIn('kategori_gad', [$kategoriGad, 'semua'])->orWhereIn('kategori_td', [$kategoriTd, 'semua'])->get(),
             ]
         ]);
     }

@@ -108,6 +108,8 @@
                         <option value="normal">Normal</option>
                         <option value="pre_hipertensi">Pra-Hipertensi</option>
                         <option value="hipertensi">Hipertensi</option>
+                        <option value="semua">Semua</option>
+                        <option value="tidak_salah_satunya">Tidak Salah Satunya</option>
                     </select>
                 </div>
                 <div>
@@ -117,6 +119,8 @@
                         <option value="ringan">Ringan</option>
                         <option value="sedang">Sedang</option>
                         <option value="tinggi">Tinggi</option>
+                        <option value="semua">Semua</option>
+                        <option value="tidak_salah_satunya">Tidak Salah Satunya</option>
                     </select>
                 </div>
             </div>
